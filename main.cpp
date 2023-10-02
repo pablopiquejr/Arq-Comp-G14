@@ -24,13 +24,14 @@ public:
         this->vz = vz;
     }
 };
+
 int main() {
     // Crear objetos de la clase Particula
     Particula particula1(1.0, 2.0, 3.0, 0.5, 0.6, 0.7, 2.5, 3.5, 4.5);
     Particula particula2(2.0, 3.0, 4.0, 0.7, 0.8, 0.9, 3.5, 4.5, 5.5);
     return 0;
 }
-double calculo_masa(double ppm,double p){
+double calculo_m(double ppm,double p){
     double ppm_cubo = std::pow(ppm, 3.0);
     double masa = p / ppm_cubo;
     return  masa;
@@ -64,14 +65,14 @@ double calculo_sz (double nz, double zmax, double zmin){
     return sz;
 }
 double calculo_i (double px, double sx, double xmin){
-    double i= (px-zmin)/nz;
-    return sz;
+    double i= (px-xmin)/sx;
+    return i;
 }
-double calculo_j (double nz, double zmax, double zmin){
-    double sz= (zmax-zmin)/nz;
-    return sz;
+double calculo_j (double sy, double py , double ymin){
+    double j= (py-ymin)/sy;
+    return j;
 }
-double calculo_k (double nz, double zmax, double zmin){
-    double sz= (zmax-zmin)/nz;
-    return sz;
+double calculo_k (double sz, double pz, double zmin){
+    double k= (pz - zmin)/sz;
+    return k;
 }
