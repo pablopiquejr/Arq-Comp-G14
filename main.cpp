@@ -12,6 +12,7 @@ public:
     double vx;
     double vy;
     double vz;
+    double densidad;
     Particula(double px,double py,double pz,double hvx,double hvy,double hvz,double vx,double vy,double vz){
         this->px = px;
         this->py = py;
@@ -22,6 +23,7 @@ public:
         this->vx = vx;
         this->vy = vy;
         this->vz = vz;
+        this->densidad = densidad;
     }
 };
 
@@ -75,4 +77,13 @@ double calculo_j (double sy, double py , double ymin){
 double calculo_k (double sz, double pz, double zmin){
     double k= (pz - zmin)/sz;
     return k;
+}
+double incremento_densidades (double h, class particula_i, class particula_j){
+        double condicion = std::pow(particula_i.densidad-particula_j.densidad,2);
+        double h_2 = std::pow(h,2);
+        if condition < h_2{
+            double incremento= std::pow(h_2-condicion,3);
+            particula_i.densidad+=incremento;
+            particula_j.densidad+=incremento;
+        }
 }
