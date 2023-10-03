@@ -537,3 +537,41 @@ events:
       
       
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/snap/clion/250/bin/cmake/linux/x64/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/snap/clion/250/bin/cmake/linux/x64/share/cmake-3.26/Modules/CheckCSourceCompiles.cmake:76 (cmake_check_source_compiles)"
+      - "/snap/clion/250/bin/cmake/linux/x64/share/cmake-3.26/Modules/FindThreads.cmake:97 (CHECK_C_SOURCE_COMPILES)"
+      - "/snap/clion/250/bin/cmake/linux/x64/share/cmake-3.26/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "cmake-build-debug/_deps/googletest-src/googletest/cmake/internal_utils.cmake:66 (find_package)"
+      - "cmake-build-debug/_deps/googletest-src/googletest/CMakeLists.txt:83 (config_compiler_and_linker)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "/home/sergio/Desktop/Arq-Comp-G14/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fZRlza"
+      binary: "/home/sergio/Desktop/Arq-Comp-G14/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fZRlza"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: /home/sergio/Desktop/Arq-Comp-G14/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fZRlza
+        
+        Run Build Command(s):/snap/clion/250/bin/cmake/linux/x64/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_238c9/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_238c9.dir/build.make CMakeFiles/cmTC_238c9.dir/build
+        gmake[1]: Entering directory '/home/sergio/Desktop/Arq-Comp-G14/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fZRlza'
+        Building C object CMakeFiles/cmTC_238c9.dir/src.c.o
+        /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -fdiagnostics-color=always -o CMakeFiles/cmTC_238c9.dir/src.c.o -c /home/sergio/Desktop/Arq-Comp-G14/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fZRlza/src.c
+        Linking C executable cmTC_238c9
+        /snap/clion/250/bin/cmake/linux/x64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_238c9.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_238c9.dir/src.c.o -o cmTC_238c9 
+        gmake[1]: Leaving directory '/home/sergio/Desktop/Arq-Comp-G14/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-fZRlza'
+        
+      exitCode: 0
+...
