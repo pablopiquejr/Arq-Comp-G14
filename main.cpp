@@ -177,3 +177,69 @@ double collision_z(class particula, double zmin, double zmax, double h ){//o mej
             };
     }
 }
+double colision_x1(class particula, double xmin, double xmax){
+    if cx=0{
+        double dx= particula.x-xmin;
+        if dx>=0{
+            return;
+        }
+        else{
+            particula.x=xmin-dx;
+        }
+    }
+    if cx=nx-1{
+        double dx= xmax-particula.x;
+        if dx>=0{
+            return;
+        }
+        else{
+            particula.x=xmax+dx
+        }
+    }
+    particula.vx=-particula.vx;
+    particula.hvx=-particula.hvx
+}
+double colision_y1(class particula, double ymin, double ymax){
+    if cy=0{
+        double dy= particula.y-ymin;
+        if dy>=0{
+            return;
+        }
+        else{
+            particula.y=ymin-dy;
+        }
+    }
+    if cy=ny-1{
+        double dy= ymax-particula.y;
+        if dy>=0{
+            return;
+        }
+        else{
+            particula.y=ymax+dy
+        }
+    }
+    particula.vy=-particula.vy;
+    particula.hvy=-particula.hvy
+}
+double colision_z1(class particula, double zmin, double zmax){
+    if cz=0{
+        double dz= particula.z-zmin;
+        if dz>=0{
+            return;
+        }
+        else{
+            particula.z=zmin-dz;
+        }
+    }
+    if cz=nz-1{
+        double dz= zmax-particula.z;
+        if dz>=0{
+            return;
+        }
+        else{
+            particula.z=zmax+dz
+        }
+    }
+    particula.vz=-particula.vz;
+    particula.hvz=-particula.hvz
+}
