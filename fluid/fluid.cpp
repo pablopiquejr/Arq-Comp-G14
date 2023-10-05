@@ -1,6 +1,7 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <list>
 
 using namespace std;
 
@@ -25,7 +26,8 @@ class Particula{
 
 void argument_validator(char * argv[]){
   // checkjng the validity of the first command (nº of executions)
-  const int base = 10;
+  //const int base = 10;
+    /*
     if (!stoi(argv[0],nullptr,base)){
       cout << "Time steps must be numeric";
       exit(-1);
@@ -34,52 +36,89 @@ void argument_validator(char * argv[]){
       cout << "Invalid number of time steps";
       exit(-2);
     }
+     */
     // for reading the input file
-    ifstream ifs(argv[1],ios_base::openmode(ios_base::binary));
+    ifstream ifs;
+    ifs.open(argv[2],ios_base::openmode(ios_base::binary));
     if (!ifs){
       cout << "Can't Open file";
       exit(-3);
     }
     // read the header
+    cout << "read the header"<< '\n';
+
     char buff[8];
     ifs.read(reinterpret_cast<char*>(&buff),sizeof(buff));
 
+    for (char i : buff){
+      cout << i<< '\n';
+    }
 
 
     // trying to read the file
     int np = 9 * buff[1];
 
+    list<Particula> list_of_particles;
+
     int counter = 0;
+
     while (counter < np){
       Particula particle{};
-      ifs.read(particle.px,sizeof(np));
-      ifs.read(particle.py,sizeof(np));
-      ifs.read(particle.pz,sizeof(np));
-      ifs.read(particle.hvx,sizeof(np));
-      ifs.read(particle.hvy,sizeof(np));
-      ifs.read(particle.hvz,sizeof(np));
-      ifs.read(particle.vx,sizeof(np));
-      ifs.read(particle.vy,sizeof(np));
-      ifs.read(particle.vz,sizeof(np));
+      char buf[4];
+
+      ifs.read(buf,sizeof(np));
+      particle.px = stod(buf, reinterpret_cast<size_t *>(sizeof(buf)));
+
+      ifs.read(buf,sizeof(np));
+      particle.py = stod(buf, reinterpret_cast<size_t *>(sizeof(buf)));
+
+      ifs.read(buf,sizeof(np));
+      particle.pz = stod(buf, reinterpret_cast<size_t *>(sizeof(buf)));
+
+      ifs.read(buf,sizeof(np));
+      particle.hvx = stod(buf, reinterpret_cast<size_t *>(sizeof(buf)));
+
+      ifs.read(buf,sizeof(np));
+      particle.hvy = stod(buf, reinterpret_cast<size_t *>(sizeof(buf)));
+
+      ifs.read(buf,sizeof(np));
+      particle.hvz = stod(buf, reinterpret_cast<size_t *>(sizeof(buf)));
+
+      ifs.read(buf ,sizeof(np));
+      particle.vx = stod(buf, reinterpret_cast<size_t *>(sizeof(buf)));
+
+      ifs.read(buf,sizeof(np));
+      particle.vy = stod(buf, reinterpret_cast<size_t *>(sizeof(buf)));
+
+      ifs.read(buf,sizeof(np));
+      particle.vz = stod(buf, reinterpret_cast<size_t *>(sizeof(buf)));
+
+      cout << particle.px <<endl;
+      cout << particle.py <<endl;
+      cout << particle.pz <<endl;
+      cout << particle.vx <<endl;
+      cout << particle.vx <<endl;
+      cout << particle.vz <<endl;
+
+      list_of_particles.push_back(particle);
       counter += 9*4;
     }
 }
 
 int main(int argc, char * argv[]) {
+    if (argc != 4) {
+      cout << "Invalid number of steps: " << argc << '\n';
+      exit(-1);
+    }
 
-  if (argc != 3){
-    cout << "Invalid number of steps: " << argc;
-    exit(-1);
-  }
+    argument_validator(argv);
+}
 
-  argument_validator(argv);
-
-
-
+/*
 
   // Crear objetos de la clase Particula
-  Particula particula1(1.0, 2.0, 3.0, 0.5, 0.6, 0.7, 2.5, 3.5, 4.5);
-  Particula particula2(2.0, 3.0, 4.0, 0.7, 0.8, 0.9, 3.5, 4.5, 5.5);
+  //Particula particula1(1.0, 2.0, 3.0, 0.5, 0.6, 0.7, 2.5, 3.5, 4.5);
+  //Particula particula2(2.0, 3.0, 4.0, 0.7, 0.8, 0.9, 3.5, 4.5, 5.5);
   return 0;
 }
 double calculo_m(double ppm,double p){
@@ -285,3 +324,4 @@ double colision_z1(class particula, double zmin, double zmax){
     particula.vz=-particula.vz;
     particula.hvz=-particula.hvz
 }
+ */
