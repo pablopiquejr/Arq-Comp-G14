@@ -1,9 +1,12 @@
+#include <cmath>
+
 #include <fstream>
 #include <iostream>
 #include <list>
 #include <span>
 #include <string>
 #include <vector>
+
 
 double read_float(std::ifstream & file){
   float number = 0;
@@ -23,10 +26,6 @@ class Particula{
     double vx = 0;
     double vy = 0;
     double vz = 0;
-    double acx = 0;
-    double acy = 0;
-    double acz = 0;
-    double densidad = 0;
 
   public:
     Particula() = default;
@@ -49,15 +48,15 @@ void Particula::printinfo(int counter) const{
 }
 
 void Particula::set_particles_coordinates(std::istream & file) {
-  px = read_float(file);
-  py = read_float(file);
-  pz = read_float(file);
-  hvx = read_float(file);
-  hvy = read_float(file);
-  hvz = read_float(file);
-  vx = read_float(file);
-  vy = read_float(file);
-  vz = read_float(file);
+  px = read_float(*file);
+  py = read_float(*file);
+  pz = read_float(*file);
+  hvx = read_float(*file);
+  hvy = read_float(*file);
+  hvz = read_float(*file);
+  vx = read_float(*file);
+  vy = read_float(*file);
+  vz = read_float(*file);
 }
 
 
@@ -65,71 +64,77 @@ void argument_validator(std::vector<std::string> arguments){
   // checkjng the validity of the first command (nº of executions)
   const int base = 10;
 
-    if (isdigit(stoi(arguments[1],nullptr,base)) == 1){
-      std::cout << "Time steps must be numeric" << '\n';
-      exit(-1);
-    }
-    else if (stoi(arguments[1], nullptr, base) < 0){
-      std::cout << "Invalid number of time steps" << '\n';
-      exit(-2);
-    }
+  if (isdigit(stoi(arguments[1],nullptr,base)) == 1){
+    std::cout << "Time steps must be numeric" << '\n';
+    exit(-1);
+  }
+  else if (stoi(arguments[1], nullptr, base) < 0){
+    std::cout << "Invalid number of time steps" << '\n';
+    exit(-2);
+  }
 
-    // for reading the input file
-    std::ifstream binary_file(arguments[2],std::ios:: in | std::ios::binary);
-    if (!binary_file){
-      std::cout << "Can't Open file";
-      exit(-3);
-    }
+  // for reading the input file
+  std::ifstream binary_file(arguments[2],std::ios::binary);
+  if (!binary_file){
+    std::cout << "Can't Open file" << '\n';
+    exit(-3);
+  }
 
-    // read the header
-    float ppm = 0;
-    int n_parameters = 0;
+  // read the header
+  float ppm = 0;
+  int n_parameters = 0;
 
-    binary_file.read(reinterpret_cast<char*>(&ppm),4); //NOLINT
-    binary_file.read(reinterpret_cast<char*>(&n_parameters),4); //NOLINT
+  binary_file.read(reinterpret_cast<char*>(&ppm),4); //NOLINT
+  binary_file.read(reinterpret_cast<char*>(&n_parameters),4); //NOLINT
 
-    std::cout << ppm << '\n';
-    std::cout << n_parameters << '\n';
+  std::cout << ppm << '\n';
+  std::cout << n_parameters << '\n';
 
-    std::list<Particula> list_of_particles;
 
-    int counter = 0;
+  std::list<Particula> list_of_particles;
 
-    while (counter < n_parameters){
-      /*
-      Particula particle{};
-      char buf[4];
+  int counter = 0;
 
-      ifs.read(buf,sizeof(n_parameters));
-      ifs.read(reinterpret_cast<char*>(&particle.px),4);
-      ifs.read(reinterpret_cast<char*>(&particle.py ),4);
-      ifs.read(reinterpret_cast<char*>(&particle.pz ),4);
-      ifs.read(reinterpret_cast<char*>(&particle.hvx ),4);
-      ifs.read(reinterpret_cast<char*>(&particle.hvy ),4);
-      ifs.read(reinterpret_cast<char*>(&particle.hvz),4);
-      ifs.read(reinterpret_cast<char*>(&particle.vx),4);
-      ifs.read(reinterpret_cast<char*>(&particle.vy ),4);
-      ifs.read(reinterpret_cast<char*>(&particle.vz ),4);
 
-       */
+  while (counter < n_parameters){
+    /*
+    Particula particle{};
+    char buf[4];
 
-      Particula particula;
+######## CREAR UN BUFFER PARA LEER  EL ARCHIVO  METERLO AHÍ EN VEZ DE LEER UNO POR UNO? ########
 
-      particula.set_particles_coordinates(binary_file);
+    ifs.read(buf,sizeof(n_parameters));
+    ifs.read(reinterpret_cast<char*>(&particle.px),4);
+    ifs.read(reinterpret_cast<char*>(&particle.py ),4);
+    ifs.read(reinterpret_cast<char*>(&particle.pz ),4);
+    ifs.read(reinterpret_cast<char*>(&particle.hvx ),4);
+    ifs.read(reinterpret_cast<char*>(&particle.hvy ),4);
+    ifs.read(reinterpret_cast<char*>(&particle.hvz),4);
+    ifs.read(reinterpret_cast<char*>(&particle.vx),4);
+    ifs.read(reinterpret_cast<char*>(&particle.vy ),4);
+    ifs.read(reinterpret_cast<char*>(&particle.vz ),4);
 
-      list_of_particles.push_back(particula);
-      particula.printinfo(counter);
+  */
 
-      counter += 1;
-    }
+
+    Particula particula;
+
+    particula.set_particles_coordinates(binary_file);
+
+    list_of_particles.push_back(particula);
+    particula.printinfo(counter);
+
+    counter += 1;
+  }
+
 }
 
-int main(int argc, char * argv[]) {
-    if (argc != 4) {
-      std::cout << "Invalid number of steps: " << argc << '\n';
-      exit(-1);
-    }
-    std::span const span_args{argv, std::size_t(argc)};
-    std::vector<std::string> const arguments{span_args.begin()+1, span_args.end()};
-    argument_validator(arguments);
+int main(int argc, char * argv[]){
+  if (argc != 4) {
+    std::cout << "Invalid number of steps: " << argc << '\n';
+    exit(-1);
+  }
+  std::span const span_args{argv, std::size_t(argc)};
+  std::vector<std::string> const arguments{span_args.begin(), span_args.end()};
+  argument_validator(arguments);
 }
