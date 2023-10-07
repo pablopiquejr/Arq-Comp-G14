@@ -8,19 +8,30 @@
 
 /*
 void Particula::set_particles_coordinates(std::istream & file) {
-  px = read_float(file);
-  py = read_float(file);
-  pz = read_float(file);
-  hvx = read_float(file);
-  hvy = read_float(file);
-  hvz = read_float(file);
-  vx = read_float(file);
-  vy = read_float(file);
-  vz = read_float(file);
-  densidad= 0;
-  acx=0;
-  ac_y=0;
-  ac_z=0;
+  float buffer[9];
+
+file.read(reinterpret_cast<char*>(&buffer),36); //NOLINT
+px = buffer[0];
+py = buffer[1];
+pz = buffer[2];
+hvx = buffer[3];
+hvy = buffer[4];
+hvz = buffer[5];
+vx = buffer[6];
+vy = buffer[7];
+vz = buffer[8];
+
+
+px = read_float(*file);
+py = read_float(*file);
+pz = read_float(*file);
+hvx = read_float(*file);
+hvy = read_float(*file);
+hvz = read_float(*file);
+vx = read_float(*file);
+vy = read_float(*file);
+vz = read_float(*file);
+
 }
 */
 void Particula::printinfo(int counter) const {
@@ -34,6 +45,20 @@ void Particula::printinfo(int counter) const {
   std::cout << "vx:  " << counter << " " << vx << '\n';
   std::cout << "vy " << counter << " " << vx << '\n';
   std::cout << "vz " << counter << " " << vz << '\n';
+}
+
+std::string Particula::particle_write() const{
+  std::string parameters;
+  parameters += std::to_string(px);
+  parameters += std::to_string(py);
+  parameters += std::to_string(pz);
+  parameters += std::to_string(hvx);
+  parameters += std::to_string(hvy);
+  parameters += std::to_string(hvz);
+  parameters += std::to_string(vx);
+  parameters += std::to_string(vy);
+  parameters += std::to_string(vz);
+  return parameters;
 }
 
 double calculo_m(double ppm,double p){

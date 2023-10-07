@@ -32,8 +32,22 @@ class Particula{
     Particula() = default;
     void printinfo(int counter) const;
     void set_particles_coordinates(std::istream & file);
+    std::string particle_write() const;
 };
 
+std::string Particula::particle_write() const{
+  std::string parameters;
+  parameters += std::to_string(px);
+  parameters += std::to_string(py);
+  parameters += std::to_string(pz);
+  parameters += std::to_string(hvx);
+  parameters += std::to_string(hvy);
+  parameters += std::to_string(hvz);
+  parameters += std::to_string(vx);
+  parameters += std::to_string(vy);
+  parameters += std::to_string(vz);
+  return parameters;
+}
 
 void Particula::printinfo(int counter) const{
   std::cout << "Particula" << counter << '\n';
@@ -152,7 +166,7 @@ std::list<Particula> argument_validator(std::vector<std::string> arguments){
     particula.set_particles_coordinates(binary_file);
 
     list_of_particles.push_back(particula);
-    particula.printinfo(counter);
+    // particula.printinfo(counter);
 
     counter += 1;
   }
@@ -167,14 +181,11 @@ void file_writer(const std::string& name, const std::list<Particula>& list_of_pa
     std::cout << "Can't Open output file " << '\n';
     exit(-4);
   }
-
-  unsigned long size = list_of_particles.size();
-  size += 2;
-  /*
   for (const auto & elem : list_of_particles){
-    output.write(reinterpret_cast<char*>(&elem),36);
+    std::string const parameters = elem.particle_write();
+    output.write(reinterpret_cast<char const*>(&parameters),36);
   }
-   */
+
   output.close();
 }
 
