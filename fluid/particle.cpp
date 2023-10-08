@@ -150,6 +150,18 @@ double transformacion_densidad (double densidad, double h, double m){
     densidad= (densidad+ std::pow(h,6))* 315 * m / (64*3.14* std::pow(h,9));
     return densidad;
 }
+void movimiento_particulas(Particula &particula_i){
+    double const tiempo = pow(10,-3);
+    particula_i.px+=particula_i.hvx * tiempo + particula_i.ax * pow(tiempo,2);
+    particula_i.py+=particula_i.hvy * tiempo + particula_i.ay * pow(tiempo,2);
+    particula_i.pz+=particula_i.hvz * tiempo + particula_i.az * pow(tiempo,2);
+    particula_i.vx= particula_i.hvx + particula_i.acx * tiempo /2;
+    particula_i.vy= particula_i.hvy + particula_i.acy * tiempo /2;
+    particula_i.vz= particula_i.hvz + particula_i.acz * tiempo /2;
+    particula_i.hvx+= particula_i.ax * tiempo;
+    particula_i.hvy+= particula_i.ay * tiempo;
+    particula_i.hvz+= particula_i.az * tiempo;
+    }
 
 // EL CUBO DEBERÍA IR EN BLOCK CPP, LEETE LA MEMORIA Y ORDENA LAS COSAS, y si es una clase
 // usa el cpp para las funciones y el hpp para la structuración de la clase.
