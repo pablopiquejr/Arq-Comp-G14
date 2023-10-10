@@ -26,8 +26,8 @@ class Particula{
   public:
     Particula() = default;
     void printinfo(int counter) const;
-    void set_particles_coordinates(std::istream & file);
-    std::string particle_write() const;
+    void set_particles_coordinates(std::ifstream & file);
+    [[nodiscard]] std::string particle_write() const;
 };
 
 #endif  // FLUID_PARTICLE_HPP
