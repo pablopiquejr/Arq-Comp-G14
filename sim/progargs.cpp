@@ -1,7 +1,7 @@
 //
 // Created by sergio on 7/10/23.
 //
-#include "particle.cpp"
+#include "particle.hpp"
 
 #include <list>
 #include <vector>
