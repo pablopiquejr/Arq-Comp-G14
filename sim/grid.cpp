@@ -15,5 +15,3 @@ double calculo_nz(double h, double zmax, double zmin) {
     double const n_z = (zmax - zmin) / h;
     return n_z;
 }
-
-#include "progargs.hpp"

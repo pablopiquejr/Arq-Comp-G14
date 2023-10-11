@@ -8,7 +8,7 @@
 #include <iostream>
 
 class Particula{
-  private:
+  public:
     double px = 0;
     double py = 0;
     double pz = 0;
@@ -23,13 +23,12 @@ class Particula{
     double acz = 0;
     double densidad = 0;
 
-  public:
     Particula() = default;
     void printinfo(int counter) const;
     void set_particles_coordinates(std::ifstream & file);
-    double calculo_i (double px, double sx, double xmin);
-    double calculo_j (double py, double sy, double ymin);
-    double calculo_k (double pz, double sz, double zmin);
+    static double calculo_i (double px, double sx, double xmin);
+    static double calculo_j (double py, double sy, double ymin);
+    static double calculo_k (double pz, double sz, double zmin);
     [[nodiscard]] std::string particle_write() const;
 };
 

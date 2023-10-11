@@ -5,6 +5,18 @@
 
 #include <list>
 #include <vector>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+
+
+double read_float(std::ifstream & file) {
+  float number = 0;
+  // NOLINTNEXTLINE
+  file.read(reinterpret_cast<char *>(&number), 4);
+  return number;
+}
+
 
 void validate_number(std::string const & n_iterations) {
   int const base = 10;
@@ -60,4 +72,15 @@ void file_writer(std::string const & name, std::list<Particula> const & list_of_
     std::string const parameters = elem.particle_write();
     output.write(reinterpret_cast<char const *>(&parameters), 36);  // NOLINT
   }
+}
+
+double calculo_m(double ppm, double p) {
+  double const ppm_cubo = std::pow(ppm, 3.0);
+  double const masa     = p / ppm_cubo;
+  return masa;
+}
+
+double calculo_h(double ppm, double r) {
+  double const height = r / ppm;
+  return height;
 }
