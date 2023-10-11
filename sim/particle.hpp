@@ -27,6 +27,9 @@ class Particula{
     Particula() = default;
     void printinfo(int counter) const;
     void set_particles_coordinates(std::ifstream & file);
+    double calculo_i (double px, double sx, double xmin);
+    double calculo_j (double py, double sy, double ymin);
+    double calculo_k (double pz, double sz, double zmin);
     [[nodiscard]] std::string particle_write() const;
 };
 

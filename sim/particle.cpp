@@ -65,20 +65,6 @@ double calculo_h(double ppm, double r) {
   return height;
 }
 
-double calculo_nx(double xmax, double xmin, double h) {
-  double const n_x = (xmax - xmin) / h;
-  return n_x;
-}
-
-double calculo_ny(double h, double ymax, double ymin) {
-  double const n_y = (ymax - ymin) / h;
-  return n_y;
-}
-
-double calculo_nz(double h, double zmax, double zmin) {
-  double const n_z = (zmax - zmin) / h;
-  return n_z;
-}
 
 double calculo_sx(double nx, double xmax, double xmin) {
   double const s_x = (xmax - xmin) / nx;
@@ -100,12 +86,12 @@ double calculo_i(double px, double sx, double xmin) {
   return i_coordinate;
 }
 
-double calculo_j(double sy, double py, double ymin) {
+double calculo_j(double py, double sy, double ymin) {
   double const j_coordinate = (py - ymin) / sy;
   return j_coordinate;
 }
 
-double calculo_k(double sz, double pz, double zmin) {
+double calculo_k(double pz, double sz, double zmin) {
   double const k_coordinate = (pz - zmin) / sz;
   return k_coordinate;
 }
