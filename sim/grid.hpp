@@ -1,23 +1,36 @@
 //
 // Created by sergio on 3/10/23.
 //
-
 #ifndef LAB_ARQUITECTURA_GRID_HPP
 #define LAB_ARQUITECTURA_GRID_HPP
+
 #include "constants.hpp"
-#include "block.hpp"
 #include <list>
+#include "block.hpp"
+#include "particle.hpp"
+#include <iostream>
+#include <cmath>
 
 class Cubo {
     public:
-      static int n_x = 0;
-      static int n_y = 0;
-      static int n_z = 0;
-      std::list<Bloque> bloques;
+      int n_x = 0;
+      int n_y = 0;
+      int n_z = 0;
+      std::list<Bloque> bloques{};
 
     Cubo() = default;
-    static void set_grid_values();
+    void set_grid_values();
     void creacion_bloques();
+
+    void set_particles_coordinates(Particula &particula) const;
+
+
+    void colision_x1(Particula & particula, Bloque &bloque) const;
+    void colision_y1(Particula & particula, Bloque &bloque) const;
+    void colision_z1(Particula & particula, Bloque &bloque) const;
+    void colision_x(Particula & particula, Bloque &bloque) const;
+    void colision_y(Particula & particula, Bloque &bloque) const;
+    void colision_z(Particula & particula, Bloque &bloque) const;
 
 };
 #endif  // LAB_ARQUITECTURA_GRID_HPP

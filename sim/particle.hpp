@@ -1,10 +1,12 @@
 //
 // Created by sergio on 5/10/23.
 //
+#ifndef LAB_ARQUITECTURA_PARTICLE_HPP
+#define LAB_ARQUITECTURA_PARTICLE_HPP
 
 #include <iostream>
 #include "constants.hpp"
-#include "grid.hpp"
+#include <fstream>
 
 class Particula{
   public:
@@ -29,7 +31,7 @@ class Particula{
     Particula() = default;
     void printinfo(int counter) const;
     void set_particles_data(std::ifstream & file, double id);
-    void set_particles_coordinates(Cubo &cubo);
+
     [[nodiscard]] std::string particle_write() const;
 };
 

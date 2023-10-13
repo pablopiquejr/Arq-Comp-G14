@@ -1,24 +1,13 @@
 //
 // Created by sergio on 7/10/23.
 //
-#include "particle.hpp"
-#include "constants.hpp"
 
-#include <list>
-#include <vector>
-#include <cmath>
-#include <fstream>
-#include <iostream>
+#include "progargs.hpp"
 
 float ppm        = 0;
 int n_parameters = 0;
 
-double read_float(std::ifstream & file) {
-  float number = 0;
-  // NOLINTNEXTLINE
-  file.read(reinterpret_cast<char *>(&number), 4);
-  return number;
-}
+
 void check_n_arguments(int argc) {
   if (argc != 4) {
     std::cout << "Invalid number of steps: " << argc << '\n';

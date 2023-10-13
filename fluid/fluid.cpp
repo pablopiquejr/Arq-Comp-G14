@@ -1,5 +1,6 @@
 #include "../sim/progargs.cpp"
-#include "../sim/block.cpp"
+#include "../sim/grid.hpp"
+#include "../sim/particle.hpp"
 #include <span>
 
 int main(int argc, char * argv[]) {
@@ -7,7 +8,8 @@ int main(int argc, char * argv[]) {
   std::span const span_args{argv, std::size_t(argc)};
   std::vector<std::string> const arguments{span_args.begin(), span_args.end()};
   std::list<Particula> const particles = argument_validator(arguments);
-  declaracion_tamaño_bloque()
+  declaracion_tamaño_bloque();
+  declaración_m_h();
   creacion_bloques();
 
 

@@ -1,13 +1,13 @@
 //
 // Created by sergio on 3/10/23.
 //
-#include "particle.hpp"
-#include "constants.hpp"
-#include "grid.cpp"
-#include <iostream>
-#include <cmath>
 #ifndef LAB_ARQUITECTURA_BLOCK_HPP
 #define LAB_ARQUITECTURA_BLOCK_HPP
+
+#include <cmath>
+#include <iostream>
+#include "particle.hpp"
+
 class Bloque {
   public:
     int b_x_coordinate = 0;
@@ -21,15 +21,9 @@ class Bloque {
     
     static double transformacion_densidad(Particula & particula);
     static void movimiento_particulas(Particula & particula_i);
-    static void incremento_densidades(Particula & particula_i, Particula & particula_j);
-    static void incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma);
+    void incremento_densidades(Particula & particula_i, Particula & particula_j);
+    void incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma);
 
-    void colision_x1(Particula & particula);
-    void colision_y1(Particula & particula);
-    void colision_z1(Particula & particula);
-    void colision_x(Particula & particula);
-    void colision_y(Particula & particula);
-    void colision_z(Particula & particula);
 };
 #endif  // LAB_ARQUITECTURA_BLOCK_HPP
 
