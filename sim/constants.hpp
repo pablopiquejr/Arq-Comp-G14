@@ -22,11 +22,11 @@ const double y_min = -0.08;
 const double z_min = -0.065;
 
 
-const double h_logitud_suavizado;
-const double m_particula;
-const double s_x;
-const double s_y;
-const double s_Z;
+double h_logitud_suavizado;
+double m_particula;
+double s_x;
+double s_y;
+double s_z;
 
 
 #endif //ARQ_COMP_G14_CONSTANTS_HPP

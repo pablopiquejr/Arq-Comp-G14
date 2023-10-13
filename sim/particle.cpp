@@ -3,7 +3,7 @@
 //
 
 #include "particle.hpp"
-
+#include "progargs.cpp"
 
 
 std::string Particula::particle_write() const {
@@ -46,8 +46,7 @@ void Particula::set_particles_data(std::ifstream & file, double id) {
   vz  = read_float(file);
 }
 
-
-void Particula::set_particles_coordinates() {
+double Particula::set_particles_coordinates() {
     i = floor((px - x_min) / s_x);
     j = floor((py - y_min) / s_y);
     k = floor((pz - z_min) / s_z);

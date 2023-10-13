@@ -6,17 +6,21 @@
 
 #include "constants.hpp"
 
-s_x = (x_max - x_min) / nx;
-s_y = (y_max - y_min) / ny;
-s_z = (z_max - z_min) / nz;
+#include <iostream>
+#include <cmath>
 
+void declaracion_tamaño_bloque(){
+  s_x = (x_max - x_min) / n_x;
+  s_y = (y_max - y_min) / n_y;
+  s_z = (z_max - z_min) / n_z;
+}
 
 
 // SI USAS DATOS DE PARTICULA PIENSA SI RENTA MAS TENER ESTA FUNCIÓN DENTRO DE LA CLASE
-void Bloque::transformacion_densidad(Particula & particula) {
+double Bloque::transformacion_densidad(Particula & particula) {
   // SI aqui usas PI, creo que hay una libreria para eso, deberias usarla
-  particula.densidad = (particula.densidad + std::pow(h, 6)) *
-                       315 * m / (64 * std::numbers::pi * std::pow(h, 9));
+  particula.densidad = (particula.densidad + std::pow(h_logitud_suavizado, 6)) *
+                       315 * m_particula / (64 * std::numbers::pi * std::pow(h_logitud_suavizado, 9));
 }
 
 void Bloque::movimiento_particulas(Particula & particula_i) {
@@ -34,30 +38,29 @@ void Bloque::movimiento_particulas(Particula & particula_i) {
 }
 
 
-void Bloque::incremento_densidades(double h, Particula & particula_i, Particula & particula_j) {
+void Bloque::incremento_densidades(Particula & particula_i, Particula & particula_j) {
   double const norma = std::pow(particula_i.px - particula_j.px, 2) +
                        std::pow(particula_i.py - particula_j.py, 2) +
                        std::pow(particula_i.pz - particula_j.pz, 2);
-  double const h_2 = std::pow(h, 2);
+  double const h_2 = std::pow(h_logitud_suavizado, 2);
   if (norma < h_2) {
     double const incremento  = std::pow(h_2 - norma, 3);
     particula_i.densidad    += incremento;
     particula_j.densidad    += incremento;
   }
-  incremento_aceleracion(particula_i, particula_j, h, norma, m);
+  incremento_aceleracion(particula_i, particula_j,norma);
 }
 
 
 // SE PASA DE COMPLEJIDAD
-void Bloque::incremento_aceleracion(Particula & particula_i, Particula & particula_j, double h,
-                                    double norma, double m) {
+void Bloque::incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma) {
   double const operador_izquierda =
       // el 1.5 es 3/2
-      15 * m * 1.5 * ps * std::pow(h - std::pow(std::max(norma, std::pow(10, -12)), 0.5), 2) *
+      15 * m_particula * 1.5 * p_s * std::pow(h_logitud_suavizado - std::pow(std::max(norma, std::pow(10, -12)), 0.5), 2) *
       (particula_i.densidad + particula_j.densidad - 2 * (std::pow(10, -3))) /
-      (std::numbers::pi  * std::pow(h, 6) * std::pow(std::max(norma, std::pow(10, -12)), 0.5));
+      (std::numbers::pi  * std::pow(h_logitud_suavizado, 6) * std::pow(std::max(norma, std::pow(10, -12)), 0.5));
 
-  double const operador_derecha            = 45 * 0.4 * m / (std::numbers::pi  * std::pow(h, 6));
+  double const operador_derecha = 45 * 0.4 * m_particula / (std::numbers::pi  * std::pow(h_logitud_suavizado, 6));
   double const incremento_aceleracion_iz_x = (particula_i.px - particula_j.px) * operador_izquierda;
   double const incremento_aceleracion_iz_y = (particula_i.py - particula_j.py) * operador_izquierda;
   double const incremento_aceleracion_iz_z = (particula_i.pz - particula_j.pz) * operador_izquierda;
@@ -81,123 +84,114 @@ void Bloque::incremento_aceleracion(Particula & particula_i, Particula & particu
   particula_j.acz += incremento_aceleracion_z;
 }
 
-void Bloque::colision_x1(Particula &particula, double xmin, double xmax){
+void Bloque::colision_x1(Particula &particula){
   if (s_x==0){
     // Aquí ponía particula.x, supongo que se referia a px
-    double const d_x= particula.px-xmin;
+    double const d_x= particula.px-x_min;
     if (d_x<0){
       // Aquí ponía particula.x, supongo que se referia a px
-      particula.px=xmin-d_x;
+      particula.px=x_min-d_x;
       }
     return;
   }
-  // Que es nx????
-  if (s_x==nx-1){
+  // Que es n_x????
+  if (s_x==n_x-1){
     // Aquí ponía particula.x, supongo que se referia a px
-    double const d_x= xmax-particula.px;
+    double const d_x= x_max-particula.px;
     if (d_x<0){
       // Aquí ponía particula.x, supongo que se referia a px
-      particula.px=xmax+d_x;
+      particula.px=x_max+d_x;
       }
     return;
   }
   particula.vx=-particula.vx;
   particula.hvx=-particula.hvx;
 }
-void Bloque::colision_y1(Particula &particula, double ymin, double ymax){
+void Bloque::colision_y1(Particula &particula){
   if (s_y==0){
     // Aquí ponía particula.y, supongo que se referia a py
-    double const d_y= particula.py-ymin;
+    double const d_y= particula.py-y_min;
     if (d_y<0){
       // Aquí ponía particula.y, supongo que se referia a py
-      particula.py=ymin-d_y;
+      particula.py=y_min-d_y;
       }
       return;
   }
-  if (s_y==ny-1){
+  if (s_y==n_y-1){
     // Aquí ponía particula.y, supongo que se referia a py
-    double const d_y= ymax-particula.py;
+    double const d_y= y_max-particula.py;
     if (d_y<0) {
       // Aquí ponía particula.y, supongo que se referia a py
-      particula.py = ymax + d_y;
+      particula.py = y_max + d_y;
     }
     return;
   }
   particula.vy=-particula.vy;
   particula.hvy=-particula.hvy;
 }
-void Bloque::colision_z1(Particula &particula, double zmin, double zmax){
+void Bloque::colision_z1(Particula &particula){
   if (s_z==0){
     // Aquí ponía particula.z, supongo que se referia a pz
-    double const d_z= particula.pz-zmin;
+    double const d_z= particula.pz-z_min;
     if (d_z < 0) {
       // Aquí ponía particula.z, supongo que se referia a pz
-      particula.pz = zmin - d_z;
+      particula.pz = z_min - d_z;
     }
     return;
   }
 
-  if (s_z == nz-1){
+  if (s_z == n_z-1){
     // Aquí ponía particula.z, supongo que se referia a pz
-    double const d_z= zmax-particula.pz;
+    double const d_z= z_max-particula.pz;
     if (d_z < 0){
       // Aquí ponía particula.z, supongo que se referia a pz
-      particula.pz=zmax+d_z;
+      particula.pz=z_max+d_z;
     }
     return;
   }
   particula.vz=-particula.vz;
   particula.hvz=-particula.hvz;
 }
-//o mejor llamar a la funcion nx aqui//
-void Bloque::colision_x(Particula &particula, double xmin, double xmax, double h ) const {
-  particula.px    = particula.px + particula.hvx;  // delta de t no va a ser 1 siempre?//
-  double const nx = calculo_nx(xmin, xmax, h);
-  double const dp = std::pow(10, -3);
-  double const cs = 3 * std::pow(10, 4);
-  double const dv = 128.0;
+//TEN EN CUENTA QUE ESTO ES PARTE DE LA FUNCION BLOQUE, NO TIENE n_x
+void Bloque::colision_x(Particula &particula) {
+  particula.px = particula.px + particula.hvx;  // delta de t no va a ser 1 siempre?//
+
   if (s_x == 0) {
-    double const incremento_x = dp - x + xmin;
-    if (incremento > dp) { particula.acx += cs * incremento_x - dv * particula.vx; }
-    if (s_x == nx - 1) {
-      double const incremento_x = dp - xmax + x;
-      if (incremento > dp) { particula.acx -= cs * incremento_x + dv * particula.vx; }
+    double const incremento_x = d_p - particula.px + x_min;
+    if (incremento > d_p) { particula.acx += s_c * incremento_x - d_v * particula.vx; }
+    if (s_x == n_x - 1) {
+      double const incremento_x = d_p - x_max + particula.px;
+      if (incremento > d_p) { particula.acx -= s_c * incremento_x + d_v * particula.vx; }
     }
   }
 }
-void Bloque::colision_y(Particula & particula, double ymin, double ymax, double h) const {
+void Bloque::colision_y(Particula & particula) {
   particula.py    = particula.py + particula.hvy;  // delta de t no va a ser 1 siempre?//
-  double const ny = calculo_ny(ymin, ymax, h);
-  double const dp = std::pow(10, -3);
-  double const cs = 3 * std::pow(10, 4);
-  double const dv = 128.0;
+
   if (s_x == 0) {
-    double const incremento_y = dp - y + ymin;
-    if (incremento > dp) { particula.acy += cs * incremento_y - dv * particula.vy; }
+    double const incremento_y = d_p - particula.py + y_min;
+    if (incremento > d_p) { particula.acy += s_c * incremento_y - d_v * particula.vy; }
   }
-  if (s_y == ny - 1) {
-    double const incremento_y = dp - ymax + y;
-    if (incremento > dp) { particula.acy -= cs * incremento_y + dv * particula.vy; }
+  if (s_y == n_y - 1) {
+    double const incremento_y = d_p - y_max + particula.py;
+    if (incremento > d_p) { particula.acy -= s_c * incremento_y + d_v * particula.vy; }
   }
 }
 
-// o mejor llamar a la funcion nx aqui//
+// o mejor llamar a la funcion n_x aqui//
 // por que &particula_i?
-void Bloque::colision_z(Particula & particula, double zmin, double zmax, double h) const {
+void Bloque::colision_z(Particula & particula) {
   // era double const z
   // Aquí ponía particula.z, supongo que se referia a pz
   particula.pz    = particula.pz + particula.hvz;  // delta de t no va a ser 1 siempre?//
-  double const nz = calculo_nz(zmin, zmax, h);
-  double const dp = std::pow(10, -3);
-  double const cs = 3 * std::pow(10, 4);
-  double const dv = 128.0;
+
   if (s_z == 0) {
-    double const incremento_z = dp - z + zmin;
-    if (incremento > dp) { particula.acz += cs * incremento_z - dv * particula.vz; };
+    double const incremento_z = d_p - particula.pz + z_min;
+    if (incremento > d_p) { particula.acz += s_c * incremento_z - d_v * particula.vz; };
   }
-  if (s_z == nz - 1) {
-    double const incremento_z = dp - zmax + z;
-    if (incremento > dp) { particula.acz -= cs * incremento_z + dv * particula.vz; };
+  if (s_z == n_z - 1) {
+    double const incremento_z = d_p - z_max + particula.pz;
+    if (incremento > d_p) { particula.acz -= s_c * incremento_z + d_v * particula.vz; };
   }
 }
 

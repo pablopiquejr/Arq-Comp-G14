@@ -79,8 +79,7 @@ void file_writer(std::string const & name, std::list<Particula> const & list_of_
   }
 }
 
-
-m_particula = p_densidad / std::pow(ppm, 3.0);
-
-h_longitud_suavizado = r_radio / ppm;
-
+void declaración_m_h() {
+  m_particula = p_densidad / std::pow(ppm, 3.0);
+  h_logitud_suavizado = r_radio / ppm;
+}
