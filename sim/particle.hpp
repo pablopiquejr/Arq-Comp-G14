@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "constants.hpp"
+#include "grid.hpp"
 
 class Particula{
   public:
@@ -28,7 +29,7 @@ class Particula{
     Particula() = default;
     void printinfo(int counter) const;
     void set_particles_data(std::ifstream & file, double id);
-    double set_particles_coordinates();
+    void set_particles_coordinates(Cubo &cubo);
     [[nodiscard]] std::string particle_write() const;
 };
 

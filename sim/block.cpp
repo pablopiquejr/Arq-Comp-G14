@@ -2,18 +2,6 @@
 // Created by sergio on 3/10/23.
 //
 #include "block.hpp"
-#include "grid.cpp"
-
-#include "constants.hpp"
-
-#include <iostream>
-#include <cmath>
-
-void declaracion_tamaño_bloque(){
-  s_x = (x_max - x_min) / n_x;
-  s_y = (y_max - y_min) / n_y;
-  s_z = (z_max - z_min) / n_z;
-}
 
 
 // SI USAS DATOS DE PARTICULA PIENSA SI RENTA MAS TENER ESTA FUNCIÓN DENTRO DE LA CLASE
@@ -84,8 +72,8 @@ void Bloque::incremento_aceleracion(Particula & particula_i, Particula & particu
   particula_j.acz += incremento_aceleracion_z;
 }
 
-void Bloque::colision_x1(Particula &particula){
-  if (s_x==0){
+void Bloque::colision_x1(Particula &particula, Cubo &cubo){
+  if (b_x_coordinate==0){
     // Aquí ponía particula.x, supongo que se referia a px
     double const d_x= particula.px-x_min;
     if (d_x<0){
@@ -95,7 +83,7 @@ void Bloque::colision_x1(Particula &particula){
     return;
   }
   // Que es n_x????
-  if (s_x==n_x-1){
+  if (b_x_coordinate==cubo.n_x-1){
     // Aquí ponía particula.x, supongo que se referia a px
     double const d_x= x_max-particula.px;
     if (d_x<0){
@@ -107,8 +95,8 @@ void Bloque::colision_x1(Particula &particula){
   particula.vx=-particula.vx;
   particula.hvx=-particula.hvx;
 }
-void Bloque::colision_y1(Particula &particula){
-  if (s_y==0){
+void Bloque::colision_y1(Particula &particula, Cubo &cubo){
+  if (b_y_coordinate==0){
     // Aquí ponía particula.y, supongo que se referia a py
     double const d_y= particula.py-y_min;
     if (d_y<0){
@@ -117,7 +105,7 @@ void Bloque::colision_y1(Particula &particula){
       }
       return;
   }
-  if (s_y==n_y-1){
+  if (b_y_coordinate==cubo.n_y-1){
     // Aquí ponía particula.y, supongo que se referia a py
     double const d_y= y_max-particula.py;
     if (d_y<0) {
@@ -129,8 +117,8 @@ void Bloque::colision_y1(Particula &particula){
   particula.vy=-particula.vy;
   particula.hvy=-particula.hvy;
 }
-void Bloque::colision_z1(Particula &particula){
-  if (s_z==0){
+void Bloque::colision_z1(Particula &particula, Cubo &cubo){
+  if (b_z_coordinate==0){
     // Aquí ponía particula.z, supongo que se referia a pz
     double const d_z= particula.pz-z_min;
     if (d_z < 0) {
@@ -140,7 +128,7 @@ void Bloque::colision_z1(Particula &particula){
     return;
   }
 
-  if (s_z == n_z-1){
+  if (b_z_coordinate == cubo.n_z-1){
     // Aquí ponía particula.z, supongo que se referia a pz
     double const d_z= z_max-particula.pz;
     if (d_z < 0){
@@ -153,45 +141,45 @@ void Bloque::colision_z1(Particula &particula){
   particula.hvz=-particula.hvz;
 }
 //TEN EN CUENTA QUE ESTO ES PARTE DE LA FUNCION BLOQUE, NO TIENE n_x
-void Bloque::colision_x(Particula &particula) {
-  particula.px = particula.px + particula.hvx;  // delta de t no va a ser 1 siempre?//
+void Bloque::colision_x(Particula &particula, Cubo &cubo) {
+  particula.px = particula.px + particula.hvx * a_tiempo;  // delta de t no va a ser 1 siempre?//
 
-  if (s_x == 0) {
+  if (b_x_coordinate == 0) {
     double const incremento_x = d_p - particula.px + x_min;
-    if (incremento > d_p) { particula.acx += s_c * incremento_x - d_v * particula.vx; }
-    if (s_x == n_x - 1) {
+    if (incremento_x > d_p) { particula.acx += s_c * incremento_x - d_v * particula.vx; }
+    if (b_y_coordinate == cubo.n_x - 1) {
       double const incremento_x = d_p - x_max + particula.px;
-      if (incremento > d_p) { particula.acx -= s_c * incremento_x + d_v * particula.vx; }
+      if (incremento_x > d_p) { particula.acx -= s_c * incremento_x + d_v * particula.vx; }
     }
   }
 }
-void Bloque::colision_y(Particula & particula) {
-  particula.py    = particula.py + particula.hvy;  // delta de t no va a ser 1 siempre?//
+void Bloque::colision_y(Particula & particula, Cubo &cubo) {
+  particula.py    = particula.py + particula.hvy * a_tiempo;  // delta de t no va a ser 1 siempre?//
 
-  if (s_x == 0) {
+  if (b_y_coordinate == 0) {
     double const incremento_y = d_p - particula.py + y_min;
-    if (incremento > d_p) { particula.acy += s_c * incremento_y - d_v * particula.vy; }
+    if (incremento_y > d_p) { particula.acy += s_c * incremento_y - d_v * particula.vy; }
   }
-  if (s_y == n_y - 1) {
+  if (b_y_coordinate == cubo.n_y - 1) {
     double const incremento_y = d_p - y_max + particula.py;
-    if (incremento > d_p) { particula.acy -= s_c * incremento_y + d_v * particula.vy; }
+    if (incremento_y > d_p) { particula.acy -= s_c * incremento_y + d_v * particula.vy; }
   }
 }
 
 // o mejor llamar a la funcion n_x aqui//
 // por que &particula_i?
-void Bloque::colision_z(Particula & particula) {
+void Bloque::colision_z(Particula & particula, Cubo &cubo) {
   // era double const z
   // Aquí ponía particula.z, supongo que se referia a pz
-  particula.pz    = particula.pz + particula.hvz;  // delta de t no va a ser 1 siempre?//
+  particula.pz    = particula.pz + particula.hvz * a_tiempo;  // delta de t no va a ser 1 siempre?//
 
-  if (s_z == 0) {
+  if (b_z_coordinate == 0) {
     double const incremento_z = d_p - particula.pz + z_min;
-    if (incremento > d_p) { particula.acz += s_c * incremento_z - d_v * particula.vz; };
+    if (incremento_z > d_p) { particula.acz += s_c * incremento_z - d_v * particula.vz; };
   }
-  if (s_z == n_z - 1) {
+  if (b_z_coordinate == cubo.n_z - 1) {
     double const incremento_z = d_p - z_max + particula.pz;
-    if (incremento > d_p) { particula.acz -= s_c * incremento_z + d_v * particula.vz; };
+    if (incremento_z > d_p) { particula.acz -= s_c * incremento_z + d_v * particula.vz; };
   }
 }
 

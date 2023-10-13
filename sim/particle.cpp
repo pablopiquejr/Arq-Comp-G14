@@ -1,10 +1,9 @@
 //
 // Created by sergio on 5/10/23.
 //
-
-#include "particle.hpp"
 #include "progargs.cpp"
-
+#include "particle.hpp"
+#include "grid.hpp"
 
 std::string Particula::particle_write() const {
   std::string parameters;
@@ -45,11 +44,11 @@ void Particula::set_particles_data(std::ifstream & file, double id) {
   vy  = read_float(file);
   vz  = read_float(file);
 }
-
-double Particula::set_particles_coordinates() {
-    i = floor((px - x_min) / s_x);
-    j = floor((py - y_min) / s_y);
-    k = floor((pz - z_min) / s_z);
+//POSIBLEMENTE ESTE MAL (SERGIO)
+void Particula::set_particles_coordinates(Cubo &cubo) {
+    i = floor((px - x_min) * cubo.n_x / (x_max - x_min))  ;
+    j = floor((py - y_min) * cubo.n_y / (y_max - y_min));
+    k = floor((pz - z_min)* cubo.n_z / (z_max - z_min));
 }
 
 

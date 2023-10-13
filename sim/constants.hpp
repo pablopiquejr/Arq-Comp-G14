@@ -12,7 +12,7 @@ const int s_c = 30000;
 const double d_v = 128.0;
 const double u_viscosidad = 0.4;
 const int d_p = -20000;
-const int a_tiempo = -1000;
+const int a_tiempo = 0.001;
 const double gravedad = -9.8;
 const double x_max = 0.065;
 const double y_max = 0.1;
@@ -21,12 +21,8 @@ const double x_min = -0.065;
 const double y_min = -0.08;
 const double z_min = -0.065;
 
-
 double h_logitud_suavizado;
 double m_particula;
-double s_x;
-double s_y;
-double s_z;
 
 
 #endif //ARQ_COMP_G14_CONSTANTS_HPP

@@ -3,6 +3,9 @@
 //
 #include "particle.hpp"
 #include "constants.hpp"
+#include "grid.cpp"
+#include <iostream>
+#include <cmath>
 #ifndef LAB_ARQUITECTURA_BLOCK_HPP
 #define LAB_ARQUITECTURA_BLOCK_HPP
 class Bloque {
