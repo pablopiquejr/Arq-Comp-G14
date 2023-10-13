@@ -21,6 +21,9 @@ class Particula{
     double acy = 0;
     double acz = 0;
     double densidad = 0;
+    int i=0;
+    int j=0;
+    int k=0;
 
     Particula() = default;
     void printinfo(int counter) const;
