@@ -27,10 +27,10 @@ class Particula{
 
     Particula() = default;
     void printinfo(int counter) const;
-    void set_particles_coordinates(std::ifstream & file);
-    static double calculo_i (double px, double sx, double xmin);
-    static double calculo_j (double py, double sy, double ymin);
-    static double calculo_k (double pz, double sz, double zmin);
+    void set_particles_data(std::ifstream & file, double id);
+    static double calculo_i (double px, double sx, double x_min);
+    static double calculo_j (double py, double sy, double y_min);
+    static double calculo_k (double pz, double sz, double z_min);
     [[nodiscard]] std::string particle_write() const;
 };
 

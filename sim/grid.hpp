@@ -4,6 +4,8 @@
 
 #ifndef LAB_ARQUITECTURA_GRID_HPP
 #define LAB_ARQUITECTURA_GRID_HPP
+#include "constants.hpp"
+
 class Cubo {
     public:
         int nx = calculo_nx(double x_max, double x_min, double h);
