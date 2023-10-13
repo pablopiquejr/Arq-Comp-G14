@@ -2,13 +2,12 @@
 // Created by sergio on 5/10/23.
 //
 
-#ifndef FLUID_PARTICLE_HPP
-#define FLUID_PARTICLE_HPP
-
 #include <iostream>
+#include "constants.hpp"
 
 class Particula{
   public:
+    double identifier = 0;
     double px = 0;
     double py = 0;
     double pz = 0;

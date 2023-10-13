@@ -3,7 +3,6 @@
 //
 
 #include "particle.hpp"
-#include "progargs.cpp"
 
 
 
@@ -34,7 +33,8 @@ void Particula::printinfo(int counter) const {
   std::cout << "vz " << vz << '\n';
 }
 
-void Particula::set_particles_coordinates(std::ifstream & file) {
+void Particula::set_particles_data(std::ifstream & file, double id) {
+  identifier = id;
   px  = read_float(file);
   py  = read_float(file);
   pz  = read_float(file);
@@ -47,19 +47,10 @@ void Particula::set_particles_coordinates(std::ifstream & file) {
 }
 
 
-double Particula::calculo_i(double px, double sx, double xmin) {
-  double const i_coordinate = (px - xmin) / sx;
-  return i_coordinate;
-}
-
-double Particula::calculo_j(double py, double sy, double ymin) {
-  double const j_coordinate = (py - ymin) / sy;
-  return j_coordinate;
-}
-
-double Particula::calculo_k(double pz, double sz, double zmin) {
-  double const k_coordinate = (pz - zmin) / sz;
-  return k_coordinate;
+void Particula::set_particles_coordinates() {
+    i = floor((px - x_min) / s_x);
+    j = floor((py - y_min) / s_y);
+    k = floor((pz - z_min) / s_z);
 }
 
 

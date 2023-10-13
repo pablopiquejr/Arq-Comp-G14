@@ -3,38 +3,29 @@
 //
 #include "block.hpp"
 #include "grid.cpp"
-#include <iostream>
-#include <cmath>
 
-double Bloque::calculo_sx(double nx, double xmax, double xmin) {
-  double const s_x = (xmax - xmin) / nx;
-  return s_x;
-}
+#include "constants.hpp"
 
-double Bloque::calculo_sy(double ny, double ymax, double ymin) {
-  double const s_y = (ymax - ymin) / ny;
-  return s_y;
-}
+s_x = (x_max - x_min) / nx;
+s_y = (y_max - y_min) / ny;
+s_z = (z_max - z_min) / nz;
 
-double Bloque::calculo_sz(double nz, double zmax, double zmin) {
-  double const s_z = (zmax - zmin) / nz;
-  return s_z;
-}
 
 
 // SI USAS DATOS DE PARTICULA PIENSA SI RENTA MAS TENER ESTA FUNCIÓN DENTRO DE LA CLASE
-double Bloque::transformacion_densidad(double densidad, double h, double m) {
+void Bloque::transformacion_densidad(Particula & particula) {
   // SI aqui usas PI, creo que hay una libreria para eso, deberias usarla
-  densidad = (densidad + std::pow(h, 6)) * 315 * m / (64 * 3.14 * std::pow(h, 9));
-  return densidad;
+  particula.densidad = (particula.densidad + std::pow(h, 6)) *
+                       315 * m / (64 * std::numbers::pi * std::pow(h, 9));
 }
 
 void Bloque::movimiento_particulas(Particula & particula_i) {
-  double const tiempo  = pow(10, -3);
+  double const tiempo  = std::pow(10, -3);
   particula_i.px      += particula_i.hvx * tiempo + particula_i.acx * pow(tiempo, 2);
   particula_i.py      += particula_i.hvy * tiempo + particula_i.acy * pow(tiempo, 2);
   particula_i.pz      += particula_i.hvz * tiempo + particula_i.acz * pow(tiempo, 2);
-  particula_i.vx       = particula_i.hvx + particula_i.acx * tiempo / 2;
+  // se puede cambiar la división por * 0.5
+  particula_i.vx       = particula_i.hvx + particula_i.acx * tiempo * 2;
   particula_i.vy       = particula_i.hvy + particula_i.acy * tiempo / 2;
   particula_i.vz       = particula_i.hvz + particula_i.acz * tiempo / 2;
   particula_i.hvx     += particula_i.acx * tiempo;
@@ -42,7 +33,7 @@ void Bloque::movimiento_particulas(Particula & particula_i) {
   particula_i.hvz     += particula_i.acz * tiempo;
 }
 
-// AQUI NO PUEDES ACCEDER A VARIABLES DEBIDO A QUE ES PRIVADA, SI QUIERES LA HACEMOS PÚBLICA
+
 void Bloque::incremento_densidades(double h, Particula & particula_i, Particula & particula_j) {
   double const norma = std::pow(particula_i.px - particula_j.px, 2) +
                        std::pow(particula_i.py - particula_j.py, 2) +
@@ -53,6 +44,7 @@ void Bloque::incremento_densidades(double h, Particula & particula_i, Particula 
     particula_i.densidad    += incremento;
     particula_j.densidad    += incremento;
   }
+  incremento_aceleracion(particula_i, particula_j, h, norma, m);
 }
 
 
@@ -60,11 +52,12 @@ void Bloque::incremento_densidades(double h, Particula & particula_i, Particula 
 void Bloque::incremento_aceleracion(Particula & particula_i, Particula & particula_j, double h,
                                     double norma, double m) {
   double const operador_izquierda =
-      15 * m * std::pow(h - std::pow(std::max(norma, std::pow(10, -12)), 0.5), 2) *
+      // el 1.5 es 3/2
+      15 * m * 1.5 * ps * std::pow(h - std::pow(std::max(norma, std::pow(10, -12)), 0.5), 2) *
       (particula_i.densidad + particula_j.densidad - 2 * (std::pow(10, -3))) /
-      (3.14 * std::pow(h, 6) * std::pow(std::max(norma, std::pow(10, -12)), 0.5));
+      (std::numbers::pi  * std::pow(h, 6) * std::pow(std::max(norma, std::pow(10, -12)), 0.5));
 
-  double const operador_derecha            = 45 * 0.4 * m / (3.14 * std::pow(h, 6));
+  double const operador_derecha            = 45 * 0.4 * m / (std::numbers::pi  * std::pow(h, 6));
   double const incremento_aceleracion_iz_x = (particula_i.px - particula_j.px) * operador_izquierda;
   double const incremento_aceleracion_iz_y = (particula_i.py - particula_j.py) * operador_izquierda;
   double const incremento_aceleracion_iz_z = (particula_i.pz - particula_j.pz) * operador_izquierda;

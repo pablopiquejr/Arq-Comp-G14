@@ -5,15 +5,16 @@
 #ifndef LAB_ARQUITECTURA_GRID_HPP
 #define LAB_ARQUITECTURA_GRID_HPP
 class Cubo {
-    private:
-        int nx = 0;
-        int ny = 0;
-        int nz = 0;
     public:
+        int nx = calculo_nx(double x_max, double x_min, double h);
+        int ny =  calculo_ny(double y_max, double y_min, double h);
+        int nz =  calculo_nz(double z_max, double z_min, double h);
+
     Cubo() = default;
-    double calculo_nx(double xmax, double xmin, double h);
-    double calculo_ny(double ymax, double ymin, double h);
-    double calculo_nz(double zmax, double zmin, double h);
+    double calculo_nx(double x_max, double x_min, double h);
+    double calculo_ny(double y_max, double y_min, double h);
+    double calculo_nz(double z_max, double z_min, double h);
+    void creacion_bloques();
 
 };
 #endif  // LAB_ARQUITECTURA_GRID_HPP

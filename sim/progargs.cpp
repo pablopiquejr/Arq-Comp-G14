@@ -2,6 +2,7 @@
 // Created by sergio on 7/10/23.
 //
 #include "particle.hpp"
+#include "constants.hpp"
 
 #include <list>
 #include <vector>
@@ -9,6 +10,8 @@
 #include <fstream>
 #include <iostream>
 
+float ppm        = 0;
+int n_parameters = 0;
 
 double read_float(std::ifstream & file) {
   float number = 0;
@@ -16,8 +19,12 @@ double read_float(std::ifstream & file) {
   file.read(reinterpret_cast<char *>(&number), 4);
   return number;
 }
-
-
+void check_n_arguments(int argc) {
+  if (argc != 4) {
+    std::cout << "Invalid number of steps: " << argc << '\n';
+    exit(-1);
+  }
+}
 void validate_number(std::string const & n_iterations) {
   int const base = 10;
   if (isdigit(stoi(n_iterations, nullptr, base)) == 1) {
@@ -36,17 +43,15 @@ std::list<Particula> file_reader(std::string const & file_name) {
     exit(-3);
   }
   // read the header
-  float ppm        = 0;
-  int n_parameters = 0;
 
   binary_file.read(reinterpret_cast<char *>(&ppm), 4);           // NOLINT
   binary_file.read(reinterpret_cast<char *>(&n_parameters), 4);  // NOLINT
 
   std::list<Particula> list_of_particles;
-  int counter = 0;
+  double counter = 0;
   while (counter < n_parameters) {
     Particula particula;
-    particula.set_particles_coordinates(binary_file);
+    particula.set_particles_data(binary_file, counter);
     list_of_particles.push_back(particula);
     // particula.printinfo(counter);
     counter += 1;
@@ -74,13 +79,8 @@ void file_writer(std::string const & name, std::list<Particula> const & list_of_
   }
 }
 
-double calculo_m(double ppm, double p) {
-  double const ppm_cubo = std::pow(ppm, 3.0);
-  double const masa     = p / ppm_cubo;
-  return masa;
-}
 
-double calculo_h(double ppm, double r) {
-  double const height = r / ppm;
-  return height;
-}
+m_particula = p_densidad / std::pow(ppm, 3.0);
+
+h_longitud_suavizado = r_radio / ppm;
+
