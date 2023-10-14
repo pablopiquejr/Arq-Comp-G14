@@ -13,16 +13,15 @@ class Bloque {
     int b_x_coordinate = 0;
     int b_y_coordinate = 0;
     int b_z_coordinate = 0;
+    std::list<Particula> lista_particulas;
 
-    Bloque(int i, int i1, int i2) = default;
+    Bloque(int b_x_coordinate,int b_y_coordinate,int b_z_coordinate);
 
     // Todos estos statics creo que son porque no llamamos a las funciones como tal creo
 
     
-    static double transformacion_densidad(Particula & particula);
+    static void transformacion_densidad(Particula & particula);
     static void movimiento_particulas(Particula & particula_i);
-    void incremento_densidades(Particula & particula_i, Particula & particula_j);
-    void incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma);
 
 };
 #endif  // LAB_ARQUITECTURA_BLOCK_HPP

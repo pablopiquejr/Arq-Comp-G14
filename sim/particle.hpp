@@ -21,7 +21,7 @@ class Particula{
     double vy = 0;
     double vz = 0;
     double acx = 0;
-    double acy = 0;
+    double acy = gravedad;
     double acz = 0;
     double densidad = 0;
     int i=0;

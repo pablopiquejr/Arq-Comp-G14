@@ -32,10 +32,11 @@ std::list<Particula> file_reader(std::string const & file_name) {
     exit(-3);
   }
   // read the header
-
   binary_file.read(reinterpret_cast<char *>(&ppm), 4);           // NOLINT
   binary_file.read(reinterpret_cast<char *>(&n_parameters), 4);  // NOLINT
-
+  if (n_parameters<=0){
+      exit(-5);
+  }
   std::list<Particula> list_of_particles;
   double counter = 0;
   while (counter < n_parameters) {
@@ -44,6 +45,9 @@ std::list<Particula> file_reader(std::string const & file_name) {
     list_of_particles.push_back(particula);
     // particula.printinfo(counter);
     counter += 1;
+  }
+  if (counter<=0){
+      exit(-5);
   }
   return list_of_particles;
 }
@@ -72,3 +76,6 @@ void declaración_m_h() {
   m_particula = p_densidad / std::pow(ppm, 3.0);
   h_logitud_suavizado = r_radio / ppm;
 }
+
+
+

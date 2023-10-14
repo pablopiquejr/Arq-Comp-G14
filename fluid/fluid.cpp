@@ -13,13 +13,8 @@ int main(int argc, char * argv[]) {
   creacion_bloques();
 
 
+
   file_writer(arguments[3], particles);
   std::cout << "Terminé" << '\n';
   return 0;
 }
-void asignacion_inicial(){
-  for (int i; i < 10; i++){
-    continue;
-  }
-
-};
