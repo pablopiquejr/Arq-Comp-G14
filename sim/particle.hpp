@@ -7,6 +7,7 @@
 #include <iostream>
 #include "constants.hpp"
 #include <fstream>
+#include <vector>
 
 class Particula{
   public:
@@ -20,9 +21,7 @@ class Particula{
     double vx = 0;
     double vy = 0;
     double vz = 0;
-    double acx = 0;
-    double acy = gravedad;
-    double acz = 0;
+    std::vector<double> a_c = {0,gravedad,0};
     double densidad = 0;
     int i=0;
     int j=0;

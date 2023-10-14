@@ -7,11 +7,6 @@
 
 
 
-
-
-
-
-
 /////////////////EJEMPLO DE COMO SE PROGRAMAN LOS TESTS ///////////////////////////
 
 /*#include "block.hpp"

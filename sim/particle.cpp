@@ -50,8 +50,3 @@ void Particula::set_particles_data(std::ifstream & file, double id) {
   vz  = read_float(file);
 }
 
-
-
-
-
-

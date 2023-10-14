@@ -77,5 +77,9 @@ void declaración_m_h() {
   h_logitud_suavizado = r_radio / ppm;
 }
 
+void print_all_starting_data(){
+  continue;
+}
+
 
 

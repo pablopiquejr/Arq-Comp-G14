@@ -21,10 +21,10 @@ class Cubo {
 
     Cubo() = default;
     void set_grid_values();
-    void creacion_bloques(std::vector<Particula>list_of_particles);
+    void creacion_bloques(const std::vector<Particula>&list_of_particles);
 
     void set_particles_coordinates(Particula &particula) const;
-    void asignacion_inicial(std::vector<Particula>list_of_particles);
+    void asignacion_inicial(const std::vector<Particula>&list_of_particles);
     void choques_entre_particulas();
 
     void transformacion_densidad(Particula & particula);

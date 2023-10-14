@@ -7,21 +7,16 @@
 #include <cmath>
 #include <iostream>
 #include "particle.hpp"
+#include <list>
 
 class Bloque {
   public:
-    int b_x_coordinate = 0;
-    int b_y_coordinate = 0;
-    int b_z_coordinate = 0;
+    int b_x = 0;
+    int b_y = 0;
+    int b_z = 0;
     std::list<Particula> lista_particulas;
 
     Bloque(int b_x_coordinate,int b_y_coordinate,int b_z_coordinate);
-
-    // Todos estos statics creo que son porque no llamamos a las funciones como tal creo
-
-    
-    static void transformacion_densidad(Particula & particula);
-    static void movimiento_particulas(Particula & particula_i);
 
 };
 #endif  // LAB_ARQUITECTURA_BLOCK_HPP

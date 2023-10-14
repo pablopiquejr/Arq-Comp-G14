@@ -3,35 +3,70 @@
 //
 #include "grid.hpp"
 // SE PASA DE COMPLEJIDAD
+
+/* VERSION PREVIA DE ESTA FUNCIÓN
+ * void incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma) {
+// izquierda x,y,z derecha x,y,z
+std::vector<double> incremento_aceleracion = {0,0,0,0,0,0};
+// vector resultado x,y,z
+std::vector<double> incremento_total = {0,0,0};
+double const operador_izquierda =
+    // el 1.5 es 3/2
+    15 * m_particula * 1.5 * p_s * std::pow(h_logitud_suavizado - std::pow(std::max(norma, std::pow(10, -12)), 0.5), 2) *
+    (particula_i.densidad + particula_j.densidad - 2 * (std::pow(10, -3))) /
+    (std::numbers::pi  * std::pow(h_logitud_suavizado, 6) * std::pow(std::max(norma, std::pow(10, -12)), 0.5));
+double const operador_derecha = 45 * 0.4 * m_particula / (std::numbers::pi  * std::pow(h_logitud_suavizado, 6));
+
+ double const incremento_aceleracion_iz_x = (particula_i.px - particula_j.px) * operador_izquierda;
+ double const incremento_aceleracion_iz_y = (particula_i.py - particula_j.py) * operador_izquierda;
+ double const incremento_aceleracion_iz_z = (particula_i.pz - particula_j.pz) * operador_izquierda;
+ double const incremento_aceleracion_der_x = (particula_j.vx - particula_i.vx) * operador_derecha;
+ double const incremento_aceleracion_der_y = (particula_j.vy - particula_i.vy) * operador_derecha;
+ double const incremento_aceleracion_der_z = (particula_j.vz - particula_i.vz) * operador_derecha;
+ double const incremento_aceleracion_x =
+     (incremento_aceleracion_iz_x + incremento_aceleracion_der_x) /
+     (particula_i.densidad * particula_j.densidad);
+ double const incremento_aceleracion_y =
+     (incremento_aceleracion_iz_y + incremento_aceleracion_der_y) /
+     (particula_i.densidad * particula_j.densidad);
+ double const incremento_aceleracion_z =
+     (incremento_aceleracion_iz_z + incremento_aceleracion_der_z) /
+     (particula_i.densidad * particula_j.densidad);
+
+particula_i.acx  += incremento_aceleracion_x;
+particula_j.acx  += incremento_aceleracion_x;
+particula_i.acy += incremento_aceleracion_y;
+particula_j.acy += incremento_aceleracion_y;
+particula_i.acz += incremento_aceleracion_z;
+particula_j.acz += incremento_aceleracion_z;
+ }
+*/
+
 void incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma) {
+  // izquierda x,y,z     derecha x,y,z     resultado x,y,z
+  std::vector<double> incremento_aceleracion = {0,0,0,0,0,0, 0,0,0};
   double const operador_izquierda =
       // el 1.5 es 3/2
       15 * m_particula * 1.5 * p_s * std::pow(h_logitud_suavizado - std::pow(std::max(norma, std::pow(10, -12)), 0.5), 2) *
       (particula_i.densidad + particula_j.densidad - 2 * (std::pow(10, -3))) /
       (std::numbers::pi  * std::pow(h_logitud_suavizado, 6) * std::pow(std::max(norma, std::pow(10, -12)), 0.5));
-
   double const operador_derecha = 45 * 0.4 * m_particula / (std::numbers::pi  * std::pow(h_logitud_suavizado, 6));
-  double const incremento_aceleracion_iz_x = (particula_i.px - particula_j.px) * operador_izquierda;
-  double const incremento_aceleracion_iz_y = (particula_i.py - particula_j.py) * operador_izquierda;
-  double const incremento_aceleracion_iz_z = (particula_i.pz - particula_j.pz) * operador_izquierda;
-  double const incremento_aceleracion_der_x = (particula_j.vx - particula_i.vx) * operador_derecha;
-  double const incremento_aceleracion_der_y = (particula_j.vy - particula_i.vy) * operador_derecha;
-  double const incremento_aceleracion_der_z = (particula_j.vz - particula_i.vz) * operador_derecha;
-  double const incremento_aceleracion_x =
-      (incremento_aceleracion_iz_x + incremento_aceleracion_der_x) /
-      (particula_i.densidad * particula_j.densidad);
-  double const incremento_aceleracion_y =
-      (incremento_aceleracion_iz_y + incremento_aceleracion_der_y) /
-      (particula_i.densidad * particula_j.densidad);
-  double const incremento_aceleracion_z =
-      (incremento_aceleracion_iz_z + incremento_aceleracion_der_z) /
-      (particula_i.densidad * particula_j.densidad);
-  particula_i.acx  += incremento_aceleracion_x;
-  particula_j.acx  += incremento_aceleracion_x;
-  particula_i.acy += incremento_aceleracion_y;
-  particula_j.acy += incremento_aceleracion_y;
-  particula_i.acz += incremento_aceleracion_z;
-  particula_j.acz += incremento_aceleracion_z;
+  incremento_aceleracion[0] = (particula_i.px - particula_j.px) * operador_izquierda;
+  incremento_aceleracion[1] = (particula_i.py - particula_j.py) * operador_izquierda;
+  incremento_aceleracion[2] = (particula_i.pz - particula_j.pz) * operador_izquierda;
+  incremento_aceleracion[3]  = (particula_j.vx - particula_i.vx) * operador_derecha;
+  incremento_aceleracion[4]  = (particula_j.vy - particula_i.vy) * operador_derecha;
+  incremento_aceleracion[5]  = (particula_j.vz - particula_i.vz) * operador_derecha;
+  incremento_aceleracion[6] = (incremento_aceleracion[0] + incremento_aceleracion[3]) /
+                              (particula_i.densidad * particula_j.densidad);
+  incremento_aceleracion[7] = (incremento_aceleracion[1] + incremento_aceleracion[4]) /
+                              (particula_i.densidad * particula_j.densidad);
+  incremento_aceleracion[8] = (incremento_aceleracion[2] + incremento_aceleracion[5]) /
+                              (particula_i.densidad * particula_j.densidad);
+  for (int i=0; i < 3; ++i){
+    particula_i.a_c[i] += incremento_aceleracion[i+6];
+    particula_j.a_c[i] += incremento_aceleracion[i+6];
+  }
 }
 void incremento_densidades(Particula & particula_i, Particula & particula_j) {
   double const norma = std::pow(particula_i.px - particula_j.px, 2) +
@@ -54,16 +89,16 @@ void Cubo::transformacion_densidad(Particula & particula) {
 }
 
 void Cubo::movimiento_particulas(Particula & particula_i) {
-  particula_i.px      += particula_i.hvx * a_tiempo + particula_i.acx * pow(a_tiempo, 2);
-  particula_i.py      += particula_i.hvy * a_tiempo + particula_i.acy * pow(a_tiempo, 2);
-  particula_i.pz      += particula_i.hvz * a_tiempo + particula_i.acz * pow(a_tiempo, 2);
+  particula_i.px      += particula_i.hvx * a_tiempo + particula_i.a_c[0] * pow(a_tiempo, 2);
+  particula_i.py      += particula_i.hvy * a_tiempo + particula_i.a_c[1] * pow(a_tiempo, 2);
+  particula_i.pz      += particula_i.hvz * a_tiempo + particula_i.a_c[2] * pow(a_tiempo, 2);
   // se puede cambiar la división por * 0.5
-  particula_i.vx       = particula_i.hvx + particula_i.acx * a_tiempo * 2;
-  particula_i.vy       = particula_i.hvy + particula_i.acy * a_tiempo / 2;
-  particula_i.vz       = particula_i.hvz + particula_i.acz * a_tiempo / 2;
-  particula_i.hvx     += particula_i.acx * a_tiempo;
-  particula_i.hvy     += particula_i.acy * a_tiempo;
-  particula_i.hvz     += particula_i.acz * a_tiempo;
+  particula_i.vx       = particula_i.hvx + particula_i.a_c[0] * a_tiempo * 2;
+  particula_i.vy       = particula_i.hvy + particula_i.a_c[1] * a_tiempo / 2;
+  particula_i.vz       = particula_i.hvz + particula_i.a_c[2] * a_tiempo / 2;
+  particula_i.hvx     += particula_i.a_c[0] * a_tiempo;
+  particula_i.hvy     += particula_i.a_c[1] * a_tiempo;
+  particula_i.hvz     += particula_i.a_c[2] * a_tiempo;
 }
 void Cubo::set_grid_values() {
   n_x = floor((x_max - x_min) / h_logitud_suavizado);
@@ -72,23 +107,23 @@ void Cubo::set_grid_values() {
 
 }
 
-void Cubo::creacion_bloques(std::vector<Particula>list_of_particles){
+void Cubo::creacion_bloques(const std::vector<Particula>&list_of_particles){
     for (int i = 0;i < n_x;i++){
       for (int j=0; j < n_y; j++){
         for (int k= 0; k < n_z; k++){
-          Bloque bloque(i, j, k);
+          Bloque const bloque(i, j, k);
           bloques.push_back(bloque);
         }
       }
     }
     asignacion_inicial(list_of_particles);
 }
-void Cubo:: asignacion_inicial(std::vector<Particula>list_of_particles){
+void Cubo:: asignacion_inicial(const std::vector<Particula>&list_of_particles){
     for (Particula particula:list_of_particles){
         set_particles_coordinates(particula);
         for (Bloque bloque: bloques){
-            if (particula.i==bloque.b_x_coordinate && particula.j==bloque.b_y_coordinate &&
-            particula.k==bloque.b_z_coordinate){
+            if (particula.i==bloque.b_x && particula.j==bloque.b_y &&
+            particula.k==bloque.b_z){
                 bloque.lista_particulas.push_back(particula);
             }
         }
@@ -96,13 +131,14 @@ void Cubo:: asignacion_inicial(std::vector<Particula>list_of_particles){
 }
 
 void Cubo::choques_entre_particulas(){
-    for (Bloque bloque: bloques){
-        for (Bloque bloque2: bloques){
-            if (bloque.b_x_coordinate==bloque2.b_x_coordinate-1 || bloque.b_x_coordinate==bloque2.b_x_coordinate ||
-            bloque.b_x_coordinate==bloque2.b_x_coordinate+1 || bloque.b_y_coordinate==bloque2.b_y_coordinate-1 ||
-            bloque.b_y_coordinate==bloque2.b_y_coordinate || bloque.b_y_coordinate==bloque2.b_y_coordinate+1 ||
-            bloque.b_z_coordinate==bloque2.b_z_coordinate-1 || bloque.b_z_coordinate==bloque2.b_z_coordinate ||
-            bloque.b_z_coordinate==bloque2.b_z_coordinate+1){
+    // Esto tiene en cuenta consigo mismo tmb eso esta bien?
+    for (Bloque const& bloque: bloques){
+        for (Bloque const& bloque2: bloques){
+            if (bloque.b_x ==bloque2.b_x -1 || bloque.b_x ==bloque2.b_x ||
+            bloque.b_x ==bloque2.b_x +1 || bloque.b_y ==bloque2.b_y -1 ||
+            bloque.b_y ==bloque2.b_y || bloque.b_y ==bloque2.b_y +1 ||
+            bloque.b_z ==bloque2.b_z -1 || bloque.b_z ==bloque2.b_z ||
+            bloque.b_z ==bloque2.b_z +1){
                 for (Particula particula: bloque.lista_particulas ){
                     for (Particula particula2: bloque2.lista_particulas ){
                         if (particula.identifier<particula2.identifier){
@@ -144,7 +180,7 @@ void Cubo::set_particles_coordinates(Particula &particula) const {
 }
 
 void Cubo::colision_x1(Particula &particula, Bloque &bloque) const{
-    if (bloque.b_x_coordinate==0){
+    if (bloque.b_x ==0){
       // Aquí ponía particula.x, supongo que se referia a px
       double const d_x= particula.px-x_min;
       if (d_x<0){
@@ -154,7 +190,7 @@ void Cubo::colision_x1(Particula &particula, Bloque &bloque) const{
       return;
     }
     // Que es n_x????
-    if (bloque.b_x_coordinate==n_x-1){
+    if (bloque.b_x ==n_x-1){
       // Aquí ponía particula.x, supongo que se referia a px
       double const d_x= x_max-particula.px;
       if (d_x<0){
@@ -167,7 +203,7 @@ void Cubo::colision_x1(Particula &particula, Bloque &bloque) const{
     particula.hvx=-particula.hvx;
 }
 void Cubo::colision_y1(Particula &particula, Bloque &bloque) const{
-    if (bloque.b_y_coordinate==0){
+    if (bloque.b_y ==0){
       // Aquí ponía particula.y, supongo que se referia a py
       double const d_y= particula.py-y_min;
       if (d_y<0){
@@ -176,7 +212,7 @@ void Cubo::colision_y1(Particula &particula, Bloque &bloque) const{
       }
       return;
     }
-    if (bloque.b_y_coordinate==n_y-1){
+    if (bloque.b_y ==n_y-1){
       // Aquí ponía particula.y, supongo que se referia a py
       double const d_y= y_max-particula.py;
       if (d_y<0) {
@@ -189,7 +225,7 @@ void Cubo::colision_y1(Particula &particula, Bloque &bloque) const{
     particula.hvy=-particula.hvy;
 }
 void Cubo::colision_z1(Particula &particula, Bloque &bloque) const{
-    if (bloque.b_z_coordinate==0){
+    if (bloque.b_z ==0){
       // Aquí ponía particula.z, supongo que se referia a pz
       double const d_z= particula.pz-z_min;
       if (d_z < 0) {
@@ -199,7 +235,7 @@ void Cubo::colision_z1(Particula &particula, Bloque &bloque) const{
       return;
     }
 
-    if (bloque.b_z_coordinate == n_z-1){
+    if (bloque.b_z == n_z-1){
       // Aquí ponía particula.z, supongo que se referia a pz
       double const d_z= z_max-particula.pz;
       if (d_z < 0){
@@ -211,29 +247,30 @@ void Cubo::colision_z1(Particula &particula, Bloque &bloque) const{
     particula.vz=-particula.vz;
     particula.hvz=-particula.hvz;
 }
-//TEN EN CUENTA QUE ESTO ES PARTE DE LA FUNCION BLOQUE, NO TIENE n_x
+//ESTA FUNCION ES DIFERENTE A LA COLISION_Y Y COLISION_Z
 void Cubo::colision_x(Particula &particula, Bloque &bloque) const {
     particula.px = particula.px + particula.hvx * a_tiempo;  // delta de t no va a ser 1 siempre?//
-
-    if (bloque.b_x_coordinate == 0) {
-      double const incremento_x = d_p - particula.px + x_min;
-      if (incremento_x > d_p) { particula.acx += s_c * incremento_x - d_v * particula.vx; }
-      if (bloque.b_y_coordinate == n_x - 1) {
-        double const incremento_x = d_p - x_max + particula.px;
-        if (incremento_x > d_p) { particula.acx -= s_c * incremento_x + d_v * particula.vx; }
-      }
+    double incremento_x = 0;
+    if (bloque.b_x == 0) {
+      incremento_x = d_p - particula.px + x_min;
+      if (incremento_x > d_p) { particula.a_c[0] += s_c * incremento_x - d_v * particula.vx; }
+    }
+    if (bloque.b_y == n_x - 1) {
+      incremento_x = d_p - x_max + particula.px;
+      if (incremento_x > d_p) { particula.a_c[0] -= s_c * incremento_x + d_v * particula.vx; }
     }
 }
+
 void Cubo::colision_y(Particula & particula, Bloque &bloque) const {
     particula.py    = particula.py + particula.hvy * a_tiempo;  // delta de t no va a ser 1 siempre?//
-
-    if (bloque.b_y_coordinate == 0) {
-      double const incremento_y = d_p - particula.py + y_min;
-      if (incremento_y > d_p) { particula.acy += s_c * incremento_y - d_v * particula.vy; }
+    double incremento_y = 0;
+    if (bloque.b_y == 0) {
+      incremento_y = d_p - particula.py + y_min;
+      if (incremento_y > d_p) { particula.a_c[1] += s_c * incremento_y - d_v * particula.vy; }
     }
-    if (bloque.b_y_coordinate == n_y - 1) {
-      double const incremento_y = d_p - y_max + particula.py;
-      if (incremento_y > d_p) { particula.acy -= s_c * incremento_y + d_v * particula.vy; }
+    if (bloque.b_y == n_y - 1) {
+      incremento_y = d_p - y_max + particula.py;
+      if (incremento_y > d_p) { particula.a_c[1] -= s_c * incremento_y + d_v * particula.vy; }
     }
 }
 
@@ -241,13 +278,13 @@ void Cubo::colision_z(Particula & particula, Bloque &bloque) const {
     // era double const z
     // Aquí ponía particula.z, supongo que se referia a pz
     particula.pz    = particula.pz + particula.hvz * a_tiempo;  // delta de t no va a ser 1 siempre?//
-
-    if (bloque.b_z_coordinate == 0) {
-      double const incremento_z = d_p - particula.pz + z_min;
-      if (incremento_z > d_p) { particula.acz += s_c * incremento_z - d_v * particula.vz; };
+    double incremento_z = 0;
+    if (bloque.b_z == 0) {
+      incremento_z = d_p - particula.pz + z_min;
+      if (incremento_z > d_p) { particula.a_c[2] += s_c * incremento_z - d_v * particula.vz; };
     }
-    if (bloque.b_z_coordinate == n_z - 1) {
-      double const incremento_z = d_p - z_max + particula.pz;
-      if (incremento_z > d_p) { particula.acz -= s_c * incremento_z + d_v * particula.vz; };
+    if (bloque.b_z == n_z - 1) {
+      incremento_z = d_p - z_max + particula.pz;
+      if (incremento_z > d_p) { particula.a_c[2] -= s_c * incremento_z + d_v * particula.vz; };
     }
 }
