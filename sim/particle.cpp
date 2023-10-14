@@ -39,33 +39,34 @@ void Particula::printinfo(int counter) const {
 
 void Particula::set_particles_data(std::ifstream & file, double id) {
   identifier = id;
-  px  = read_float(file);
-  py  = read_float(file);
-  pz  = read_float(file);
-  hvx = read_float(file);
-  hvy = read_float(file);
-  hvz = read_float(file);
-  vx  = read_float(file);
-  vy  = read_float(file);
-  vz  = read_float(file);
-}
-//ESTAS DOS FUNCIONES ERAN DE BLOQUE
-// SI USAS DATOS DE PARTICULA PIENSA SI RENTA MAS TENER ESTA FUNCIÓN DENTRO DE LA CLASE
-void Particula::transformacion_densidad() {
-  // SI aqui usas PI, creo que hay una libreria para eso, deberias usarla
-  densidad = (densidad + std::pow(h_logitud_suavizado, 6)) *
-                       315 * m_particula / (64 * std::numbers::pi * std::pow(h_logitud_suavizado, 9));
-}
-void Particula::movimiento_particulas() {
-  px      += hvx * a_tiempo + a_c[0] * pow(a_tiempo, 2);
-  py      += hvy * a_tiempo + a_c[1] * pow(a_tiempo, 2);
-  pz      += hvz * a_tiempo + a_c[2] * pow(a_tiempo, 2);
-  // se puede cambiar la división por * 0.5
-  vx       = hvx + a_c[0] * a_tiempo * 2;
-  vy       = hvy + a_c[1] * a_tiempo / 2;
-  vz       = hvz + a_c[2] * a_tiempo / 2;
-  hvx     += a_c[0] * a_tiempo;
-  hvy     += a_c[1] * a_tiempo;
-  hvz     += a_c[2] * a_tiempo;
+  px         = read_float(file);
+  py         = read_float(file);
+  pz         = read_float(file);
+  hvx        = read_float(file);
+  hvy        = read_float(file);
+  hvz        = read_float(file);
+  vx         = read_float(file);
+  vy         = read_float(file);
+  vz         = read_float(file);
 }
 
+// ESTAS DOS FUNCIONES ERAN DE BLOQUE
+//  SI USAS DATOS DE PARTICULA PIENSA SI RENTA MAS TENER ESTA FUNCIÓN DENTRO DE LA CLASE
+void Particula::transformacion_densidad(double h_logitud_suavizado, double masa_p) {
+  // SI aqui usas PI, creo que hay una libreria para eso, deberias usarla
+  densidad = (densidad + std::pow(h_logitud_suavizado, m_num_6)) * 315 * masa_p /
+             (64 * std::numbers::pi * std::pow(h_logitud_suavizado, m_num_9));
+}
+
+void Particula::movimiento_particulas() {
+  px += hvx * a_tiempo + a_c[0] * pow(a_tiempo, 2);
+  py += hvy * a_tiempo + a_c[1] * pow(a_tiempo, 2);
+  pz += hvz * a_tiempo + a_c[2] * pow(a_tiempo, 2);
+  // se puede cambiar la división por * 0.5
+  vx   = hvx + a_c[0] * a_tiempo * 2;
+  vy   = hvy + a_c[1] * a_tiempo / 2;
+  vz   = hvz + a_c[2] * a_tiempo / 2;
+  hvx += a_c[0] * a_tiempo;
+  hvy += a_c[1] * a_tiempo;
+  hvz += a_c[2] * a_tiempo;
+}

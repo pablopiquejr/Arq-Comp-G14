@@ -4,16 +4,13 @@
 
 #include "progargs.hpp"
 
-float ppm        = 0;
-int n_parameters = 0;
-
-
 void check_n_arguments(int argc) {
   if (argc != 4) {
     std::cout << "Invalid number of steps: " << argc << '\n';
     exit(-1);
   }
 }
+
 void validate_number(std::string const & n_iterations) {
   int const base = 10;
   if (isdigit(stoi(n_iterations, nullptr, base)) == 1) {
@@ -32,11 +29,12 @@ std::list<Particula> file_reader(std::string const & file_name) {
     exit(-3);
   }
   // read the header
+  float ppm        = 0;
+  int n_parameters = 0;
   binary_file.read(reinterpret_cast<char *>(&ppm), 4);           // NOLINT
   binary_file.read(reinterpret_cast<char *>(&n_parameters), 4);  // NOLINT
-  if (n_parameters<=0){
-      exit(-5);
-  }
+
+  if (n_parameters <= 0) { exit(-m_num_5); }
   std::list<Particula> list_of_particles;
   double counter = 0;
   while (counter < n_parameters) {
@@ -46,9 +44,7 @@ std::list<Particula> file_reader(std::string const & file_name) {
     // particula.printinfo(counter);
     counter += 1;
   }
-  if (counter<=0){
-      exit(-5);
-  }
+  if (counter <= 0) { exit(-m_num_5); }
   return list_of_particles;
 }
 
@@ -72,14 +68,19 @@ void file_writer(std::string const & name, std::list<Particula> const & list_of_
   }
 }
 
-void declaración_m_h() {
-  m_particula = p_densidad / std::pow(ppm, 3.0);
-  h_logitud_suavizado = r_radio / ppm;
+double declaración_m(float ppm) {
+  double const masa_setter = p_densidad / std::pow(ppm, 3);
+  return masa_setter;
 }
 
+double declaración_h(float ppm) {
+  double const h_logitud_suavizado = r_radio / ppm;
+  return h_logitud_suavizado;
+}
+
+/*
 void print_all_starting_data(){
   continue;
 }
 
-
-
+ */
