@@ -20,6 +20,7 @@ const double z_max = 0.065;
 const double x_min = -0.065;
 const double y_min = -0.08;
 const double z_min = -0.065;
+const double limite_colision=0.000000000001
 
 double h_logitud_suavizado;
 double m_particula;

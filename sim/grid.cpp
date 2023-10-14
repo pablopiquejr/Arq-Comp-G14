@@ -161,145 +161,29 @@ void Cubo::set_particles_coordinates(Particula &particula) const {
     }
 }
 
-void Cubo::colision_x1(Particula &particula, Bloque &bloque) const{
-    if (bloque.b_x ==0){
-      // Aquí ponía particula.x, supongo que se referia a px
-      double const d_x= particula.px-x_min;
-      if (d_x<0){
-        // Aquí ponía particula.x, supongo que se referia a px
-        particula.px=x_min-d_x;
-      }
-      return;
-    }
-    // Que es n_x????
-    if (bloque.b_x ==n_x-1){
-      // Aquí ponía particula.x, supongo que se referia a px
-      double const d_x= x_max-particula.px;
-      if (d_x<0){
-        // Aquí ponía particula.x, supongo que se referia a px
-        particula.px=x_max+d_x;
-      }
-      return;
-    }
-    particula.vx=-particula.vx;
-    particula.hvx=-particula.hvx;
-}
-void Cubo::colision_y1(Particula &particula, Bloque &bloque) const{
-    if (bloque.b_y ==0){
-      // Aquí ponía particula.y, supongo que se referia a py
-      double const d_y= particula.py-y_min;
-      if (d_y<0){
-        // Aquí ponía particula.y, supongo que se referia a py
-        particula.py=y_min-d_y;
-      }
-      return;
-    }
-    if (bloque.b_y ==n_y-1){
-      // Aquí ponía particula.y, supongo que se referia a py
-      double const d_y= y_max-particula.py;
-      if (d_y<0) {
-        // Aquí ponía particula.y, supongo que se referia a py
-        particula.py = y_max + d_y;
-      }
-      return;
-    }
-    particula.vy=-particula.vy;
-    particula.hvy=-particula.hvy;
-}
-void Cubo::colision_z1(Particula &particula, Bloque &bloque) const{
-    if (bloque.b_z ==0){
-      // Aquí ponía particula.z, supongo que se referia a pz
-      double const d_z= particula.pz-z_min;
-      if (d_z < 0) {
-        // Aquí ponía particula.z, supongo que se referia a pz
-        particula.pz = z_min - d_z;
-      }
-      return;
-    }
-
-    if (bloque.b_z == n_z-1){
-      // Aquí ponía particula.z, supongo que se referia a pz
-      double const d_z= z_max-particula.pz;
-      if (d_z < 0){
-        // Aquí ponía particula.z, supongo que se referia a pz
-        particula.pz=z_max+d_z;
-      }
-      return;
-    }
-    particula.vz=-particula.vz;
-    particula.hvz=-particula.hvz;
-}
-//ESTA FUNCION ES DIFERENTE A LA COLISION_Y Y COLISION_Z
-void Cubo::colision_x(Particula &particula, Bloque &bloque) const {
-    particula.px = particula.px + particula.hvx * a_tiempo;  // delta de t no va a ser 1 siempre?//
-    double incremento_x = 0;
-    if (bloque.b_x == 0) {
-      incremento_x = d_p - particula.px + x_min;
-      if (incremento_x > d_p) { particula.a_c[0] += s_c * incremento_x - d_v * particula.vx; }
-    }
-    if (bloque.b_y == n_x - 1) {
-      incremento_x = d_p - x_max + particula.px;
-      if (incremento_x > d_p) { particula.a_c[0] -= s_c * incremento_x + d_v * particula.vx; }
-    }
-}
-
-void Cubo::colision_y(Particula & particula, Bloque &bloque) const {
-    particula.py    = particula.py + particula.hvy * a_tiempo;  // delta de t no va a ser 1 siempre?//
-    double incremento_y = 0;
-    if (bloque.b_y == 0) {
-      incremento_y = d_p - particula.py + y_min;
-      if (incremento_y > d_p) { particula.a_c[1] += s_c * incremento_y - d_v * particula.vy; }
-    }
-    if (bloque.b_y == n_y - 1) {
-      incremento_y = d_p - y_max + particula.py;
-      if (incremento_y > d_p) { particula.a_c[1] -= s_c * incremento_y + d_v * particula.vy; }
-    }
-}
-
-void Cubo::colision_z(Particula & particula, Bloque &bloque) const {
-    // era double const z
-    // Aquí ponía particula.z, supongo que se referia a pz
-    particula.pz    = particula.pz + particula.hvz * a_tiempo;  // delta de t no va a ser 1 siempre?//
-    double incremento_z = 0;
-    if (bloque.b_z == 0) {
-      incremento_z = d_p - particula.pz + z_min;
-      if (incremento_z > d_p) { particula.a_c[2] += s_c * incremento_z - d_v * particula.vz; };
-    }
-    if (bloque.b_z == n_z - 1) {
-      incremento_z = d_p - z_max + particula.pz;
-      if (incremento_z > d_p) { particula.a_c[2] -= s_c * incremento_z + d_v * particula.vz; };
-    }
-}
 //IDEA: meter el movimiento dentro de colision_baja
 void Cubo::colision_limites(){
-    for (Bloque const& bloque: bloques){
+    for (Bloque & bloque: bloques){
         if (bloque.b_x == 0){
-            //colision_x_baja                 estas dos funciones se podrian fusionar en una para ajustar la complejidad
-            //colision_x_baja_pos
+            bloque.colision_x_baja();
         }
         if (bloque.b_x == n_x-1){
-            //colision_x_alta
-            //colision_x_alta_pos
+            bloque.colision_x_alta();
         }
         if (bloque.b_y == 0){
-            //colision_y_baja
-            //colision_y_baja_pos
+            bloque.colision_y_baja();
         }
         if (bloque.b_y == n_y-1){
-            //colision_y_alta
-            //colision_y_alta_pos
+            bloque.colision_y_alta();
         }
         if (bloque.b_z == 0){
-            //colision_z_baja
-            //colision_z_baja_pos
+            bloque.colision_z_baja();
         }
         if (bloque.b_z == n_z-1){
-            //colision_z_alta
-            //colision_z_alta_pos
+            bloque.colision_z_alta();
         }
-        mover_particulas_bloque(); //no implementada, haria un for en su lista de particulas y moveria todas
+        for (Particula & particula: bloque.lista_particulas){
+            particula.movimiento_particulas();
+        } //mover_particulas_bloque(); //no implementada (leer fijado discord)
     }
-
-
-
-}
+    }

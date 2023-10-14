@@ -17,6 +17,13 @@ class Bloque {
     std::list<Particula> lista_particulas;
 
     Bloque(int b_x_coordinate,int b_y_coordinate,int b_z_coordinate);
+    void colision_x_baja();
+    void colision_y_baja();
+    void colision_z_baja();
+    void colision_x_alta();
+    void colision_y_alta();
+    void colision_z_alta();
+
 
 };
 #endif  // LAB_ARQUITECTURA_BLOCK_HPP
