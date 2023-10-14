@@ -47,7 +47,7 @@ void incremento_aceleracion(Particula & particula_i, Particula & particula_j, do
   std::vector<double> incremento_aceleracion = {0,0,0,0,0,0, 0,0,0};
   double const operador_izquierda =
       // el 1.5 es 3/2
-      15 * m_particula * 1.5 * p_s * std::pow(h_logitud_suavizado - std::pow(std::max(norma, std::pow(10, -12)), 0.5), 2) *
+      15 * m_particula * 1.5 * p_s * std::pow(h_logitud_suavizado-std::pow(std::max(norma,std::pow(10, -12)), 0.5), 2) *
       (particula_i.densidad + particula_j.densidad - 2 * (std::pow(10, -3))) /
       (std::numbers::pi  * std::pow(h_logitud_suavizado, 6) * std::pow(std::max(norma, std::pow(10, -12)), 0.5));
   double const operador_derecha = 45 * 0.4 * m_particula / (std::numbers::pi  * std::pow(h_logitud_suavizado, 6));
@@ -78,28 +78,13 @@ void incremento_densidades(Particula & particula_i, Particula & particula_j) {
     particula_i.densidad    += incremento;
     particula_j.densidad    += incremento;
   }
+  particula_i.transformacion_densidad();
+  particula_j.transformacion_densidad();
   incremento_aceleracion(particula_i, particula_j,norma);
 }
-//ESTAS DOS FUNCIONES ERAN DE BLOQUE
-// SI USAS DATOS DE PARTICULA PIENSA SI RENTA MAS TENER ESTA FUNCIÓN DENTRO DE LA CLASE
-void Cubo::transformacion_densidad(Particula & particula) {
-  // SI aqui usas PI, creo que hay una libreria para eso, deberias usarla
-  particula.densidad = (particula.densidad + std::pow(h_logitud_suavizado, 6)) *
-                       315 * m_particula / (64 * std::numbers::pi * std::pow(h_logitud_suavizado, 9));
-}
 
-void Cubo::movimiento_particulas(Particula & particula_i) {
-  particula_i.px      += particula_i.hvx * a_tiempo + particula_i.a_c[0] * pow(a_tiempo, 2);
-  particula_i.py      += particula_i.hvy * a_tiempo + particula_i.a_c[1] * pow(a_tiempo, 2);
-  particula_i.pz      += particula_i.hvz * a_tiempo + particula_i.a_c[2] * pow(a_tiempo, 2);
-  // se puede cambiar la división por * 0.5
-  particula_i.vx       = particula_i.hvx + particula_i.a_c[0] * a_tiempo * 2;
-  particula_i.vy       = particula_i.hvy + particula_i.a_c[1] * a_tiempo / 2;
-  particula_i.vz       = particula_i.hvz + particula_i.a_c[2] * a_tiempo / 2;
-  particula_i.hvx     += particula_i.a_c[0] * a_tiempo;
-  particula_i.hvy     += particula_i.a_c[1] * a_tiempo;
-  particula_i.hvz     += particula_i.a_c[2] * a_tiempo;
-}
+
+
 void Cubo::set_grid_values() {
   n_x = floor((x_max - x_min) / h_logitud_suavizado);
   n_y = floor((y_max - y_min) / h_logitud_suavizado);
@@ -143,10 +128,7 @@ void Cubo::choques_entre_particulas(){
                     for (Particula particula2: bloque2.lista_particulas ){
                         if (particula.identifier<particula2.identifier){
                             incremento_densidades(particula,particula2);
-                            movimiento_particulas(particula);
-                            movimiento_particulas(particula2);
-                            transformacion_densidad(particula);
-                            transformacion_densidad(particula2);
+
                         }
                     }
                 }
@@ -287,4 +269,37 @@ void Cubo::colision_z(Particula & particula, Bloque &bloque) const {
       incremento_z = d_p - z_max + particula.pz;
       if (incremento_z > d_p) { particula.a_c[2] -= s_c * incremento_z + d_v * particula.vz; };
     }
+}
+//IDEA: meter el movimiento dentro de colision_baja
+void Cubo::colision_limites(){
+    for (Bloque const& bloque: bloques){
+        if (bloque.b_x == 0){
+            //colision_x_baja                 estas dos funciones se podrian fusionar en una para ajustar la complejidad
+            //colision_x_baja_pos
+        }
+        if (bloque.b_x == n_x-1){
+            //colision_x_alta
+            //colision_x_alta_pos
+        }
+        if (bloque.b_y == 0){
+            //colision_y_baja
+            //colision_y_baja_pos
+        }
+        if (bloque.b_y == n_y-1){
+            //colision_y_alta
+            //colision_y_alta_pos
+        }
+        if (bloque.b_z == 0){
+            //colision_z_baja
+            //colision_z_baja_pos
+        }
+        if (bloque.b_z == n_z-1){
+            //colision_z_alta
+            //colision_z_alta_pos
+        }
+        mover_particulas_bloque(); //no implementada, haria un for en su lista de particulas y moveria todas
+    }
+
+
+
 }

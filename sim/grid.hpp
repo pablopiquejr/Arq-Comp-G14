@@ -27,9 +27,8 @@ class Cubo {
     void asignacion_inicial(const std::vector<Particula>&list_of_particles);
     void choques_entre_particulas();
 
-    void transformacion_densidad(Particula & particula);
     void movimiento_particulas(Particula & particula_i);
-
+    void colision_limites();
     void colision_x1(Particula & particula, Bloque &bloque) const;
     void colision_y1(Particula & particula, Bloque &bloque) const;
     void colision_z1(Particula & particula, Bloque &bloque) const;

@@ -8,6 +8,7 @@
 #include "constants.hpp"
 #include <fstream>
 #include <vector>
+#include <cmath>
 
 class Particula{
   public:
@@ -30,7 +31,8 @@ class Particula{
     Particula() = default;
     void printinfo(int counter) const;
     void set_particles_data(std::ifstream & file, double id);
-
+    void transformacion_densidad();
+    void movimiento_particulas();
     [[nodiscard]] std::string particle_write() const;
 };
 
