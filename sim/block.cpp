@@ -3,6 +3,8 @@
 //
 #include "block.hpp"
 
+Bloque::Bloque(int param_x, int param_y, int param_z) : b_x(param_x), b_y(param_y), b_z(param_z) {}
+
 void Bloque::colision_x_baja() {
   for (Particula particula : lista_particulas) {
     double const const_x      = particula.px + particula.hvx * a_tiempo;
@@ -96,6 +98,8 @@ void Bloque::colision_z_alta() {
     particula.hvz = -particula.hvz;
   }
 }
+
+
 
 /////////////////EJEMPLO DE COMO SE PROGRAMAN LOS TESTS ///////////////////////////
 

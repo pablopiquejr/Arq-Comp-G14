@@ -44,20 +44,21 @@ particula_j.acz += incremento_aceleracion_z;
  }
 */
 
+
 // variación de acelaración (incremento)-> izquierda x,y,z (p)  derecha x,y,z (v) resultado x,y,z
 
 // el 1.5 es 3/2
 // NOTA: SE PASA DE COMPLEXIDAD POR EXCESO DE PARAMETROS
 void incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma,
-                            double l_suavizado, double masa_p) {
+                            longitud_y_masa const &l_m) {
   std::vector<double> var_ac = {0, 0, 0, 0, 0, 0, 0, 0, 0};
   double const operador_izquierda =
-      15 * masa_p * 1.5 * p_s *
-      std::pow(l_suavizado - std::pow(std::max(norma, std::pow(10, -12)), 0.5), 2) *
+      15 * l_m.masa_p * 1.5 * p_s *
+      std::pow(l_m.l_suavizado - std::pow(std::max(norma, std::pow(10, -12)), 0.5), 2) *
       (particula_i.densidad + particula_j.densidad - 2 * (std::pow(10, -3))) /
-      (std::numbers::pi * std::pow(l_suavizado, 6) *
+      (std::numbers::pi * std::pow(l_m.l_suavizado, 6) *
        std::pow(std::max(norma, std::pow(10, -12)), 0.5));
-  double const operador_derecha = 45 * 0.4 * masa_p / (std::numbers::pi * std::pow(l_suavizado, 6));
+  double const operador_derecha = 45 * 0.4 * l_m.masa_p / (std::numbers::pi * std::pow(l_m.l_suavizado, 6));
   var_ac[0]                     = (particula_i.px - particula_j.px) * operador_izquierda;
   var_ac[1]                     = (particula_i.py - particula_j.py) * operador_izquierda;
   var_ac[2]                     = (particula_i.pz - particula_j.pz) * operador_izquierda;
@@ -73,29 +74,29 @@ void incremento_aceleracion(Particula & particula_i, Particula & particula_j, do
   }
 }
 
-void incremento_densidades(Particula & particula_i, Particula & particula_j, double l_suavizado,
-                           double masa_p) {
+void incremento_densidades(Particula & particula_i, Particula & particula_j, longitud_y_masa const &l_m) {
+
   double const norma = std::pow(particula_i.px - particula_j.px, 2) +
                        std::pow(particula_i.py - particula_j.py, 2) +
                        std::pow(particula_i.pz - particula_j.pz, 2);
-  double const h_2 = std::pow(l_suavizado, 2);
+  double const h_2 = std::pow(l_m.l_suavizado, 2);
   if (norma < h_2) {
     double const incremento  = std::pow(h_2 - norma, 3);
     particula_i.densidad    += incremento;
     particula_j.densidad    += incremento;
   }
-  particula_i.transformacion_densidad(l_suavizado, masa_p);
-  particula_j.transformacion_densidad(l_suavizado, masa_p);
-  incremento_aceleracion(particula_i, particula_j, norma, l_suavizado, masa_p);
+  particula_i.transformacion_densidad(l_m.l_suavizado, l_m.masa_p);
+  particula_j.transformacion_densidad(l_m.l_suavizado, l_m.masa_p);
+  incremento_aceleracion(particula_i, particula_j, norma, l_m);
 }
 
-void Cubo::set_grid_values(double h_longitud_suavizado) {
-  n_x = floor((x_max - x_min) / h_longitud_suavizado);
-  n_y = floor((y_max - y_min) / h_longitud_suavizado);
-  n_z = floor((z_max - z_min) / h_longitud_suavizado);
+void Cubo::set_grid_values() {
+  n_x = floor((x_max - x_min) / l_m.l_suavizado);
+  n_y = floor((y_max - y_min) / l_m.l_suavizado);
+  n_z = floor((z_max - z_min) / l_m.l_suavizado);
 }
 
-void Cubo::creacion_bloques(std::vector<Particula> const & list_of_particles) {
+void Cubo::creacion_bloques() {
   for (int i = 0; i < n_x; i++) {
     for (int j = 0; j < n_y; j++) {
       for (int k = 0; k < n_z; k++) {
@@ -104,11 +105,11 @@ void Cubo::creacion_bloques(std::vector<Particula> const & list_of_particles) {
       }
     }
   }
-  asignacion_inicial(list_of_particles);
+  asignacion_inicial();
 }
 
-void Cubo::asignacion_inicial(std::vector<Particula> const & list_of_particles) {
-  for (Particula particula : list_of_particles) {
+void Cubo::asignacion_inicial() {
+  for (Particula particula : l_m.list_of_particles) {
     set_particles_coordinates(particula);
     for (Bloque bloque : bloques) {
       if (particula.i == bloque.b_x && particula.j == bloque.b_y && particula.k == bloque.b_z) {
@@ -118,7 +119,7 @@ void Cubo::asignacion_inicial(std::vector<Particula> const & list_of_particles) 
   }
 }
 
-void Cubo::choques_entre_particulas(double l_suavizado, double masa_p) {
+void Cubo::choques_entre_particulas() {
   // Esto tiene en cuenta consigo mismo tmb eso esta bien?
   for (Bloque const & bloque : bloques) {
     for (Bloque const & bloque2 : bloques) {
@@ -130,7 +131,7 @@ void Cubo::choques_entre_particulas(double l_suavizado, double masa_p) {
         for (Particula particula : bloque.lista_particulas) {
           for (Particula particula2 : bloque2.lista_particulas) {
             if (particula.identifier < particula2.identifier) {
-              incremento_densidades(particula, particula2, l_suavizado, masa_p);
+              incremento_densidades(particula, particula2, l_m);
             }
           }
         }

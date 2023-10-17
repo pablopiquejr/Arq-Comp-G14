@@ -22,7 +22,7 @@ void validate_number(std::string const & n_iterations) {
   }
 }
 
-std::list<Particula> file_reader(std::string const & file_name) {
+struct longitud_y_masa file_reader(std::string const & file_name) {
   std::ifstream binary_file(file_name, std::ios::binary);
   if (!binary_file) {
     std::cout << "Can't Open input file" << '\n';
@@ -33,22 +33,21 @@ std::list<Particula> file_reader(std::string const & file_name) {
   int n_parameters = 0;
   binary_file.read(reinterpret_cast<char *>(&ppm), 4);           // NOLINT
   binary_file.read(reinterpret_cast<char *>(&n_parameters), 4);  // NOLINT
-
+  longitud_y_masa l_m {ppm,n_parameters};
   if (n_parameters <= 0) { exit(-m_num_5); }
-  std::list<Particula> list_of_particles;
   double counter = 0;
   while (counter < n_parameters) {
     Particula particula;
     particula.set_particles_data(binary_file, counter);
-    list_of_particles.push_back(particula);
+    l_m.list_of_particles.push_back(particula);
     // particula.printinfo(counter);
     counter += 1;
   }
   if (counter <= 0) { exit(-m_num_5); }
-  return list_of_particles;
+  return l_m;
 }
 
-std::list<Particula> argument_validator(std::vector<std::string> arguments) {
+struct longitud_y_masa argument_validator(std::vector<std::string> arguments) {
   // checking the validity of the first command (nº of executions)
   validate_number(arguments[1]);
 
@@ -56,27 +55,27 @@ std::list<Particula> argument_validator(std::vector<std::string> arguments) {
   return file_reader(arguments[2]);
 }
 
-void file_writer(std::string const & name, std::list<Particula> const & list_of_particles) {
+void file_writer(std::string const & name, longitud_y_masa mis_datos) {
   std::ofstream output{name, std::ios::binary};
   if (!output) {
     std::cout << "Can't Open output file " << '\n';
     exit(-4);
   }
-  for (auto const & elem : list_of_particles) {
-    std::string const parameters = elem.particle_write();
-    output.write(reinterpret_cast<char const *>(&parameters), 36);  // NOLINT
+  // Escribir la cabecera
+  output.write(reinterpret_cast<char*>(&mis_datos.ppm),4);
+  output.write(reinterpret_cast<char*>(&mis_datos.n_particulas),4);
+  // Escribir los datos de todas las particulas
+  std::vector<float> my_data;
+  for (Particula const & particula : mis_datos.list_of_particles) {
+    my_data = particula.particle_write();
+    for (float elemento: my_data) {
+      output.write(reinterpret_cast<char *>(&elemento), 4); //NOLINT
+    }
   }
+
 }
 
-double declaración_m(float ppm) {
-  double const masa_setter = p_densidad / std::pow(ppm, 3);
-  return masa_setter;
-}
 
-double declaración_h(float ppm) {
-  double const h_logitud_suavizado = r_radio / ppm;
-  return h_logitud_suavizado;
-}
 
 /*
 void print_all_starting_data(){

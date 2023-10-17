@@ -8,16 +8,16 @@
 
 #include <cmath>
 #include <iostream>
-#include <list>
 
 class Bloque {
   public:
     int b_x;
     int b_y;
     int b_z;
-    std::list<Particula> lista_particulas;
+    std::vector<Particula> lista_particulas;
 
-    Bloque(int b_x, int b_y, int b_z);
+    Bloque(int param_x, int param_y, int param_z);
+
 
     void colision_x_baja();
     void colision_y_baja();

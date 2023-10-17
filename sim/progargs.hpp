@@ -4,11 +4,10 @@
 
 #ifndef LAB_ARQUITECTURA_PROGARGS_HPP
 #define LAB_ARQUITECTURA_PROGARGS_HPP
-#include "particle.hpp"
+#include "h_y_m_struct.hpp"
 #include <cmath>
 #include <fstream>
 #include <iostream>
-#include <list>
 #include <string>
 #include <vector>
 

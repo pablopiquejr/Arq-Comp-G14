@@ -9,6 +9,7 @@ add_library(sim
         constants.hpp
         particle.cpp
         particle.hpp
+        h_y_m_struct.hpp
 )
 # Use this line only if you have dependencies from stim to GSL
 target_link_libraries (sim PRIVATE Microsoft.GSL::GSL)

@@ -4,6 +4,7 @@
 
 #ifndef ARQ_COMP_G14_CONSTANTS_HPP
 #define ARQ_COMP_G14_CONSTANTS_HPP
+#include <cmath>
 
 double const r_radio         = 1.695;
 int const p_densidad         = 1000;

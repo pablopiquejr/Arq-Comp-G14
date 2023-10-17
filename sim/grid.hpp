@@ -6,11 +6,9 @@
 
 #include "block.hpp"
 #include "constants.hpp"
-#include "particle.hpp"
-
+#include "h_y_m_struct.hpp"
 #include <cmath>
 #include <iostream>
-#include <list>
 #include <vector>
 
 class Cubo {
@@ -18,15 +16,18 @@ class Cubo {
     int n_x = 0;
     int n_y = 0;
     int n_z = 0;
-    std::list<Bloque> bloques;
+    std::vector<Bloque> bloques;
 
-    Cubo() = default;
-    void set_grid_values(double h_longitud_suavizado);
-    void creacion_bloques(std::vector<Particula> const & list_of_particles);
+    explicit Cubo(longitud_y_masa setter):l_m{setter}{};
+
+    longitud_y_masa const l_m;
+
+    void set_grid_values();
+    void creacion_bloques();
 
     void set_particles_coordinates(Particula & particula) const;
-    void asignacion_inicial(std::vector<Particula> const & list_of_particles);
-    void choques_entre_particulas(double l_suavizado, double masa_p);
+    void asignacion_inicial();
+    void choques_entre_particulas();
 
     void movimiento_particulas(Particula & particula_i);
     void colision_limites();

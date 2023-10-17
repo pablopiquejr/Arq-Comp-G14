@@ -10,18 +10,19 @@ double read_float(std::ifstream & file) {
   return number;
 }
 
-std::string Particula::particle_write() const {
-  std::string parameters;
-  parameters += std::to_string(px);
-  parameters += std::to_string(py);
-  parameters += std::to_string(pz);
-  parameters += std::to_string(hvx);
-  parameters += std::to_string(hvy);
-  parameters += std::to_string(hvz);
-  parameters += std::to_string(vx);
-  parameters += std::to_string(vy);
-  parameters += std::to_string(vz);
-  return parameters;
+
+std::vector<float> Particula::particle_write() const {
+  auto n_px = (float)px;
+  auto n_py = (float)py;
+  auto n_pz = (float)pz;
+  auto n_hvx = (float)hvx;
+  auto n_hvy = (float)hvy;
+  auto n_hvz = (float)hvz;
+  auto n_vx = (float)vx;
+  auto n_vy = (float)vy;
+  auto n_vz = (float)vz;
+  std::vector<float> const data = {n_px,n_py,n_pz,n_hvx,n_hvy,n_hvz,n_vx,n_vy,n_vz};
+  return data;
 }
 
 void Particula::printinfo(int counter) const {
@@ -63,7 +64,7 @@ void Particula::movimiento_particulas() {
   py += hvy * a_tiempo + a_c[1] * pow(a_tiempo, 2);
   pz += hvz * a_tiempo + a_c[2] * pow(a_tiempo, 2);
   // se puede cambiar la división por * 0.5
-  vx   = hvx + a_c[0] * a_tiempo * 2;
+  vx   = hvx + a_c[0] * a_tiempo / 2;
   vy   = hvy + a_c[1] * a_tiempo / 2;
   vz   = hvz + a_c[2] * a_tiempo / 2;
   hvx += a_c[0] * a_tiempo;
