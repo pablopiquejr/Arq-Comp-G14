@@ -34,7 +34,7 @@ class Particula {
     void set_particles_data(std::ifstream & file, double id);
     void transformacion_densidad(double h_logitud_suavizado, double masa_p);
     void movimiento_particulas();
-    [[nodiscard]] std::vector<float>  particle_write() const;
+    [[nodiscard]] std::vector<float> particle_write() const;
 };
 
 #endif  // FLUID_PARTICLE_HPP

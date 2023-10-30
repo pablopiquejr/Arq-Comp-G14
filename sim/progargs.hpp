@@ -5,6 +5,7 @@
 #ifndef LAB_ARQUITECTURA_PROGARGS_HPP
 #define LAB_ARQUITECTURA_PROGARGS_HPP
 #include "h_y_m_struct.hpp"
+
 #include <cmath>
 #include <fstream>
 #include <iostream>

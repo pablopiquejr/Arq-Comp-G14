@@ -33,7 +33,7 @@ struct longitud_y_masa file_reader(std::string const & file_name) {
   int n_parameters = 0;
   binary_file.read(reinterpret_cast<char *>(&ppm), 4);           // NOLINT
   binary_file.read(reinterpret_cast<char *>(&n_parameters), 4);  // NOLINT
-  longitud_y_masa l_m {ppm,n_parameters};
+  longitud_y_masa l_m{ppm, n_parameters};
   if (n_parameters <= 0) { exit(-m_num_5); }
   double counter = 0;
   while (counter < n_parameters) {
@@ -62,20 +62,17 @@ void file_writer(std::string const & name, longitud_y_masa mis_datos) {
     exit(-4);
   }
   // Escribir la cabecera
-  output.write(reinterpret_cast<char*>(&mis_datos.ppm),4);
-  output.write(reinterpret_cast<char*>(&mis_datos.n_particulas),4);
+  output.write(reinterpret_cast<char *>(&mis_datos.ppm), 4);           // NOLINT
+  output.write(reinterpret_cast<char *>(&mis_datos.n_particulas), 4);  // NOLINT
   // Escribir los datos de todas las particulas
   std::vector<float> my_data;
   for (Particula const & particula : mis_datos.list_of_particles) {
     my_data = particula.particle_write();
-    for (float elemento: my_data) {
-      output.write(reinterpret_cast<char *>(&elemento), 4); //NOLINT
+    for (float elemento : my_data) {
+      output.write(reinterpret_cast<char *>(&elemento), 4);  // NOLINT
     }
   }
-
 }
-
-
 
 /*
 void print_all_starting_data(){

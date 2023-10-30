@@ -23,10 +23,9 @@ double const y_min           = -0.08;
 double const z_min           = -0.065;
 double const limite_colision = 0.000000000001;
 
-
-int const m_num_5     = 5;
-int const m_num_6     = 6;
-int const m_num_7     = 7;
-int const m_num_8     = 8;
-int const m_num_9     = 9;
+int const m_num_5 = 5;
+int const m_num_6 = 6;
+int const m_num_7 = 7;
+int const m_num_8 = 8;
+int const m_num_9 = 9;
 #endif  // ARQ_COMP_G14_CONSTANTS_HPP
