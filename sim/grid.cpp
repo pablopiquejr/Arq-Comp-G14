@@ -44,13 +44,12 @@ particula_j.acz += incremento_aceleracion_z;
  }
 */
 
-
 // variación de acelaración (incremento)-> izquierda x,y,z (p)  derecha x,y,z (v) resultado x,y,z
 
 // el 1.5 es 3/2
 // NOTA: SE PASA DE COMPLEXIDAD POR EXCESO DE PARAMETROS
 void incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma,
-                            longitud_y_masa const &l_m) {
+                            longitud_y_masa const & l_m) {
   std::vector<double> var_ac = {0, 0, 0, 0, 0, 0, 0, 0, 0};
   double const operador_izquierda =
       15 * l_m.masa_p * 1.5 * p_s *
@@ -58,13 +57,14 @@ void incremento_aceleracion(Particula & particula_i, Particula & particula_j, do
       (particula_i.densidad + particula_j.densidad - 2 * (std::pow(10, -3))) /
       (std::numbers::pi * std::pow(l_m.l_suavizado, 6) *
        std::pow(std::max(norma, std::pow(10, -12)), 0.5));
-  double const operador_derecha = 45 * 0.4 * l_m.masa_p / (std::numbers::pi * std::pow(l_m.l_suavizado, 6));
-  var_ac[0]                     = (particula_i.px - particula_j.px) * operador_izquierda;
-  var_ac[1]                     = (particula_i.py - particula_j.py) * operador_izquierda;
-  var_ac[2]                     = (particula_i.pz - particula_j.pz) * operador_izquierda;
-  var_ac[3]                     = (particula_j.vx - particula_i.vx) * operador_derecha;
-  var_ac[4]                     = (particula_j.vy - particula_i.vy) * operador_derecha;
-  var_ac[m_num_5]               = (particula_j.vz - particula_i.vz) * operador_derecha;
+  double const operador_derecha =
+      45 * 0.4 * l_m.masa_p / (std::numbers::pi * std::pow(l_m.l_suavizado, 6));
+  var_ac[0]       = (particula_i.px - particula_j.px) * operador_izquierda;
+  var_ac[1]       = (particula_i.py - particula_j.py) * operador_izquierda;
+  var_ac[2]       = (particula_i.pz - particula_j.pz) * operador_izquierda;
+  var_ac[3]       = (particula_j.vx - particula_i.vx) * operador_derecha;
+  var_ac[4]       = (particula_j.vy - particula_i.vy) * operador_derecha;
+  var_ac[m_num_5] = (particula_j.vz - particula_i.vz) * operador_derecha;
   var_ac[m_num_6] = (var_ac[0] + var_ac[3]) / (particula_i.densidad * particula_j.densidad);
   var_ac[m_num_7] = (var_ac[1] + var_ac[4]) / (particula_i.densidad * particula_j.densidad);
   var_ac[m_num_8] = (var_ac[2] + var_ac[m_num_5]) / (particula_i.densidad * particula_j.densidad);
@@ -74,8 +74,8 @@ void incremento_aceleracion(Particula & particula_i, Particula & particula_j, do
   }
 }
 
-void incremento_densidades(Particula & particula_i, Particula & particula_j, longitud_y_masa const &l_m) {
-
+void incremento_densidades(Particula & particula_i, Particula & particula_j,
+                           longitud_y_masa const & l_m) {
   double const norma = std::pow(particula_i.px - particula_j.px, 2) +
                        std::pow(particula_i.py - particula_j.py, 2) +
                        std::pow(particula_i.pz - particula_j.pz, 2);

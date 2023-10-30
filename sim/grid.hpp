@@ -7,8 +7,10 @@
 #include "block.hpp"
 #include "constants.hpp"
 #include "h_y_m_struct.hpp"
+
 #include <cmath>
 #include <iostream>
+#include <utility>
 #include <vector>
 
 class Cubo {
@@ -18,9 +20,9 @@ class Cubo {
     int n_z = 0;
     std::vector<Bloque> bloques;
 
-    explicit Cubo(longitud_y_masa setter):l_m{setter}{};
+    explicit Cubo(longitud_y_masa & setter) : l_m{setter} {};
 
-    longitud_y_masa const l_m;
+    longitud_y_masa l_m;
 
     void set_grid_values();
     void creacion_bloques();
@@ -29,13 +31,6 @@ class Cubo {
     void asignacion_inicial();
     void choques_entre_particulas();
 
-    void movimiento_particulas(Particula & particula_i);
     void colision_limites();
-    void colision_x1(Particula & particula, Bloque & bloque) const;
-    void colision_y1(Particula & particula, Bloque & bloque) const;
-    void colision_z1(Particula & particula, Bloque & bloque) const;
-    void colision_x(Particula & particula, Bloque & bloque) const;
-    void colision_y(Particula & particula, Bloque & bloque) const;
-    void colision_z(Particula & particula, Bloque & bloque) const;
 };
 #endif  // LAB_ARQUITECTURA_GRID_HPP

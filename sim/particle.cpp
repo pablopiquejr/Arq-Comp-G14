@@ -10,18 +10,17 @@ double read_float(std::ifstream & file) {
   return number;
 }
 
-
 std::vector<float> Particula::particle_write() const {
-  auto n_px = (float)px;
-  auto n_py = (float)py;
-  auto n_pz = (float)pz;
-  auto n_hvx = (float)hvx;
-  auto n_hvy = (float)hvy;
-  auto n_hvz = (float)hvz;
-  auto n_vx = (float)vx;
-  auto n_vy = (float)vy;
-  auto n_vz = (float)vz;
-  std::vector<float> const data = {n_px,n_py,n_pz,n_hvx,n_hvy,n_hvz,n_vx,n_vy,n_vz};
+  auto n_px                     = (float) px;
+  auto n_py                     = (float) py;
+  auto n_pz                     = (float) pz;
+  auto n_hvx                    = (float) hvx;
+  auto n_hvy                    = (float) hvy;
+  auto n_hvz                    = (float) hvz;
+  auto n_vx                     = (float) vx;
+  auto n_vy                     = (float) vy;
+  auto n_vz                     = (float) vz;
+  std::vector<float> const data = {n_px, n_py, n_pz, n_hvx, n_hvy, n_hvz, n_vx, n_vy, n_vz};
   return data;
 }
 
