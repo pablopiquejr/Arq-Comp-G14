@@ -3,7 +3,7 @@ add_library(sim
         progargs.hpp
         progargs.cpp
         grid.hpp
-        grid.cpp ################ DOS VECES? ###########################
+        grid.cpp
         block.hpp
         block.cpp
         constants.hpp

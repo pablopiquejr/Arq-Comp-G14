@@ -27,8 +27,9 @@ class Cubo {
     void set_grid_values();
     void creacion_bloques();
 
-    void set_particles_coordinates(Particula & particula) const;
+    void set_particles_coordinates(Particula & particula) ;
     void asignacion_inicial();
+    void reposicionar_particula_i(Particula &particula,Bloque  &bloque_original);
     void choques_entre_particulas();
 
     void colision_limites();

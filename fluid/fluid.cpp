@@ -10,12 +10,12 @@ int main(int argc, char * argv[]) {
   longitud_y_masa mi_struct = argument_validator(arguments);
   int const n_interacciones       =  1;//stoi(arguments[1]);
   Cubo my_cubo(mi_struct);
-  for (int i = 0; i < n_interacciones; i++) {
     my_cubo.set_grid_values();
     my_cubo.creacion_bloques();
-
-    my_cubo.choques_entre_particulas();
-    my_cubo.colision_limites();
+    for (int i = 0; i < n_interacciones; i++) {
+        my_cubo.choques_entre_particulas();
+        my_cubo.set_particles_coordinates();
+        my_cubo.colision_limites();
 
     std::cout << "Terminé" << '\n';
   }

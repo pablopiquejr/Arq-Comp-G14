@@ -122,6 +122,10 @@ void Cubo::asignacion_inicial() {
 void Cubo::choques_entre_particulas() {
   // Esto tiene en cuenta consigo mismo tmb eso esta bien?
   for (Bloque const & bloque : bloques) {
+    for (Particula particula_setter: bloque.lista_particulas){ //Posible futuro cambio, de momento se hace una funcion
+        //aparte con otros for
+        particula_setter;
+    }
     for (Bloque const & bloque2 : bloques) {
       if (bloque.b_x == bloque2.b_x - 1 || bloque.b_x == bloque2.b_x ||
           bloque.b_x == bloque2.b_x + 1 || bloque.b_y == bloque2.b_y - 1 ||
@@ -140,13 +144,48 @@ void Cubo::choques_entre_particulas() {
   }
 }
 
-void Cubo::set_particles_coordinates(Particula & particula) const {
-  particula.i = floor((particula.px - x_min) * n_x / (x_max - x_min));
-  if (0 > particula.i) {
-    particula.i = 0;
-  } else if (particula.i > n_x - 1) {
-    particula.i = n_x - 1;
+void Cubo::set_particles_coordinates(Particula & particula)  {
+    for (Bloque  &bloque : bloques){
+        for (Particula &particula: bloque.lista_particulas){
+             if (particula.i != floor((particula.px - x_min) * n_x / (x_max - x_min))) {
+                 particula.i= floor((particula.px - x_min) * n_x / (x_max - x_min));
+                 reposicionar_particula_i(particula, bloque);
+             }
+              if (particula.j !=  floor((particula.py - y_min) * n_y / (y_max - y_min))) {
+                  particula.j = floor((particula.py - y_min) * n_y / (y_max - y_min));
+                  reposicionar_particula_j(particula, bloque);
+              }
+               if (particula.k != floor((particula.pz - z_min) * n_z / (z_max - z_min))) {
+                   particula.k = floor((particula.pz - z_min) * n_z / (z_max - z_min));
+                   reposicionar_particula_k(particula, bloque);
+               }
+        }
+    }
+}
+void Cubo::reposicionar_particula_i(Particula &particula,Bloque  &bloque_original){
+    if (0 > particula.i) {
+        particula.i = 0;
   }
+    else if (particula.i > n_x - 1) {
+        particula.i = n_x - 1;
+  }
+    else {
+        int counter = 0;
+        for (Particula &particula_extra: bloque_original.lista_particulas){
+            if ((particula_extra.i==particula.i) and (particula_extra.j==particula.j) and  (particula_extra.k==particula.k)){
+                bloque_original.lista_particulas.erase(bloque_original.lista_particulas.begin(),bloque_original.lista_particulas.begin()+counter);
+                break;
+            }
+            counter++;
+        }
+        for (Bloque &bloque : bloques){
+            if ((bloque.b_x==particula.i) and (bloque.b_y==particula.j) and  (bloque.b_z==particula.k)){
+                bloque.lista_particulas.push_back(particula);
+            }
+        }
+  }
+  particula.i = floor((particula.px - x_min) * n_x / (x_max - x_min));
+
   particula.j = floor((particula.py - y_min) * n_y / (y_max - y_min));
   if (0 > particula.j) {
     particula.j = 0;
@@ -159,6 +198,7 @@ void Cubo::set_particles_coordinates(Particula & particula) const {
   } else if (particula.k > n_z - 1) {
     particula.k = n_z - 1;
   }
+  Block.lista_particulas.push_back(particula);
 }
 
 // IDEA: meter el movimiento dentro de colision_baja
