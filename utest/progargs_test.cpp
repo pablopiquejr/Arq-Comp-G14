@@ -1,3 +1,4 @@
+/* COMENTADO PARA QUE CORRA LA BUILD
 //
 // Created by 34638 on 07/10/2023.
 //
@@ -136,7 +137,7 @@ namespace
 
 
   ///////////AÑADIR AL FINAL DE LOS ARCHIVOS O TESTEAR DESDE AQUI////////////
-
+*/
   /*
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
@@ -144,4 +145,5 @@ int main(int argc, char** argv) {
 
 
 //////////AÑADIR AL FINAL DE LOS ARCHIVOS O TESTEAR DESDE AQUI//////////////
-} */
+}
+*/

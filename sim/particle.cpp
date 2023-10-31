@@ -11,43 +11,42 @@ double read_float(std::ifstream & file) {
 }
 
 std::vector<float> Particula::particle_write() const {
-  auto n_px                     = (float) px;
-  auto n_py                     = (float) py;
-  auto n_pz                     = (float) pz;
-  auto n_hvx                    = (float) hvx;
-  auto n_hvy                    = (float) hvy;
-  auto n_hvz                    = (float) hvz;
-  auto n_vx                     = (float) vx;
-  auto n_vy                     = (float) vy;
-  auto n_vz                     = (float) vz;
-  std::vector<float> const data = {n_px, n_py, n_pz, n_hvx, n_hvy, n_hvz, n_vx, n_vy, n_vz};
+  // Guardamos los nuevos datos en arrays convertidos a floats
+  std::vector<float> data(pxyz.begin(),pxyz.end());
+
+  std::vector<float> h_v(hvxyz.begin(),hvxyz.end());
+
+  std::vector<float> v_aux(hvxyz.begin(),hvxyz.end());
+
+  data.insert(data.end(), h_v.begin(),h_v.end());
+  data.insert(data.end(), v_aux.begin(),v_aux.end());
   return data;
 }
 
-void Particula::printinfo(int counter) const {
-  std::cout << "Particula" << counter << '\n';
-  std::cout << "px:  " << px << '\t';
-  std::cout << "py:  " << py << '\t';
-  std::cout << "pz:  " << pz << '\t';
-  std::cout << "hvx:  " << hvx << '\t';
-  std::cout << "hvy " << hvy << '\t';
-  std::cout << "hvz " << hvz << '\t';
-  std::cout << "vx:  " << vx << '\t';
-  std::cout << "vy " << vy << '\t';
-  std::cout << "vz " << vz << '\n';
+void Particula::printinfo() const {
+  std::cout << "Particula" << identifier << '\n';
+  std::cout << "px:  " << pxyz[0] << '\t';
+  std::cout << "py:  " << pxyz[1] << '\t';
+  std::cout << "pz:  " << pxyz[2] << '\t';
+  std::cout << "hvx:  " << hvxyz[0] << '\t';
+  std::cout << "hvy " << hvxyz[1] << '\t';
+  std::cout << "hvz " << hvxyz[2] << '\t';
+  std::cout << "vx:  " << vxyz[0] << '\t';
+  std::cout << "vy " << vxyz[1] << '\t';
+  std::cout << "vz " << vxyz[2] << '\n';
 }
 
 void Particula::set_particles_data(std::ifstream & file, double id) {
   identifier = id;
-  px         = read_float(file);
-  py         = read_float(file);
-  pz         = read_float(file);
-  hvx        = read_float(file);
-  hvy        = read_float(file);
-  hvz        = read_float(file);
-  vx         = read_float(file);
-  vy         = read_float(file);
-  vz         = read_float(file);
+  pxyz[0]         = read_float(file);
+  pxyz[1]         = read_float(file);
+  pxyz[2]         = read_float(file);
+  hvxyz[0]        = read_float(file);
+  hvxyz[1]        = read_float(file);
+  hvxyz[2]        = read_float(file);
+  vxyz[0]         = read_float(file);
+  vxyz[1]         = read_float(file);
+  vxyz[2]         = read_float(file);
 }
 
 // ESTAS DOS FUNCIONES ERAN DE BLOQUE
@@ -59,14 +58,14 @@ void Particula::transformacion_densidad(double h_logitud_suavizado, double masa_
 }
 
 void Particula::movimiento_particulas() {
-  px += hvx * a_tiempo + a_c[0] * pow(a_tiempo, 2);
-  py += hvy * a_tiempo + a_c[1] * pow(a_tiempo, 2);
-  pz += hvz * a_tiempo + a_c[2] * pow(a_tiempo, 2);
+  pxyz[0] += hvxyz[0] * a_tiempo + a_c[0] * pow(a_tiempo, 2);
+  pxyz[1] += hvxyz[1] * a_tiempo + a_c[1] * pow(a_tiempo, 2);
+  pxyz[2] += hvxyz[2] * a_tiempo + a_c[2] * pow(a_tiempo, 2);
   // se puede cambiar la división por * 0.5
-  vx   = hvx + a_c[0] * a_tiempo / 2;
-  vy   = hvy + a_c[1] * a_tiempo / 2;
-  vz   = hvz + a_c[2] * a_tiempo / 2;
-  hvx += a_c[0] * a_tiempo;
-  hvy += a_c[1] * a_tiempo;
-  hvz += a_c[2] * a_tiempo;
+  vxyz[0]   = hvxyz[0] + a_c[0] * a_tiempo / 2;
+  vxyz[1]   = hvxyz[1] + a_c[1] * a_tiempo / 2;
+  vxyz[2]   = hvxyz[2] + a_c[2] * a_tiempo / 2;
+  hvxyz[0] += a_c[0] * a_tiempo;
+  hvxyz[1] += a_c[1] * a_tiempo;
+  hvxyz[2] += a_c[2] * a_tiempo;
 }

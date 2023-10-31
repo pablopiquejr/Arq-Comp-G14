@@ -14,23 +14,19 @@
 class Particula {
   public:
     double identifier       = 0;
-    double px               = 0;
-    double py               = 0;
-    double pz               = 0;
-    double hvx              = 0;
-    double hvy              = 0;
-    double hvz              = 0;
-    double vx               = 0;
-    double vy               = 0;
-    double vz               = 0;
+    std::vector<double> pxyz = {0,0,0};
+
+    std::vector<double> hvxyz = {0,0,0};
+
+    std::vector<double> vxyz = {0,0,0};
+
     std::vector<double> a_c = {0, gravedad, 0};
     double densidad         = 0;
-    int i                   = 0;
-    int j                   = 0;
-    int k                   = 0;
+                              // i, j, k
+    std::vector<int> bpos = {0,0,0};
 
     Particula() = default;
-    void printinfo(int counter) const;
+    void printinfo() const;
     void set_particles_data(std::ifstream & file, double id);
     void transformacion_densidad(double h_logitud_suavizado, double masa_p);
     void movimiento_particulas();

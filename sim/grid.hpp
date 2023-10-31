@@ -15,9 +15,9 @@
 
 class Cubo {
   public:
-    int n_x = 0;
-    int n_y = 0;
-    int n_z = 0;
+    // n_x, n_y, n_z
+    std::vector<int> borders = {0, 0, 0};
+
     std::vector<Bloque> bloques;
 
     explicit Cubo(longitud_y_masa & setter) : l_m{setter} {};
@@ -27,9 +27,9 @@ class Cubo {
     void set_grid_values();
     void creacion_bloques();
 
-    void set_particles_coordinates(Particula & particula) ;
+    void set_particles_coordinates(Particula & particula, Bloque & bloque);
     void asignacion_inicial();
-    void reposicionar_particula_i(Particula &particula,Bloque  &bloque_original);
+    void reposicionar_particula(int mode, Particula & particula, Bloque & bloque_original);
     void choques_entre_particulas();
 
     void colision_limites();

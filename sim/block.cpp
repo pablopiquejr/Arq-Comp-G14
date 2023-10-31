@@ -7,95 +7,95 @@ Bloque::Bloque(int param_x, int param_y, int param_z) : b_x(param_x), b_y(param_
 
 void Bloque::colision_x_baja() {
   for (Particula particula : lista_particulas) {
-    double const const_x      = particula.px + particula.hvx * a_tiempo;
-    double const incremento_x = d_p - const_x + x_min;
+    double const const_x      = particula.pxyz[0] + particula.hvxyz[0] * a_tiempo;
+    double const incremento_x = d_p - const_x + min[0];
     if (incremento_x > limite_colision) {
-      particula.a_c[0] += s_c * incremento_x - d_v * particula.vx;
+      particula.a_c[0] += s_c * incremento_x - d_v * particula.vxyz[0];
     }
     particula.movimiento_particulas();
-    double const d_x = particula.px - x_min;
-    if (d_x < 0) { particula.px = x_min - d_x; }
-    particula.vx  = -particula.vx;
-    particula.hvx = -particula.hvx;
+    double const d_x = particula.pxyz[0] - min[0];
+    if (d_x < 0) { particula.pxyz[0] = min[0] - d_x; }
+    particula.vxyz[0]  = -particula.vxyz[0];
+    particula.hvxyz[0] = -particula.hvxyz[0];
   }
 }
 
 void Bloque::colision_y_baja() {
   for (Particula particula : lista_particulas) {
-    double const const_y      = particula.py + particula.hvy * a_tiempo;
-    double const incremento_y = d_p - const_y + y_min;
+    double const const_y      = particula.pxyz[1] + particula.hvxyz[1] * a_tiempo;
+    double const incremento_y = d_p - const_y + min[1];
     if (incremento_y > limite_colision) {
-      particula.a_c[0] += s_c * incremento_y - d_v * particula.vy;
+      particula.a_c[0] += s_c * incremento_y - d_v * particula.vxyz[1];
     }
     particula.movimiento_particulas();
-    double const d_y = particula.py - y_min;
-    if (d_y < 0) { particula.py = y_min - d_y; }
-    particula.vy  = -particula.vy;
-    particula.hvy = -particula.hvy;
+    double const d_y = particula.pxyz[1] - min[1];
+    if (d_y < 0) { particula.pxyz[1] = min[1] - d_y; }
+    particula.vxyz[1]  = -particula.vxyz[1];
+    particula.hvxyz[1] = -particula.hvxyz[1];
   }
 }
 
 void Bloque::colision_z_baja() {
   for (Particula particula : lista_particulas) {
     double const const_z =
-        particula.pz + particula.hvz * a_tiempo;  // delta de t no va a ser 1 siempre?//
-    double const incremento_z = d_p - const_z + z_min;
+        particula.pxyz[2] + particula.hvxyz[2] * a_tiempo;  // delta de t no va a ser 1 siempre?//
+    double const incremento_z = d_p - const_z + min[2];
     if (incremento_z > limite_colision) {
-      particula.a_c[0] += s_c * incremento_z - d_v * particula.vz;
+      particula.a_c[0] += s_c * incremento_z - d_v * particula.vxyz[2];
     }
     particula.movimiento_particulas();
-    double const d_z = particula.pz - z_min;
-    if (d_z < 0) { particula.pz = z_min - d_z; }
-    particula.vz  = -particula.vz;
-    particula.hvz = -particula.hvz;
+    double const d_z = particula.pxyz[2] - min[2];
+    if (d_z < 0) { particula.pxyz[2] = min[2] - d_z; }
+    particula.vxyz[2]  = -particula.vxyz[2];
+    particula.hvxyz[2] = -particula.hvxyz[2];
   }
 }
 
 void Bloque::colision_x_alta() {
   for (Particula particula : lista_particulas) {
     double const const_x =
-        particula.px + particula.hvx * a_tiempo;  // delta de t no va a ser 1 siempre?//
-    double const incremento_x = d_p - x_max + const_x;
+        particula.pxyz[0] + particula.hvxyz[0] * a_tiempo;  // delta de t no va a ser 1 siempre?//
+    double const incremento_x = d_p - max[0] + const_x;
     if (incremento_x > limite_colision) {
-      particula.a_c[0] += -s_c * incremento_x + d_v * particula.vx;
+      particula.a_c[0] += -s_c * incremento_x + d_v * particula.vxyz[0];
     }
     particula.movimiento_particulas();
-    double const d_x = x_max - particula.px;
-    if (d_x < 0) { particula.px = x_max + d_x; }
-    particula.vx  = -particula.vx;
-    particula.hvx = -particula.hvx;
+    double const d_x = max[0] - particula.pxyz[0];
+    if (d_x < 0) { particula.pxyz[0] = max[0] + d_x; }
+    particula.vxyz[0]  = -particula.vxyz[0];
+    particula.hvxyz[0] = -particula.hvxyz[0];
   }
 }
 
 void Bloque::colision_y_alta() {
   for (Particula particula : lista_particulas) {
     double const const_y =
-        particula.py + particula.hvy * a_tiempo;  // delta de t no va a ser 1 siempre?//
-    double const incremento_y = d_p - y_max + const_y;
+        particula.pxyz[1] + particula.hvxyz[1] * a_tiempo;  // delta de t no va a ser 1 siempre?//
+    double const incremento_y = d_p - max[1] + const_y;
     if (incremento_y > limite_colision) {
-      particula.a_c[0] += -s_c * incremento_y + d_v * particula.vy;
+      particula.a_c[0] += -s_c * incremento_y + d_v * particula.vxyz[1];
     }
     particula.movimiento_particulas();
-    double const d_y = y_max - particula.py;
-    if (d_y < 0) { particula.py = y_max + d_y; }
-    particula.vy  = -particula.vy;
-    particula.hvy = -particula.hvy;
+    double const d_y = max[1] - particula.pxyz[1];
+    if (d_y < 0) { particula.pxyz[1] = max[1] + d_y; }
+    particula.vxyz[1]  = -particula.vxyz[1];
+    particula.hvxyz[1] = -particula.hvxyz[1];
   }
 }
 
 void Bloque::colision_z_alta() {
   for (Particula particula : lista_particulas) {
     double const const_z =
-        particula.pz + particula.hvz * a_tiempo;  // delta de t no va a ser 1 siempre?//
-    double const incremento_z = d_p - z_max + const_z;
+        particula.pxyz[2] + particula.hvxyz[2] * a_tiempo;  // delta de t no va a ser 1 siempre?//
+    double const incremento_z = d_p - max[2] + const_z;
     if (incremento_z > limite_colision) {
-      particula.a_c[0] += -s_c * incremento_z + d_v * particula.vz;
+      particula.a_c[0] += -s_c * incremento_z + d_v * particula.vxyz[2];
     }
     particula.movimiento_particulas();
-    double const d_z = z_max - particula.pz;
-    if (d_z < 0) { particula.pz = z_max + d_z; }
-    particula.vz  = -particula.vz;
-    particula.hvz = -particula.hvz;
+    double const d_z = max[2] - particula.pxyz[2];
+    if (d_z < 0) { particula.pxyz[2] = max[2] + d_z; }
+    particula.vxyz[2]  = -particula.vxyz[2];
+    particula.hvxyz[2] = -particula.hvxyz[2];
   }
 }
 
