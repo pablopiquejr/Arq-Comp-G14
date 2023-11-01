@@ -14,6 +14,8 @@ int main(int argc, char * argv[]) {
   my_cubo.creacion_bloques();
 
   for (int i = 0; i < n_interacciones; i++) {
+      //va a hacer una iteracion extra de repos
+
       my_cubo.choques_entre_particulas();
       std::cout << "Colisiones" << "\n";
       my_cubo.colision_limites();

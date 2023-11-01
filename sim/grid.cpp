@@ -111,11 +111,12 @@ void Cubo::creacion_bloques() {
 void Cubo::asignacion_inicial() {
   for (Particula & particula : l_m.list_of_particles) {
     particula.printinfo();
-    //set_particles_coordinates();
+
     for (Bloque & bloque : bloques) {
       if (particula.bpos[0] == bloque.b_x && particula.bpos[1] == bloque.b_y &&
           particula.bpos[2] == bloque.b_z) {
         bloque.lista_particulas.push_back(particula);
+
       }
     }
   }
@@ -124,29 +125,34 @@ void Cubo::asignacion_inicial() {
 void Cubo::choques_entre_particulas() {
   // Esto tiene en cuenta consigo mismo tmb eso esta bien?
   for (Bloque & bloque : bloques) {
-    for (Particula particula_setter :
-         bloque.lista_particulas) {  // Posible futuro cambio, de momento se hace una funcion
-      set_particles_coordinates(particula_setter, bloque);
-
-    }
-    for (Bloque const & bloque2 : bloques) {
+    for (Bloque  & bloque2 : bloques) {
       if (bloque.b_x == bloque2.b_x - 1 || bloque.b_x == bloque2.b_x ||
           bloque.b_x == bloque2.b_x + 1 || bloque.b_y == bloque2.b_y - 1 ||
           bloque.b_y == bloque2.b_y || bloque.b_y == bloque2.b_y + 1 ||
           bloque.b_z == bloque2.b_z - 1 || bloque.b_z == bloque2.b_z ||
           bloque.b_z == bloque2.b_z + 1) {
-        for (Particula particula : bloque.lista_particulas) {
-          for (Particula particula2 : bloque2.lista_particulas) {
-            if (particula.identifier < particula2.identifier) {
-              incremento_densidades(particula, particula2, l_m);
-            }
-          }
-        }
+          comprobar_reposicionamiento(bloque, bloque2);
       }
     }
   }
 }
-
+void Cubo::comprobar_reposicionamiento(Bloque &bloque, Bloque &bloque2){
+    for (Particula particula : bloque.lista_particulas) {
+          for (Particula particula2 : bloque2.lista_particulas) {
+               if (particula.identifier < particula2.identifier) {
+                   if (!particula.repos){
+                      set_particles_coordinates(particula, bloque);
+                      particula.repos=true;
+                  }
+                   if (!particula2.repos){
+                       set_particles_coordinates(particula2, bloque2);
+                       particula2.repos=true;
+                  }
+              incremento_densidades(particula, particula2, l_m);
+            }
+          }
+        }
+}
 void Cubo::set_particles_coordinates(Particula & particula, Bloque & bloque) {
   if (particula.bpos[0] != floor((particula.pxyz[0] - min[0]) * borders[0] / (max[0] - min[0]))) {
     particula.bpos[0] = floor((particula.pxyz[0] - min[0]) * borders[0] / (max[0] - min[0]));
@@ -177,9 +183,7 @@ void Cubo::reposicionar_particula(int mode, Particula & particula, Bloque & bloq
         break;
       }
       counter++;
-
     }
-
     for (Bloque & bloque : bloques) {
       if ((bloque.b_x == particula.bpos[0]) && (bloque.b_y == particula.bpos[1]) &&
           (bloque.b_z == particula.bpos[2])) {
@@ -187,66 +191,20 @@ void Cubo::reposicionar_particula(int mode, Particula & particula, Bloque & bloq
       }
     }
   }
-  particula.bpos[mode] =
-      floor((particula.pxyz[mode] - min[mode]) * borders[mode] / (max[mode] - min[mode]));
-  bloque_original.lista_particulas.push_back(particula);
 }
 
-/* VERSION ANTIGUA (PREVIA A REFRACTOR TOCHO)
-void Cubo::reposicionar_particula(int mode,Particula &particula,Bloque  &bloque_original){
-    if (0 > particula.bpos[0]) {
-        particula.bpos[0] = 0;
-  }
-    else if (particula.bpos[0] > borders[0] - 1) {
-        particula.bpos[0] = borders[0] - 1;
-  }
-    else {
-        int counter = 0;
-        for (Particula &particula_extra: bloque_original.lista_particulas){
-            if ((particula_extra.bpos[0]==particula.bpos[0]) and
-(particula_extra.bpos[1]==particula.bpos[1]) and
-(particula_extra.bpos[2]==particula.bpos[2])){
-                bloque_original.lista_particulas.erase(bloque_original.lista_particulas.begin(),bloque_original.lista_particulas.begin()+counter);
-                break;
-            }
-            counter++;
-        }
-        for (Bloque &bloque : bloques){
-            if ((bloque.b_x==particula.bpos[0]) and (bloque.b_y==particula.bpos[1])
-and  (bloque.b_z==particula.bpos[2])){ bloque.lista_particulas.push_back(particula);
-            }
-        }
-  }
-  particula.bpos[0] = floor((particula.pxyz[0] - min[0]) * borders[0] / (max[0] - min[0]));
-
-  particula.bpos[1] = floor((particula.pxyz[1] - min[1]) * borders[1] / (max[1] - min[1]));
-  if (0 > particula.bpos[1]) {
-    particula.bpos[1] = 0;
-  } else if (particula.bpos[1] > borders[1] - 1) {
-    particula.bpos[1] = borders[1] - 1;
-  }
-  particula.bpos[2] = floor((particula.pxyz[2] - min[2]) * borders[2] / (max[2] - min[2]));
-  if (0 > particula.bpos[2]) {
-    particula.bpos[2] = 0;
-  } else if (particula.bpos[2] > borders[2] - 1) {
-    particula.bpos[2] = borders[2] - 1;
-  }
-  bloque_original.lista_particulas.push_back(particula);
-}
-
- */
-
-// IDEA: meter el movimiento dentro de colision_baja
 void Cubo::colision_limites() {
   for (Bloque & bloque : bloques) {
     if (bloque.b_x == 0) { bloque.colision_x_baja(); }
-    if (bloque.b_x == borders[0] - 1) { bloque.colision_x_alta(); }
-    if (bloque.b_y == 0) { bloque.colision_y_baja(); }
-    if (bloque.b_y == borders[1] - 1) { bloque.colision_y_alta(); }
-    if (bloque.b_z == 0) { bloque.colision_z_baja(); }
-    if (bloque.b_z == borders[2] - 1) { bloque.colision_z_alta(); }
-    for (Particula & particula : bloque.lista_particulas) {
-      particula.movimiento_particulas();
-    }  // mover_particulas_bloque(); //no implementada (leer fijado discord)
+    else if (bloque.b_x == borders[0] - 1) { bloque.colision_x_alta(); }
+    else if (bloque.b_y == 0) { bloque.colision_y_baja(); }
+    else if (bloque.b_y == borders[1] - 1) { bloque.colision_y_alta(); }
+    else if (bloque.b_z == 0) { bloque.colision_z_baja(); }
+    else if (bloque.b_z == borders[2] - 1) { bloque.colision_z_alta(); }
+    else {
+         for (Particula & particula : bloque.lista_particulas) {
+             particula.movimiento_particulas();
+         }
+         }
+     }
   }
-}

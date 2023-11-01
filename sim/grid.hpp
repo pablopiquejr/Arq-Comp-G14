@@ -31,7 +31,7 @@ class Cubo {
     void asignacion_inicial();
     void reposicionar_particula(int mode, Particula & particula, Bloque & bloque_original);
     void choques_entre_particulas();
-
+    void comprobar_reposicionamiento(Bloque &bloque, Bloque &bloque2);
     void colision_limites();
 };
 #endif  // LAB_ARQUITECTURA_GRID_HPP

@@ -14,6 +14,7 @@
 class Particula {
   public:
     double identifier       = 0;
+    bool repos= false;
     std::vector<double> pxyz = {0,0,0};
 
     std::vector<double> hvxyz = {0,0,0};

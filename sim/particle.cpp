@@ -68,4 +68,5 @@ void Particula::movimiento_particulas() {
   hvxyz[0] += a_c[0] * a_tiempo;
   hvxyz[1] += a_c[1] * a_tiempo;
   hvxyz[2] += a_c[2] * a_tiempo;
+  repos= false;
 }
