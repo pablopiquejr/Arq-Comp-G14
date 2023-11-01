@@ -14,6 +14,7 @@
 class Particula {
   public:
     double identifier       = 0;
+    // Ha sido reposicionada
     bool repos= false;
     std::vector<double> pxyz = {0,0,0};
 
@@ -23,7 +24,7 @@ class Particula {
 
     std::vector<double> a_c = {0, gravedad, 0};
     double densidad         = 0;
-                              // i, j, k
+                          // i, j, k
     std::vector<int> bpos = {0,0,0};
 
     Particula() = default;

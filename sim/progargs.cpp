@@ -71,6 +71,7 @@ void file_writer(std::string const & name, longitud_y_masa mis_datos) {
     for (float elemento : my_data) {
       output.write(reinterpret_cast<char *>(&elemento), 4);  // NOLINT
     }
+    particula.printinfo();
   }
 }
 
