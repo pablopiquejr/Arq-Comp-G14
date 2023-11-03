@@ -40,7 +40,7 @@ struct longitud_y_masa file_reader(std::string const & file_name) {
     Particula particula;
     particula.set_particles_data(binary_file, counter);
     l_m.list_of_particles.push_back(particula);
-    // particula.printinfo(counter);
+
     counter += 1;
   }
   if (counter <= 0) { exit(-m_num_5); }
@@ -68,16 +68,12 @@ void file_writer(std::string const & name, longitud_y_masa mis_datos) {
   std::vector<float> my_data;
   for (Particula const & particula : mis_datos.list_of_particles) {
     my_data = particula.particle_write();
+
     for (float elemento : my_data) {
       output.write(reinterpret_cast<char *>(&elemento), 4);  // NOLINT
     }
     particula.printinfo();
+
   }
 }
 
-/*
-void print_all_starting_data(){
-  continue;
-}
-
- */

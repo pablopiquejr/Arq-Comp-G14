@@ -62,19 +62,29 @@ void Cubo::creacion_bloques() {
       }
     }
   }
+  len_bloq = bloques.size();
   asignacion_inicial();
 }
 
 void Cubo::asignacion_inicial() {
   for (Particula & particula : l_m.list_of_particles) {
-    particula.bpos[0]=floor((particula.pxyz[0] - min[0]) * borders[0] / (max[0] - min[0]));
-    particula.bpos[1]=floor((particula.pxyz[1] - min[1]) * borders[1] / (max[1] - min[1]));
-    particula.bpos[2]=floor((particula.pxyz[2] - min[2]) * borders[2] / (max[2] - min[2]));
+    particula.bpos[0] = floor((particula.pxyz[0] - min[0]) * borders[0] / (max[0] - min[0]));
+    particula.bpos[1] = floor((particula.pxyz[1] - min[1]) * borders[1] / (max[1] - min[1]));
+    particula.bpos[2] = floor((particula.pxyz[2] - min[2]) * borders[2] / (max[2] - min[2]));
+
+    for (int pos = 0; pos < 3; pos++) {
+      if (0 > particula.bpos[pos]) {
+        particula.bpos[pos] = 0;
+      } else if (particula.bpos[pos] > borders[pos] - 1) {
+        particula.bpos[pos] = borders[pos] - 1;
+      }
+    }
 
     for (Bloque & bloque : bloques) {
       if (particula.bpos[0] == bloque.b_x && particula.bpos[1] == bloque.b_y &&
           particula.bpos[2] == bloque.b_z) {
         bloque.lista_particulas.push_back(particula);
+        break;
       }
     }
   }
@@ -82,15 +92,34 @@ void Cubo::asignacion_inicial() {
 
 void Cubo::choques_entre_particulas() {
   // Esto tiene en cuenta consigo mismo tmb eso esta bien?
+  // BTW SI LO HACEMOS COMO [0][0][0], podemos hacerlo en un único bucle creo
   for (Bloque & bloque : bloques) {
     for (Bloque & bloque2 : bloques) {
-      if (bloque.b_x == bloque2.b_x - 1 || bloque.b_x == bloque2.b_x ||
-          bloque.b_x == bloque2.b_x + 1 || bloque.b_y == bloque2.b_y - 1 ||
-          bloque.b_y == bloque2.b_y || bloque.b_y == bloque2.b_y + 1 ||
-          bloque.b_z == bloque2.b_z - 1 || bloque.b_z == bloque2.b_z ||
-          bloque.b_z == bloque2.b_z + 1) {
-        comprobar_reposicionamiento(bloque, bloque2);
+      // ESTA MAL
+      if (((bloque.b_y == bloque2.b_y + 1 || bloque.b_y == bloque2.b_y - 1 ||
+            bloque.b_y == bloque2.b_y)) &&
+          (bloque.b_y == bloque2.b_y + 1 || bloque.b_y == bloque2.b_y - 1 ||
+           bloque.b_y == bloque2.b_y) &&
+          (bloque.b_z == bloque2.b_z + 1 || bloque.b_z == bloque2.b_z - 1 ||
+           bloque.b_z == bloque2.b_z)) {
+        if (bloque.b_x == bloque2.b_x && bloque2.b_y == bloque.b_y && bloque2.b_z == bloque.b_z){
+          int pass = 0;
+          pass +=1;
+        }
+        else {
+          comprobar_reposicionamiento(bloque, bloque2);
+        }
       }
+
+      /* ANTIGUA (MALA)
+    if (bloque.b_x == bloque2.b_x - 1 || bloque.b_x == bloque2.b_x ||
+        bloque.b_x == bloque2.b_x + 1 || bloque.b_y == bloque2.b_y - 1 ||
+        bloque.b_y == bloque2.b_y || bloque.b_y == bloque2.b_y + 1 ||
+        bloque.b_z == bloque2.b_z - 1 || bloque.b_z == bloque2.b_z ||
+        bloque.b_z == bloque2.b_z + 1) {
+    comprobar_reposicionamiento(bloque, bloque2);
+  }
+       */
     }
   }
 }
@@ -113,21 +142,21 @@ void Cubo::comprobar_reposicionamiento(Bloque & bloque, Bloque & bloque2) {
   }
 }
 
-void Cubo::set_particles_coordinates(Particula & particula, Bloque & bloque) {
+void Cubo::set_particles_coordinates(Particula &particula, Bloque & bloque) {
   std::vector<double> newpos = {
     floor((particula.pxyz[0] - min[0]) * borders[0] / (max[0] - min[0])),
     floor((particula.pxyz[1] - min[1]) * borders[1] / (max[1] - min[1])),
-    floor((particula.pxyz[2] - min[2]) * borders[2] / (max[2] - min[2]))
-  };
+    floor((particula.pxyz[2] - min[2]) * borders[2] / (max[2] - min[2]))};
+  for (int pos = 0; pos < 3; pos++) {
+    if (0 > newpos[pos]) {
+      newpos[pos] = 0;
+    } else if (newpos[pos] > borders[pos] - 1) {
+      newpos[pos] = borders[pos] - 1;
+    }
+  }
   if (particula.bpos[0] != newpos[0] || particula.bpos[1] != newpos[1] ||
       particula.bpos[2] != newpos[2]) {
-    for (int mode; mode < 3; mode++) {
-      if (0 > newpos[mode]) {
-        newpos[mode] = 0;
-      } else if (newpos[mode]> borders[mode] - 1) {
-        newpos[mode]= borders[mode] - 1;
-      }
-    }
+
     reposicionar_particula(newpos, particula, bloque);
   }
 }
@@ -153,6 +182,41 @@ void Cubo::reposicionar_particula(std::vector<double> const newpos, Particula & 
       bloque.lista_particulas.push_back(particula);
     }
   }
+}
+
+size_t partition(std::vector<Particula> & particles, size_t low, size_t high) {
+  int pivot = particles[high].identifier;
+  size_t i  = low - 1;
+
+  for (size_t j = low; j < high; j++) {
+    if (particles[j].identifier < pivot) {
+      i++;
+      std::swap(particles[i], particles[j]);
+    }
+  }
+
+  std::swap(particles[i + 1], particles[high]);
+  return i + 1;
+}
+
+// QuickSort implementation
+void quickSort(std::vector<Particula> & particles, size_t low, size_t high) {
+  if (low < high) {
+    size_t pivotIndex = partition(particles, low, high);
+
+    if (pivotIndex > 0) { quickSort(particles, low, pivotIndex - 1); }
+    quickSort(particles, pivotIndex + 1, high);
+  }
+}
+
+longitud_y_masa Cubo::actualizar_lista() {
+  l_m.list_of_particles = {};
+  for (Bloque const & bloque : bloques) {
+    l_m.list_of_particles.insert(l_m.list_of_particles.end(), bloque.lista_particulas.begin(),
+                                 bloque.lista_particulas.end());
+  }
+  quickSort(l_m.list_of_particles, 0, l_m.list_of_particles.size() - 1);
+  return l_m;
 }
 
 void Cubo::colision_limites() {

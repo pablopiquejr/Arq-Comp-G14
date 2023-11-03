@@ -16,7 +16,7 @@ std::vector<float> Particula::particle_write() const {
 
   std::vector<float> h_v(hvxyz.begin(),hvxyz.end());
 
-  std::vector<float> v_aux(hvxyz.begin(),hvxyz.end());
+  std::vector<float> v_aux(vxyz.begin(),vxyz.end());
 
   data.insert(data.end(), h_v.begin(),h_v.end());
   data.insert(data.end(), v_aux.begin(),v_aux.end());

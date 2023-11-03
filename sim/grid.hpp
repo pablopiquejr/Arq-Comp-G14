@@ -24,6 +24,8 @@ class Cubo {
 
     longitud_y_masa l_m;
 
+    double len_bloq = 0;
+
     void set_grid_values();
     void creacion_bloques();
 
@@ -34,5 +36,7 @@ class Cubo {
     void choques_entre_particulas();
     void comprobar_reposicionamiento(Bloque & bloque, Bloque & bloque2);
     void colision_limites();
+
+    longitud_y_masa actualizar_lista();
 };
 #endif  // LAB_ARQUITECTURA_GRID_HPP
