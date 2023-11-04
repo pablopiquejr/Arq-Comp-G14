@@ -53,7 +53,7 @@ void Particula::set_particles_data(std::ifstream & file, double id) {
 //  SI USAS DATOS DE PARTICULA PIENSA SI RENTA MAS TENER ESTA FUNCIÓN DENTRO DE LA CLASE
 void Particula::transformacion_densidad(double h_logitud_suavizado, double masa_p) {
   // SI aqui usas PI, creo que hay una libreria para eso, deberias usarla
-  densidad = (densidad + std::pow(h_logitud_suavizado, m_num_6)) * 315 * masa_p /
+  densidad = ((densidad + std::pow(h_logitud_suavizado, m_num_6)) * 315 * masa_p) /
              (64 * std::numbers::pi * std::pow(h_logitud_suavizado, m_num_9));
 }
 

@@ -9,10 +9,16 @@ int main(int argc, char * argv[]) {
   std::vector<std::string> const arguments{span_args.begin(), span_args.end()};
   longitud_y_masa mi_struct = argument_validator(arguments);
 
-  int const n_interacciones       =  1;//stoi(arguments[1]);
+  int const n_interacciones       =  2;//stoi(arguments[1]);
   Cubo my_cubo(mi_struct);
   my_cubo.set_grid_values();
   my_cubo.creacion_bloques();
+
+
+  //////////////////////////////////////////////////////////
+  // HAY QUE CAMBIAR EL GRID A VECGRID ANTES DE CORRERLO////
+  //////////////////////////////////////////////////////////
+
 
   for (int i = 0; i < n_interacciones; i++) {
       //va a hacer una iteracion extra de repos
