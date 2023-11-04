@@ -14,8 +14,8 @@
 class Particula {
   public:
     double identifier       = 0;
-    // Ha sido reposicionada
-    bool repos= false;
+
+    bool eliminada = false;
     std::vector<double> pxyz = {0,0,0};
 
     std::vector<double> hvxyz = {0,0,0};

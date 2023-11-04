@@ -4,7 +4,6 @@
 #include "grid.hpp"
 
 // el 1.5 es 3/2
-// NOTA: SE PASA DE COMPLEXIDAD POR EXCESO DE PARAMETROS
 void Cubo::incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma) {
   std::vector<double> var_ac = {0, 0, 0, 0, 0, 0, 0, 0, 0};
   double dist                = std::pow(std::max(norma, std::pow(10, -12)), 0.5);
@@ -41,6 +40,33 @@ void Cubo::incremento_densidades(Particula & particula_i, Particula & particula_
   }
 }
 
+
+void Cubo::transferencia_aceleracion() {
+  for (Bloque & bloque : bloques) {
+    for (Bloque & bloque2 : bloques) {
+      if (((bloque.b_x == bloque2.b_x + 1 || bloque.b_x == bloque2.b_x - 1 ||
+            bloque.b_x == bloque2.b_x)) &&
+          (bloque.b_y == bloque2.b_y + 1 || bloque.b_y == bloque2.b_y - 1 ||
+           bloque.b_y == bloque2.b_y) &&
+          (bloque.b_z == bloque2.b_z + 1 || bloque.b_z == bloque2.b_z - 1 ||
+           bloque.b_z == bloque2.b_z)) {
+        for (Particula & particula : bloque.lista_particulas) {
+          for (Particula & particula2 : bloque2.lista_particulas) {
+            if (particula.identifier < particula2.identifier) {
+              double const norma = std::pow(particula2.pxyz[0] - particula.pxyz[0], 2) +
+                                   std::pow(particula2.pxyz[1] - particula.pxyz[1], 2) +
+                                   std::pow(particula2.pxyz[2] - particula.pxyz[2], 2);
+              if (norma < (l_m.l_suavizado * l_m.l_suavizado)) {
+                incremento_aceleracion(particula, particula2, norma);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 void Cubo::set_grid_values() {
   borders[0] = floor((max[0] - min[0]) / l_m.l_suavizado);
   borders[1] = floor((max[1] - min[1]) / l_m.l_suavizado);
@@ -56,7 +82,6 @@ void Cubo::creacion_bloques() {
       }
     }
   }
-  len_bloq = bloques.size();
   asignacion_inicial();
 }
 
@@ -97,10 +122,6 @@ void Cubo::choques_entre_particulas() {
            bloque.b_y == bloque2.b_y) &&
           (bloque.b_z == bloque2.b_z + 1 || bloque.b_z == bloque2.b_z - 1 ||
            bloque.b_z == bloque2.b_z)) {
-        if (bloque.b_x == bloque.b_y && bloque.b_z == 0 && bloque.b_x == bloque.b_z) {
-          std::cout << "Colision con el bloque: " << bloque2.b_x << bloque2.b_y << bloque2.b_z
-                    << '\n';
-        }
         comprobar_reposicionamiento(bloque, bloque2);
       }
     }
@@ -111,47 +132,32 @@ void Cubo::choques_entre_particulas() {
   transferencia_aceleracion();
 }
 
-void Cubo::transferencia_aceleracion() {
-  for (Bloque & bloque : bloques) {
-    for (Bloque & bloque2 : bloques) {
-      if (((bloque.b_x == bloque2.b_x + 1 || bloque.b_x == bloque2.b_x - 1 ||
-            bloque.b_x == bloque2.b_x)) &&
-          (bloque.b_y == bloque2.b_y + 1 || bloque.b_y == bloque2.b_y - 1 ||
-           bloque.b_y == bloque2.b_y) &&
-          (bloque.b_z == bloque2.b_z + 1 || bloque.b_z == bloque2.b_z - 1 ||
-           bloque.b_z == bloque2.b_z)) {
-        for (Particula & particula : bloque.lista_particulas) {
-          for (Particula & particula2 : bloque2.lista_particulas) {
-            if (particula.identifier < particula2.identifier) {
-              double const norma = std::pow(particula2.pxyz[0] - particula.pxyz[0], 2) +
-                                   std::pow(particula2.pxyz[1] - particula.pxyz[1], 2) +
-                                   std::pow(particula2.pxyz[2] - particula.pxyz[2], 2);
-              if (norma < (l_m.l_suavizado * l_m.l_suavizado)) {
-                incremento_aceleracion(particula, particula2, norma);
-              }
-            }
-          }
-        }
+void Cubo::comprobar_reposicionamiento(Bloque & bloque, Bloque & bloque2) {
+  for (Particula & particula : bloque.lista_particulas) {
+    for (Particula & particula2 : bloque2.lista_particulas) {
+      if (particula.identifier < particula2.identifier) {
+        incremento_densidades(particula, particula2);
       }
     }
   }
 }
 
-void Cubo::comprobar_reposicionamiento(Bloque & bloque, Bloque & bloque2) {
-  for (Particula & particula : bloque.lista_particulas) {
-    for (Particula & particula2 : bloque2.lista_particulas) {
-      if (particula.identifier < particula2.identifier) {
-        if (!particula.repos) {
-          set_particles_coordinates(particula, bloque);
-          particula.repos = true;
-        }
-        if (!particula2.repos) {
-          set_particles_coordinates(particula2, bloque2);
-          particula2.repos = true;
-        }
-        incremento_densidades(particula, particula2);
-      }
+void Cubo::repos_particulas() {
+  for (Bloque &bloque: bloques){
+    for (Particula &particula: bloque.lista_particulas){
+      set_particles_coordinates(particula, bloque);
+      particula.densidad = 0;
+      particula.a_c[0] = 0;
+      particula.a_c[1] = gravedad;
+      particula.a_c[2] = 0;
     }
+    bloque.lista_particulas.erase(
+        std::remove_if(
+            bloque.lista_particulas.begin(),
+            bloque.lista_particulas.end(),
+            [](const Particula &particula) { return particula.eliminada; }),
+        bloque.lista_particulas.end()
+    );
   }
 }
 
@@ -169,29 +175,27 @@ void Cubo::set_particles_coordinates(Particula & particula, Bloque & bloque) {
   }
   if (particula.bpos[0] != newpos[0] || particula.bpos[1] != newpos[1] ||
       particula.bpos[2] != newpos[2]) {
-    reposicionar_particula(newpos, particula, bloque);
+    particula.bpos[0] = newpos[0];
+    particula.bpos[1] = newpos[1];
+    particula.bpos[2] = newpos[2];
+    reposicionar_particula(particula, bloque);
   }
 }
 
-void Cubo::reposicionar_particula(std::vector<double> const newpos, Particula & particula,
+void Cubo::reposicionar_particula(Particula & particula,
                                   Bloque & bloque_original) {
-  int counter = 0;
+  Particula dummy = particula;
   for (Particula & p_extra : bloque_original.lista_particulas) {
-    if ((p_extra.bpos[0] == particula.bpos[0]) && (p_extra.bpos[1] == particula.bpos[1]) &&
-        (p_extra.bpos[2] == particula.bpos[2])) {
-      bloque_original.lista_particulas.erase(bloque_original.lista_particulas.begin(),
-                                             bloque_original.lista_particulas.begin() + counter);
+    if (p_extra.identifier == particula.identifier) {
+      particula.eliminada = true;
       break;
     }
-    counter++;
   }
-  particula.bpos[0] = newpos[0];
-  particula.bpos[1] = newpos[1];
-  particula.bpos[2] = newpos[2];
   for (Bloque & bloque : bloques) {
-    if ((bloque.b_x == particula.bpos[0]) && (bloque.b_y == particula.bpos[1]) &&
-        (bloque.b_z == particula.bpos[2])) {
+    if ((bloque.b_x == dummy.bpos[0]) && (bloque.b_y == dummy.bpos[1]) &&
+        (bloque.b_z == dummy.bpos[2])) {
       bloque.lista_particulas.push_back(particula);
+      break;
     }
   }
 }

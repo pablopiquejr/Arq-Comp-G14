@@ -8,7 +8,7 @@ Bloque::Bloque(int param_x, int param_y, int param_z) : b_x(param_x), b_y(param_
 void Bloque::colision_x_baja() {
   for (Particula particula : lista_particulas) {
     double const const_x      = particula.pxyz[0] + particula.hvxyz[0] * a_tiempo;
-    double const incremento_x = d_p - const_x + min[0];
+    double const incremento_x = d_p - (const_x - min[0]);
     if (incremento_x > limite_colision) {
       particula.a_c[0] += s_c * incremento_x - d_v * particula.vxyz[0];
     }

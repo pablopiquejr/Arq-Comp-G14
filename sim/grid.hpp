@@ -24,14 +24,15 @@ class Cubo {
 
     longitud_y_masa l_m;
 
-    double len_bloq = 0;
+
 
     void set_grid_values();
     void creacion_bloques();
 
+    void repos_particulas();
     void set_particles_coordinates(Particula & particula, Bloque & bloque);
     void asignacion_inicial();
-    void reposicionar_particula(std::vector<double> const newpos, Particula & particula,
+    void reposicionar_particula(Particula & particula,
                                 Bloque & bloque_original);
     void choques_entre_particulas();
 
