@@ -9,7 +9,7 @@ int main(int argc, char * argv[]) {
   std::vector<std::string> const arguments{span_args.begin(), span_args.end()};
   longitud_y_masa mi_struct = argument_validator(arguments);
 
-  int const n_interacciones       =  2;//stoi(arguments[1]);
+  int const n_interacciones       =  1;//stoi(arguments[1]);
   Cubo my_cubo(mi_struct);
   my_cubo.set_grid_values();
   my_cubo.creacion_bloques();
@@ -25,7 +25,8 @@ int main(int argc, char * argv[]) {
       my_cubo.repos_particulas();
       my_cubo.choques_entre_particulas();
       //std::cout << "Colisiones" << "\n";
-      my_cubo.colision_limites();
+      //my_cubo.colision_limites();
+      my_cubo.procesamiento_colisiones();
   }
   longitud_y_masa final = my_cubo.actualizar_lista();
   file_writer(arguments[3], final);

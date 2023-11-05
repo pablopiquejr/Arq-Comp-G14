@@ -39,10 +39,13 @@ class Cubo {
     void transferencia_aceleracion();
 
     void comprobar_reposicionamiento(Bloque & bloque, Bloque & bloque2);
+
+    void procesamiento_colisiones();
+
     void colision_limites();
 
-    void incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma);
-    void incremento_densidades(Particula & particula_i, Particula & particula_j);
+    void incremento_aceleracion(Particula & particula_i, Particula & particula_j, double norma) const;
+    void incremento_densidades(Particula & particula_i, Particula & particula_j) const;
     longitud_y_masa actualizar_lista();
 };
 #endif  // LAB_ARQUITECTURA_GRID_HPP

@@ -58,9 +58,9 @@ void Particula::transformacion_densidad(double h_logitud_suavizado, double masa_
 }
 
 void Particula::movimiento_particulas() {
-  pxyz[0] += hvxyz[0] * a_tiempo + a_c[0] * pow(a_tiempo, 2);
-  pxyz[1] += hvxyz[1] * a_tiempo + a_c[1] * pow(a_tiempo, 2);
-  pxyz[2] += hvxyz[2] * a_tiempo + a_c[2] * pow(a_tiempo, 2);
+  pxyz[0] += hvxyz[0] * a_tiempo + a_c[0] * std::pow(a_tiempo, 2);
+  pxyz[1] += hvxyz[1] * a_tiempo + a_c[1] * std::pow(a_tiempo, 2);
+  pxyz[2] += hvxyz[2] * a_tiempo + a_c[2] * std::pow(a_tiempo, 2);
   // se puede cambiar la división por * 0.5
   vxyz[0]   = hvxyz[0] + a_c[0] * a_tiempo / 2;
   vxyz[1]   = hvxyz[1] + a_c[1] * a_tiempo / 2;
