@@ -5,7 +5,7 @@
 
 // el 1.5 es 3/2
 void Cubo::incremento_aceleracion(Particula & particula_i, Particula & particula_j,
-                                  double norma) const {
+                                  double norma) const{
   if (particula_j.identifier == 0 || particula_i.identifier == 0) {
     std::vector<double> var_ac = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     double dist                = std::pow(std::max(norma, std::pow(10, -12)), 0.5);
@@ -14,11 +14,9 @@ void Cubo::incremento_aceleracion(Particula & particula_i, Particula & particula
          (particula_i.densidad + particula_j.densidad - 2 * p_densidad)) /
         (std::numbers::pi * std::pow(l_m.l_suavizado, 6) * dist);
     double const operador_derecha =
-        45 * 0.4 * l_m.masa_p / (std::numbers::pi * std::pow(l_m.l_suavizado, 6));
+        45 * u_viscosidad * l_m.masa_p / (std::numbers::pi * std::pow(l_m.l_suavizado, 6));
     for (int i = 0; i < 3; ++i) {
       var_ac[i] = (particula_i.pxyz[i] - particula_j.pxyz[i]) * operador_izquierda;
-    }
-    for (int i = 0; i < 3; ++i) {
       var_ac[i + 3] = (particula_j.vxyz[i] - particula_i.vxyz[i]) * operador_derecha;
     }
     var_ac[6] = (var_ac[0] + var_ac[3]) / (particula_i.densidad * particula_j.densidad);
