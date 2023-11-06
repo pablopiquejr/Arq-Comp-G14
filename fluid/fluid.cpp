@@ -4,9 +4,9 @@
 
 #include <span>
 
-
-#include "../sim/grid.hpp"
 /*
+#include "../sim/grid.hpp"
+
 int main(int argc, char * argv[]) {
   check_n_arguments(argc);
   std::span const span_args{argv, std::size_t(argc)};
@@ -56,6 +56,7 @@ int main(int argc, char * argv[]) {
     my_cubo.check_if_repos();
     my_cubo.choques_entre_particulas();
     my_cubo.procesamiento_colisiones();
+    //my_cubo.colision_limites();
     my_cubo.write_report(i+1);
   }
   file_writer(arguments[3], my_cubo.l_m);

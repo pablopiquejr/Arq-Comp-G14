@@ -29,14 +29,14 @@ class Vec_Bloque {
     void recinto_x(int n_x, std::vector<Particula> &Lista_b);
     void recinto_y(int n_y, std::vector<Particula> &Lista_b);
     void recinto_z(int n_z, std::vector<Particula> &Lista_b);
-    /*
-    void colision_x_baja();
-    void colision_y_baja();
-    void colision_z_baja();
-    void colision_x_alta();
-    void colision_y_alta();
-    void colision_z_alta();
-     */
+
+    void colision_x_baja(std::vector<Particula> &Lista_b);
+    void colision_y_baja(std::vector<Particula> &Lista_b);
+    void colision_z_baja(std::vector<Particula> &Lista_b);
+    void colision_x_alta(std::vector<Particula> &Lista_b);
+    void colision_y_alta(std::vector<Particula> &Lista_b);
+    void colision_z_alta(std::vector<Particula> &Lista_b);
+
 };
 
 

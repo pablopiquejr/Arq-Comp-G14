@@ -30,6 +30,8 @@ class Grid {
 
     longitud_y_masa l_m;
 
+    void escribir_datos_iniciales();
+
     int transform(int i, int j, int k);
 
     void primeros_calculos();
@@ -50,6 +52,7 @@ class Grid {
                                 double norma) const;
 
     void procesamiento_colisiones();
+    void colision_limites();
 
     void write_report(int n_iteraccion);
 

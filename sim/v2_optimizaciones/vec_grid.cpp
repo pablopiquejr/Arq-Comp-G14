@@ -5,10 +5,21 @@
 // Created by sergio on 3/10/23.
 //
 
+void Grid::escribir_datos_iniciales() {
+  std::cout << "Numero de Partículas: " << l_m.n_particulas << '\n'
+            << "Particles Per Meter: " << l_m.ppm << "\n"
+            << "Longitud de suavizado: " << l_m.l_suavizado << '\n'
+            << "Masa de particula: " << l_m.masa_p << '\n'
+            << "Tamaño Bloque: " << borders[0] << " * " << borders[1] << " * " << borders[2] << '\n'
+            << "Numero de Bloques: " << size_cubo << '\n'
+            << "Tamaño Bloque: " << borders[0] / max[0] << " * " << borders[1] / max[0] << " * "
+            << borders[2] / max[2] << '\n';
+}
+
 void Grid::primeros_calculos() {
   for (int i = 0; i < 3; i++) { borders[i] = floor((max[i] - min[i]) / l_m.l_suavizado); }
-  bloques   = std::vector<Vec_Bloque>(borders[0] * borders[1] * borders[2], Vec_Bloque());
   size_cubo = borders[0] * borders[1] * borders[2];
+  bloques   = std::vector<Vec_Bloque>(size_cubo, Vec_Bloque());
   for (Particula & particula : l_m.list_of_particles) {
     for (int i = 0; i < 3; i++) {
       particula.bpos[i] = floor((particula.pxyz[i] - min[i]) * borders[i] / (max[i] - min[i]));
@@ -22,6 +33,7 @@ void Grid::primeros_calculos() {
     bloques[size].lista_particulas.push_back(particula.identifier);
   }
   for (int i = 0; i < size_cubo; i++) { bloques[i].threeD_values(i, borders); }
+  escribir_datos_iniciales();
 }
 
 void Grid::check_if_repos() {
@@ -188,14 +200,36 @@ void Grid::procesamiento_colisiones() {
   }
 }
 
+void Grid::colision_limites() {
+  for (Vec_Bloque & bloque : bloques) {
+    if (bloque.b_z == 0) {
+      bloque.colision_z_baja(l_m.list_of_particles);
+    } if (bloque.b_z == borders[2] - 1) {
+      bloque.colision_z_alta(l_m.list_of_particles);
+    } if (bloque.b_y == 0) {
+      bloque.colision_y_baja(l_m.list_of_particles);
+    } if (bloque.b_y == borders[1] - 1) {
+      bloque.colision_y_alta(l_m.list_of_particles);
+    } if (bloque.b_x == 0) {
+      bloque.colision_x_baja(l_m.list_of_particles);
+    } if (bloque.b_x == borders[0] - 1) {
+      bloque.colision_x_alta(l_m.list_of_particles);
+    } else {
+      for (int i_d : bloque.lista_particulas) { l_m.list_of_particles[i_d].movimiento_particulas(); }
+    }
+  }
+}
+
+
+
 void Grid::write_report(int n_iteaccion) {
-  std::ofstream output("traza_iteraccion" + std::to_string(n_iteaccion) + ".txt");
+  std::ofstream output("traza_large_iteraccion" + std::to_string(n_iteaccion) + ".txt");
 
   if (!output) { std::cerr << "No se pudo crear el archivo de texto." << '\n'; }
   for (int n = 0; n < size_cubo; n++) {
     output << "Bloque " << n << " - Número de partículas: " << bloques[n].lista_particulas.size()
            << '\n';
-    for (int i: bloques[n].lista_particulas) {
+    for (int i : bloques[n].lista_particulas) {
       Particula particles = l_m.list_of_particles[i];
       output << "Particula " << particles.identifier << '\n';
       output << "Posición (x, y, z): " << particles.pxyz[0] << ", " << particles.pxyz[1] << ", "
