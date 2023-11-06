@@ -48,7 +48,7 @@ int main(int argc, char * argv[]) {
   std::vector<std::string> const arguments{span_args.begin(), span_args.end()};
   longitud_y_masa mi_struct = argument_validator(arguments);
 
-  int const n_interacciones       =  1;//stoi(arguments[1]);
+  int const n_interacciones       =  stoi(arguments[1]);
   Grid my_cubo(mi_struct);
   my_cubo.primeros_calculos();
 
@@ -56,6 +56,7 @@ int main(int argc, char * argv[]) {
     my_cubo.check_if_repos();
     my_cubo.choques_entre_particulas();
     my_cubo.procesamiento_colisiones();
+    my_cubo.write_report(i+1);
   }
   file_writer(arguments[3], my_cubo.l_m);
   std::cout << "Terminé" << '\n';

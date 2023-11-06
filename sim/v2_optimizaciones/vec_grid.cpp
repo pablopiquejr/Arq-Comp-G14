@@ -59,7 +59,7 @@ void Grid::reposicionar_particula(Particula & particula, std::vector<double> new
 
   for (int i = 0; i < 3; ++i) { particula.bpos[i] = newpos[i]; }
 
-  bloques[transform(particula.pxyz[0], particula.pxyz[1], particula.pxyz[2])]
+  bloques[transform(particula.bpos[0], particula.bpos[1], particula.bpos[2])]
       .lista_particulas.push_back(particula.identifier);
 }
 
@@ -155,8 +155,10 @@ void Grid::incremento_aceleracion(Particula & particula_i, Particula & particula
     var_ac[i + 3] = (particula_j.vxyz[i] - particula_i.vxyz[i]) * operador_derecha;
   }
   for (size_t i = 0; i < 3; i++) {
-    particula_i.a_c[i] += (var_ac[i] + var_ac[i+3]) / (particula_i.densidad * particula_j.densidad);
-    particula_j.a_c[i] -= (var_ac[i] + var_ac[i+3]) / (particula_i.densidad * particula_j.densidad);
+    particula_i.a_c[i] +=
+        (var_ac[i] + var_ac[i + 3]) / (particula_i.densidad * particula_j.densidad);
+    particula_j.a_c[i] -=
+        (var_ac[i] + var_ac[i + 3]) / (particula_i.densidad * particula_j.densidad);
   }
 }
 
@@ -172,9 +174,7 @@ void Grid::procesamiento_colisiones() {
       bloque.colision_z(bloque.b_z, l_m.list_of_particles);
     }
 
-    for (int id : bloque.lista_particulas) {
-      l_m.list_of_particles[id].movimiento_particulas();
-    }
+    for (int id : bloque.lista_particulas) { l_m.list_of_particles[id].movimiento_particulas(); }
 
     if (bloque.b_x == 0 || bloque.b_x == borders[0] - 1) {
       bloque.recinto_x(bloque.b_x, l_m.list_of_particles);
@@ -184,6 +184,30 @@ void Grid::procesamiento_colisiones() {
     }
     if (bloque.b_z == 0 || bloque.b_z == borders[2] - 1) {
       bloque.recinto_z(bloque.b_z, l_m.list_of_particles);
+    }
+  }
+}
+
+void Grid::write_report(int n_iteaccion) {
+  std::ofstream output("traza_iteraccion" + std::to_string(n_iteaccion) + ".txt");
+
+  if (!output) { std::cerr << "No se pudo crear el archivo de texto." << '\n'; }
+  for (int n = 0; n < size_cubo; n++) {
+    output << "Bloque " << n << " - Número de partículas: " << bloques[n].lista_particulas.size()
+           << '\n';
+    for (int i: bloques[n].lista_particulas) {
+      Particula particles = l_m.list_of_particles[i];
+      output << "Particula " << particles.identifier << '\n';
+      output << "Posición (x, y, z): " << particles.pxyz[0] << ", " << particles.pxyz[1] << ", "
+             << particles.pxyz[2] << '\n';
+      output << "HV (x, y, z): " << particles.hvxyz[0] << ", " << particles.hvxyz[1] << ", "
+             << particles.hvxyz[2] << '\n';
+      output << "Velocidad (x, y, z): " << particles.vxyz[0] << ", " << particles.vxyz[1] << ", "
+             << particles.vxyz[2] << '\n';
+      output << "Densidad: " << particles.densidad << '\n';
+      output << "Aceleración (x, y, z): " << particles.a_c[0] << ", " << particles.a_c[1] << ", "
+             << particles.a_c[2] << '\n';
+      output << '\n';
     }
   }
 }

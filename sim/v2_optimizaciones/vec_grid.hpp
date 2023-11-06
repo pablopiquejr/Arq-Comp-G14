@@ -13,6 +13,7 @@
 #include <utility>
 #include <vector>
 
+
 class Grid {
   public:
     // n_x, n_y, n_z
@@ -39,10 +40,6 @@ class Grid {
 
     std::vector<Vec_Bloque> get_adyacents(int i);
 
-    void adyacent_subx(std::vector<int> const & coor, std::vector<Vec_Bloque> & adyacentes);
-    void adyacent_x(std::vector<int> const & coor, std::vector<Vec_Bloque> & adyacentes);
-    void adyacent_plusx(std::vector<int> const & coor, std::vector<Vec_Bloque> & adyacentes);
-
     void incremento_densidades(int & id1, int & id2);
 
     void choques_entre_particulas();
@@ -53,6 +50,8 @@ class Grid {
                                 double norma) const;
 
     void procesamiento_colisiones();
+
+    void write_report(int n_iteraccion);
 
 };
 #endif  // LAB_ARQUITECTURA_VEC_GRID_HPP
