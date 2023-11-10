@@ -102,24 +102,6 @@ int Grid::transform(int i, int j, int k) {
   return size;
 }
 
-std::vector<Vec_Bloque> Grid::get_adyacents(int i) {
-  std::vector<Vec_Bloque> adyacentes;
-  for (int dx = -1; dx <= 1; dx++) {
-    int const x = bloques[i].b_x + dx;
-    if (!(x < 0 || x >= borders[0])) {
-      for (int dy = -1; dy <= 1; dy++) {
-        int const y = bloques[i].b_y + dy;
-        if (!(y < 0 || y >= borders[1])) {
-          for (int dz = -1; dz <= 1; dz++) {
-            int const z = bloques[i].b_z + dz;
-            if (!(z < 0 || z >= borders[2])) { adyacentes.push_back(bloques[transform(x, y, z)]); }
-          }
-        }
-      }
-    }
-  }
-  return adyacentes;
-}
 
 void Grid::incremento_densidades(int & id1, int & id2) {
   double const norma =
@@ -158,19 +140,20 @@ void Grid::choques_entre_particulas() {
 
 void Grid::transferencia_aceleracion() {
   for (int i = 0; i < size_cubo; ++i) {
-    std::vector<Vec_Bloque> adyacents = get_adyacents(i);
-    for (Vec_Bloque & bloque : adyacents) {
+    for (Vec_Bloque & bloque : bloques[i].adyacentes) {
       for (int & id1 : bloques[i].lista_particulas) {
         for (int & id2 : bloque.lista_particulas) {
-          if (id1 < id2) {
-            double const norma =
-                std::pow(l_m.list_of_particles[id2].pxyz[0] - l_m.list_of_particles[id1].pxyz[0],
-                         2) +
-                std::pow(l_m.list_of_particles[id2].pxyz[1] - l_m.list_of_particles[id1].pxyz[1],
-                         2) +
-                std::pow(l_m.list_of_particles[id2].pxyz[2] - l_m.list_of_particles[id1].pxyz[2],
-                         2);
-            if (norma < std::pow(l_m.l_suavizado, 2)) {
+          double const norma =
+              std::pow(l_m.list_of_particles[id2].pxyz[0] - l_m.list_of_particles[id1].pxyz[0], 2) +
+              std::pow(l_m.list_of_particles[id2].pxyz[1] - l_m.list_of_particles[id1].pxyz[1], 2) +
+              std::pow(l_m.list_of_particles[id2].pxyz[2] - l_m.list_of_particles[id1].pxyz[2], 2);
+          if (norma < std::pow(l_m.l_suavizado, 2)) {
+            if (i == transform(bloque.b_x, bloque.b_y, bloque.b_z)) {
+              if (id1 < id2) {
+                incremento_aceleracion(l_m.list_of_particles[id1], l_m.list_of_particles[id2],
+                                       norma);
+              }
+            } else {
               incremento_aceleracion(l_m.list_of_particles[id1], l_m.list_of_particles[id2], norma);
             }
           }
@@ -179,6 +162,7 @@ void Grid::transferencia_aceleracion() {
     }
   }
 }
+
 
 void Grid::incremento_aceleracion(Particula & particula_i, Particula & particula_j,
                                   double norma) const {
