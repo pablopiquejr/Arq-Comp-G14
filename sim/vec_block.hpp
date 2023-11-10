@@ -16,6 +16,8 @@ class Vec_Bloque {
 
     Vec_Bloque()=default;
 
+    std::vector<Vec_Bloque>adyacentes;
+
     int b_x = 0;
     int b_y = 0;
     int b_z = 0;
@@ -30,12 +32,9 @@ class Vec_Bloque {
     void recinto_y(int n_y, std::vector<Particula> &Lista_b);
     void recinto_z(int n_z, std::vector<Particula> &Lista_b);
 
-    void colision_x_baja(std::vector<Particula> &Lista_b);
-    void colision_y_baja(std::vector<Particula> &Lista_b);
-    void colision_z_baja(std::vector<Particula> &Lista_b);
-    void colision_x_alta(std::vector<Particula> &Lista_b);
-    void colision_y_alta(std::vector<Particula> &Lista_b);
-    void colision_z_alta(std::vector<Particula> &Lista_b);
+    void colision_x_(int n_x, std::vector<Particula> &Lista_b);
+    void colision_y_(int n_z, std::vector<Particula> &Lista_b);
+    void colision_z_(int n_z, std::vector<Particula> &Lista_b);
 
 };
 

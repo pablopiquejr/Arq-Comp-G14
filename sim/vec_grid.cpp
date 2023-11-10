@@ -33,8 +33,30 @@ void Grid::primeros_calculos() {
     bloques[size].lista_particulas.push_back(particula.identifier);
   }
   for (int i = 0; i < size_cubo; i++) { bloques[i].threeD_values(i, borders); }
+  for (int i = 0; i < size_cubo; i++) { get_adyacents_op(i, bloques[i]); }
   escribir_datos_iniciales();
 }
+
+void Grid::get_adyacents_op(int i, Vec_Bloque & bloque) {
+  for (int dx = -1; dx <= 1; dx++) {
+    int const x = bloques[i].b_x + dx;
+    if (!(x < 0 || x >= borders[0])) {
+      for (int dy = -1; dy <= 1; dy++) {
+        int const y = bloques[i].b_y + dy;
+        if (!(y < 0 || y >= borders[1])) {
+          for (int dz = -1; dz <= 1; dz++) {
+            int const z = bloques[i].b_z + dz;
+            if (!(z < 0 || z >= borders[2])) {
+              int const aux = transform(x,y,z);
+              if (i <= aux){bloque.adyacentes.push_back(bloques[aux]);}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 
 void Grid::check_if_repos() {
   for (Particula & particula : l_m.list_of_particles) {
@@ -83,13 +105,15 @@ int Grid::transform(int i, int j, int k) {
 std::vector<Vec_Bloque> Grid::get_adyacents(int i) {
   std::vector<Vec_Bloque> adyacentes;
   for (int dx = -1; dx <= 1; dx++) {
-    for (int dy = -1; dy <= 1; dy++) {
-      for (int dz = -1; dz <= 1; dz++) {
-        int const x = bloques[i].b_x + dx;
+    int const x = bloques[i].b_x + dx;
+    if (!(x < 0 || x >= borders[0])) {
+      for (int dy = -1; dy <= 1; dy++) {
         int const y = bloques[i].b_y + dy;
-        int const z = bloques[i].b_z + dz;
-        if (!(x < 0 || x >= borders[0] || y < 0 || y >= borders[1] || z < 0 || z >= borders[2])) {
-          adyacentes.push_back(bloques[transform(x, y, z)]);
+        if (!(y < 0 || y >= borders[1])) {
+          for (int dz = -1; dz <= 1; dz++) {
+            int const z = bloques[i].b_z + dz;
+            if (!(z < 0 || z >= borders[2])) { adyacentes.push_back(bloques[transform(x, y, z)]); }
+          }
         }
       }
     }
@@ -113,11 +137,15 @@ void Grid::incremento_densidades(int & id1, int & id2) {
 void Grid::choques_entre_particulas() {
   /////////PUEDE QUE CON INT NOS PASEMOS DE RANGO
   for (int i = 0; i < size_cubo; ++i) {
-    std::vector<Vec_Bloque> adyacents = get_adyacents(i);
-    for (Vec_Bloque & bloque : adyacents) {
+    for (Vec_Bloque & bloque : bloques[i].adyacentes) {
       for (int & id1 : bloques[i].lista_particulas) {
         for (int & id2 : bloque.lista_particulas) {
-          if (id1 < id2) { incremento_densidades(id1, id2); }
+          if (i == transform(bloque.b_x,bloque.b_y, bloque.b_z)) {
+            if (id1 < id2) { incremento_densidades(id1, id2); }
+          }
+          else{
+            incremento_densidades(id1, id2);
+          }
         }
       }
     }
@@ -202,28 +230,24 @@ void Grid::procesamiento_colisiones() {
 
 void Grid::colision_limites() {
   for (Vec_Bloque & bloque : bloques) {
-    if (bloque.b_z == 0) {
-      bloque.colision_z_baja(l_m.list_of_particles);
-    } if (bloque.b_z == borders[2] - 1) {
-      bloque.colision_z_alta(l_m.list_of_particles);
-    } if (bloque.b_y == 0) {
-      bloque.colision_y_baja(l_m.list_of_particles);
-    } if (bloque.b_y == borders[1] - 1) {
-      bloque.colision_y_alta(l_m.list_of_particles);
-    } if (bloque.b_x == 0) {
-      bloque.colision_x_baja(l_m.list_of_particles);
-    } if (bloque.b_x == borders[0] - 1) {
-      bloque.colision_x_alta(l_m.list_of_particles);
+    if (bloque.b_x == 0 || bloque.b_x == borders[0] - 1) {
+      bloque.colision_x_(bloque.b_x, l_m.list_of_particles);
+    }
+    if (bloque.b_y == 0 || bloque.b_y == borders[1] - 1) {
+      bloque.colision_y_(bloque.b_y, l_m.list_of_particles);
+    }
+    if (bloque.b_z == 0 || bloque.b_z == borders[2] - 1) {
+      bloque.colision_z_(bloque.b_z, l_m.list_of_particles);
     } else {
-      for (int i_d : bloque.lista_particulas) { l_m.list_of_particles[i_d].movimiento_particulas(); }
+      for (int i_d : bloque.lista_particulas) {
+        l_m.list_of_particles[i_d].movimiento_particulas();
+      }
     }
   }
 }
 
-
-
 void Grid::write_report(int n_iteaccion) {
-  std::ofstream output("traza_large_iteraccion" + std::to_string(n_iteaccion) + ".txt");
+  std::ofstream output("prueba_iteraccion" + std::to_string(n_iteaccion) + ".txt");
 
   if (!output) { std::cerr << "No se pudo crear el archivo de texto." << '\n'; }
   for (int n = 0; n < size_cubo; n++) {
