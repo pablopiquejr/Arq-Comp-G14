@@ -5,7 +5,7 @@
 
 #include "../sim/block.cpp"
 #include "../sim/progargs.cpp"
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 #include <vector>
 #include <fstream>
 #include <cstdlib>
