@@ -14,6 +14,23 @@ void Vec_Bloque::threeD_values(int identifier, std::vector<int> borders) {
   b_x = (identifier % (borders[0] * borders[1])) % borders[0];
 }
 
+void Vec_Bloque::colision(int n_p, std::vector<Particula> &Lista_b, int eje){
+  for (int i_d : lista_particulas) {
+    double const const_eje = Lista_b[i_d].pxyz[eje] + Lista_b[i_d].hvxyz[eje] * a_tiempo;
+    double incremento_eje;
+    if (n_p == 0) {
+      incremento_eje = d_p - (const_eje - min[eje]);
+    } else {
+      incremento_eje = d_p - (max[eje] - const_eje);
+    }
+    if (incremento_eje > limite_colision) {
+      double aumento = s_c * incremento_eje - d_v * Lista_b[i_d].vxyz[eje];
+      if (n_p != 0) { aumento = -s_c * incremento_eje - d_v * Lista_b[i_d].vxyz[eje]; }
+      Lista_b[i_d].a_c[eje] += aumento;
+    }
+  }
+}
+
 void Vec_Bloque::colision_x(int n_x, std::vector<Particula> & Lista_b) {
   for (int i_d : lista_particulas) {
     double const const_x = Lista_b[i_d].pxyz[0] + Lista_b[i_d].hvxyz[0] * a_tiempo;
@@ -61,6 +78,26 @@ void Vec_Bloque::colision_z(int n_z, std::vector<Particula> & Lista_b) {
       double aumento = s_c * incremento_z - d_v * Lista_b[i_d].vxyz[2];
       if (n_z != 0) { aumento = -s_c * incremento_z - d_v * Lista_b[i_d].vxyz[2]; }
       Lista_b[i_d].a_c[2] += aumento;
+    }
+  }
+}
+
+void Vec_Bloque::recinto(int n_x, std::vector<Particula> & Lista_b, int eje) {
+  for (int i_d : lista_particulas) {
+    double d_eje;
+    if (n_x == 0) {
+      d_eje = Lista_b[i_d].pxyz[eje] - min[eje];
+    } else {
+      d_eje = max[eje] - Lista_b[i_d].pxyz[eje];
+    }
+    if (d_eje < 0) {
+      if (n_x == 0) {
+        Lista_b[i_d].pxyz[eje] = min[eje] - d_eje;
+      } else {
+        Lista_b[i_d].pxyz[eje] = max[eje] + d_eje;
+      }
+      Lista_b[i_d].vxyz[eje]  = -Lista_b[i_d].vxyz[eje];
+      Lista_b[i_d].hvxyz[eje] = -Lista_b[i_d].hvxyz[eje];
     }
   }
 }

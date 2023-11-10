@@ -40,6 +40,8 @@ class Grid {
 
     void check_if_repos();
 
+    std::vector<Vec_Bloque> get_adyacents(int i);
+
     void reposicionar_particula(Particula & particula, std::vector<double> newpos);
 
     void incremento_densidades(int & id1, int & id2);
@@ -52,7 +54,6 @@ class Grid {
                                 double norma) const;
 
     void procesamiento_colisiones();
-    void colision_limites();
 
     void write_report(int n_iteraccion);
 

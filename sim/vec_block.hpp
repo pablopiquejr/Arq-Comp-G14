@@ -16,13 +16,16 @@ class Vec_Bloque {
 
     Vec_Bloque()=default;
 
-    std::vector<Vec_Bloque>adyacentes;
+    std::vector<int>adyacentes;
 
     int b_x = 0;
     int b_y = 0;
     int b_z = 0;
 
     void threeD_values(int identifier,  std::vector<int> borders);
+
+    void colision(int n_p, std::vector<Particula> &Lista_b, int eje);
+    void recinto(int n_x, std::vector<Particula> & Lista_b, int eje);
 
     void colision_x(int n_x, std::vector<Particula> &Lista_b);
     void colision_y(int n_y, std::vector<Particula> &Lista_b);
