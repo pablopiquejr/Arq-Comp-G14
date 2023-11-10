@@ -2,8 +2,7 @@
 // Created by 34638 on 07/10/2023.
 //
 
-#include "../sim/block.cpp"
-#include "../sim/block.hpp"
+#include "../sim/vec_block.cpp"
 #include "gtest/gtest.h"
 
 // https://google.github.io/googletest/reference/assertions.html
@@ -55,4 +54,5 @@ namespace
     // Por ejemplo:
     // std::vector<Particula> lista_particulas = { ... };
 
+}
 }

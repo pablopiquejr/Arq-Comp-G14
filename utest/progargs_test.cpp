@@ -1,9 +1,9 @@
-/* COMENTADO PARA QUE CORRA LA BUILD
+
 //
 // Created by 34638 on 07/10/2023.
 //
 
-#include "../sim/block.cpp"
+#include "../sim/vec_block.cpp"
 #include "../sim/progargs.cpp"
 #include "gtest/gtest.h"
 #include <vector>
@@ -53,7 +53,7 @@ namespace
 
     // Verificar que los datos leídos coincidan con los datos de prueba
     EXPECT_FLOAT_EQ(result.ppm, ppm);
-    EXPECT_EQ(result.n_parameters, n_parameters);
+    EXPECT_EQ(result.n_particulas, n_parameters);
 
     // También puedes agregar más aserciones para verificar los datos de partículas si es necesario
 
@@ -75,10 +75,7 @@ namespace
 
   TEST(ProgArgsSuite, file_writer_test){
   // Creamos datos de prueba
-  longitud_y_masa mis_datos;
-  mis_datos.ppm = 3.14;
-  mis_datos.n_particulas = 2;
-
+  longitud_y_masa mis_datos(3.14, 2);
   Particula particula1, particula2;
   // Configuramos datos de prueba para las partículas
   // ...
@@ -124,7 +121,7 @@ namespace
   {
     // Llamamos a file_writer con un nombre de archivo inválido o cuando no se puede abrir el archivo de salida
     ::testing::internal::CaptureStdout();
-    ASSERT_EXIT(file_writer("invalid_output_file.bin", longitud_y_masa()), ::testing::ExitedWithCode(255), "Can't Open output file");
+    ASSERT_EXIT(file_writer("invalid_output_file.bin", mis_datos), ::testing::ExitedWithCode(255), "Can't Open output file");
     std::string stdout_capture = ::testing::internal::GetCapturedStdout();
     EXPECT_EQ(stdout_capture, "Can't Open output file\n");
   }
@@ -137,8 +134,7 @@ namespace
 
 
   ///////////AÑADIR AL FINAL DE LOS ARCHIVOS O TESTEAR DESDE AQUI////////////
-*/
-  /*
+ /*
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
