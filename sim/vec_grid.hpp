@@ -26,8 +26,6 @@ class Grid {
 
     std::vector<Vec_Bloque> bloques;
 
-    void escribir_datos_iniciales();
-
     explicit Grid(longitud_y_masa & setter) : l_m{setter} {};
 
     longitud_y_masa l_m;
