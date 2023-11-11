@@ -4,8 +4,8 @@
 #ifndef LAB_ARQUITECTURA_VEC_GRID_HPP
 #define LAB_ARQUITECTURA_VEC_GRID_HPP
 
-#include "../constants.hpp"
-#include "../h_y_m_struct.hpp"
+#include "constants.hpp"
+#include "h_y_m_struct.hpp"
 #include "vec_block.hpp"
 
 #include <cmath>
@@ -25,6 +25,8 @@ class Grid {
     //std::vector<int> vertices;
 
     std::vector<Vec_Bloque> bloques;
+
+    void escribir_datos_iniciales();
 
     explicit Grid(longitud_y_masa & setter) : l_m{setter} {};
 

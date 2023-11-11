@@ -1,9 +1,9 @@
 //
 // Created by 34638 on 07/10/2023.
 //
-
+/*
 #include "../sim/grid.cpp"
-/*#include "block.hpp"
+#include "block.hpp"
 #include "product.h"
 
 #include <gtest/gtest.h>

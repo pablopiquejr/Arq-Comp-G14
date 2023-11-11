@@ -5,6 +5,17 @@
 // Created by sergio on 3/10/23.
 //
 
+void Grid::escribir_datos_iniciales() {
+  std::cout << "Numero de Partículas: " << l_m.n_particulas << '\n'
+            << "Particles Per Meter: " << l_m.ppm << "\n"
+            << "Longitud de suavizado: " << l_m.l_suavizado << '\n'
+            << "Masa de particula: " << l_m.masa_p << '\n'
+            << "Tamaño Bloque: " << borders[0] << " * " << borders[1] << " * " << borders[2] << '\n'
+            << "Numero de Bloques: " << size_cubo << '\n'
+            << "Tamaño Bloque: " << borders[0] / max[0] << " * " << borders[1] / max[0] << " * "
+            << borders[2] / max[2] << '\n';
+}
+
 void Grid::primeros_calculos() {
   for (int i = 0; i < 3; i++) { borders[i] = floor((max[i] - min[i]) / l_m.l_suavizado); }
   bloques   = std::vector<Vec_Bloque>(borders[0] * borders[1] * borders[2], Vec_Bloque());
@@ -22,6 +33,7 @@ void Grid::primeros_calculos() {
     bloques[size].lista_particulas.push_back(particula.identifier);
   }
   for (int i = 0; i < size_cubo; i++) { bloques[i].threeD_values(i, borders); }
+  escribir_datos_iniciales();
 }
 
 void Grid::check_if_repos() {
@@ -211,159 +223,3 @@ void Grid::write_report(int n_iteaccion) {
     }
   }
 }
-
-/* VERSION ANTIGUA
- vertices =
-std::vector<int>{0,
-                borders[0] - 1,
-                (borders[1] - 1) * borders[0],
-                borders[0] - 1 + (borders[1] - 1) * borders[0],
-                (borders[2] - 1) * borders[0] * borders[1],
-                borders[0] - 1 + (borders[2] - 1) * borders[0] * borders[1],
-                (borders[1] - 1) * borders[0] + (borders[2] - 1) * borders[0] * borders[1],
-                size_cubo};
-
-
-void Grid::choques_entre_particulas() {
-  /////////PUEDE QUE CON INT NOS PASEMOS DE RANGO
-  for (int i = 0; i < size_cubo; ++i) {
-    // Comprobar si es un vertice -> cada vertice colisiona con 7 bloques (excluyendose)
-    if (i == 0 || i == borders[0] - 1 || i == (borders[1] - 1) * borders[0] ||
-        i == (borders[0] - 1 + (borders[1] - 1) * borders[0]) ||
-        i == (borders[2] - 1) * borders[0] * borders[1] ||
-        i == borders[0] - 1 + (borders[2] - 1) * borders[0] * borders[1] ||
-        i == ((borders[1] - 1) * borders[0] + (borders[2] - 1) * borders[0] * borders[1]) ||
-        i == size_cubo) {
-      for (int pos : vertices) {
-        if (pos != i) { comprobar_reposicionamiento(bloques[i], bloques[pos]); }
-      }
-    }
-    // cada bloque de una arista colisiona con 11 bloques
-    else if (es_arista(i)) {
-      // x
-      colisiones abajo = [ i - 1, i + 1 ];
-      arriba = [ i + 15, i + 16, i + 17 ] enfrente = [ i + 315, i + 316, i + 317 ] arr_enfrente =
-          [ i + 330, i + 331, i + 332 ]
-
-          colisiones abajo = [ i - 15, i + 15 ];
-      arriba               = [ i - 1, i + 1 ];
-      enfrente = [ i + 315, i + 316, i + 317 ] arr_enfrente = [ i + 330, i + 331, i + 332 ]
-
-    }
-
-    else if (es_pared(i)) {
-    }
-  }
-
-  for (Particula & particula : l_m.list_of_particles) {
-    particula.transformacion_densidad(l_m.l_suavizado, l_m.masa_p);
-  }
-}
-}
-
- */
-
-/*
-void Grid::adyacent_subx(std::vector<int> const & coor, std::vector<Vec_Bloque> & adyacentes) {
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] - 1, coor[1] - 1, coor[2] - 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] - 1, coor[1] - 1, coor[2])]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] - 1, coor[1] - 1, coor[2] + 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] - 1, coor[1], coor[2] - 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] - 1, coor[1], coor[2])]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] - 1, coor[1], coor[2] + 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] - 1, coor[1] + 1, coor[2] - 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] - 1, coor[1] + 1, coor[2])]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] - 1, coor[1] + 1, coor[2] + 1)]);
-  } catch (...) { };
-}
-
-void Grid::adyacent_x(std::vector<int> const & coor, std::vector<Vec_Bloque> & adyacentes) {
-  try {
-    adyacentes.push_back(bloques[transform(coor[0], coor[1] - 1, coor[2] - 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0], coor[1] - 1, coor[2])]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0], coor[1] - 1, coor[2] + 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0], coor[1], coor[2] - 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0], coor[1], coor[2])]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0], coor[1], coor[2] + 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0], coor[1] + 1, coor[2] - 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0], coor[1] + 1, coor[2])]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0], coor[1] + 1, coor[2] + 1)]);
-  } catch (...) { };
-}
-
-void Grid::adyacent_plusx(std::vector<int> const & coor, std::vector<Vec_Bloque> & adyacentes) {
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] + 1, coor[1] - 1, coor[2] - 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] + 1, coor[1] - 1, coor[2])]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] + 1, coor[1] - 1, coor[2] + 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] + 1, coor[1], coor[2] - 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] + 1, coor[1], coor[2])]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] + 1, coor[1], coor[2] + 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] + 1, coor[1] + 1, coor[2] - 1)]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] + 1, coor[1] + 1, coor[2])]);
-  } catch (...) { };
-  try {
-    adyacentes.push_back(bloques[transform(coor[0] + 1, coor[1] + 1, coor[2] + 1)]);
-  } catch (...) { };
-}
-
-std::vector<Vec_Bloque> Grid::get_adyacents(int i) {
-  std::vector<int> const coor = {(i % (borders[0] * borders[1])) % borders[0],
-                                 (i % (borders[0] * borders[1])) / borders[0],
-                                 i / (borders[0] * borders[1])};
-  std::vector<Vec_Bloque> adyacentes;
-
-  adyacent_subx(coor, adyacentes);
-  adyacent_x(coor, adyacentes);
-  adyacent_plusx(coor, adyacentes);
-
-  return adyacentes;
-}
-*/
