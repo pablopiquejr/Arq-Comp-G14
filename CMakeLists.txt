@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 # Set compiler options
 add_compile_options(-Wall -Wextra -Werror -pedantic -pedantic-errors)
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native -O3")
 # Enable GoogleTest Library
 include(FetchContent)
 FetchContent_Declare(
@@ -25,7 +25,7 @@ FetchContent_MakeAvailable(GSL)
 # Run clang−tidy on the whole source tree
 # Note this will slow down compilation.
 # You may temporarily disable but do not forget to enable again.
-set(CMAKE_CXX_CLANG_TIDY-18 clang-tidy-18 −header−filter=.*)              # CON ESTA LINEA LA BUILD NO SE GENERA
+set(CMAKE_CXX_CLANG_TIDY-18 clang-tidy-18 −header−filter=.*)
 # All includes relative to source tree root.
 include_directories (PUBLIC .)
 # Process cmake from sim and fluid directories

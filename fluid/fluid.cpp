@@ -18,6 +18,7 @@ int main(int argc, char * argv[]) {
     my_cubo.check_if_repos();
     my_cubo.choques_entre_particulas();
     my_cubo.procesamiento_colisiones();
+    //my_cubo.write_report(i+1);
   }
   file_writer(arguments[3], my_cubo.l_m);
   return 0;

@@ -3,37 +3,40 @@
 //
 /*
 #include "../sim/grid.cpp"
-#include "block.hpp"
-#include "product.h"
-
+#include "../sim/grid.hpp"
 #include <gtest/gtest.h>
 
 // https://google.github.io/googletest/reference/assertions.html
 
 namespace
 {
-  TEST(PersonTestSuite, functionA)
+  TEST(GridSuite,incremento_aceleracion_test)
   {
-    Product p;
-    EXPECT_EQ(p.computeA(10, 20), 200);
+
   }
-  TEST(PersonTestSuite, functionB)
+  TEST(GridSuite, incremento_densidades_test)
   {
-    Product p;
-    EXPECT_EQ(p.computeB(10, 20, 30), 6000);
+
   }
 
-  TEST(PersonTestSuite, not_equal_functionB)
+  TEST(GridSuite, asignacion_inicial_test)
   {
-    Product p;
-    EXPECT_NE(p.computeB(10, 20, 30), 5000);
+
   }
 
-  TEST(PersonTestSuite, fun_B_greater_funA)
+  TEST(GridSuite,choques_entre_particulas_test)
   {
-    Product p;
-    EXPECT_GT(p.computeB(10, 20, 30), p.computeA(10, 10));
+
+  }
+  TEST(GridSuite, set_particles_coordinatestest)
+  {
+
   }
 
-}
+  TEST(GridSuite, colision_limites)/////??? sin implementar la funcion colision limites
+  {
+
+
+  }
+
  */
