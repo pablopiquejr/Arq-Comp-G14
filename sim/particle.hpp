@@ -13,26 +13,18 @@
 
 class Particula {
   public:
-    double identifier       = 0;
+    std::vector<std::vector<double>> pxyz;
 
-    bool eliminada = false;
-    std::vector<double> pxyz = {0,0,0};
+    std::vector<std::vector<double>>hvxyz;
 
-    std::vector<double> hvxyz = {0,0,0};
+    std::vector<std::vector<double>>vxyz;
 
-    std::vector<double> vxyz = {0,0,0};
-
-    std::vector<double> a_c = {0, gravedad, 0};
-    double densidad         = 0;
+    std::vector<std::vector<double>> a_c;
+    std::vector<double>densidad;
                           // i, j, k
-    std::vector<int> bpos = {0,0,0};
+    std::vector<std::vector<int>> bpos;
 
     Particula() = default;
-    void printinfo() const;
-    void set_particles_data(std::ifstream & file, double id);
-    void transformacion_densidad(double h_logitud_suavizado, double masa_p);
-    void movimiento_particulas();
-    [[nodiscard]] std::vector<float> particle_write() const;
 };
 
 #endif  // FLUID_PARTICLE_HPP

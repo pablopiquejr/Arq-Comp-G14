@@ -14,7 +14,7 @@ struct longitud_y_masa{
       : l_suavizado{r_radio / ppm}, masa_p{p_densidad / std::pow(ppm, 3)}, n_particulas{numero_p},
         ppm{ppm} { }
 
-    std::vector<Particula> list_of_particles;
+    Particula particulas;
     double l_suavizado;
     double masa_p;
     int n_particulas;

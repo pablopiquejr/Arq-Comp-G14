@@ -19,7 +19,7 @@ class Grid {
     // n_x, n_y, n_z
     std::vector<int> borders = {0, 0, 0};
 
-    int size_cubo;
+    int size_cubo = 0;
 
     std::vector<Vec_Bloque> bloques;
 
@@ -31,26 +31,26 @@ class Grid {
 
     int transform(int i, int j, int k);
 
-    void get_adyacents_op(int i, Vec_Bloque &bloque);
+    void get_adyacents_op(int i, Vec_Bloque & bloque) ;
 
     void primeros_calculos();
 
     void check_if_repos();
 
-    std::vector<Vec_Bloque> get_adyacents(int i);
+    void reposicionar_particula(Particula & particula, int index, std::vector<double> newpos);
 
-    void reposicionar_particula(Particula & particula, std::vector<double> newpos);
+    void incremento_densidades(int & id1, int & id2) ;
 
     void choques_entre_particulas();
 
     void transferencia_aceleracion();
 
-    void incremento_aceleracion(Particula & particula_i, Particula & particula_j,
+    void incremento_aceleracion(Particula & particula_i, int index1, int index2,
                                 double norma) const;
 
     void procesamiento_colisiones();
 
-    void write_report(int n_iteraccion);
+    //void write_report(int n_iteraccion);
 
 };
 #endif  // LAB_ARQUITECTURA_VEC_GRID_HPP
