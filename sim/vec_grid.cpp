@@ -97,26 +97,24 @@ std::vector<Vec_Bloque> Grid::get_adyacents(int i) {
   return adyacentes;
 }
 
-void Grid::incremento_densidades(int & id1, int & id2) {
-  double norma = 0;
-  for (int i = 0; i <3 ;i++) {
-    norma += std::pow(l_m.list_of_particles[id2].pxyz[i] - l_m.list_of_particles[id1].pxyz[i],2);
-  }
-  double const h_2 = std::pow(l_m.l_suavizado,2);
-  if (norma < h_2) {
-    double const incremento              = (h_2 - norma)*(h_2-norma)*(h_2-norma);
-    l_m.list_of_particles[id1].densidad += incremento;
-    l_m.list_of_particles[id2].densidad += incremento;
-  }
-}
 
 void Grid::choques_entre_particulas() {
   for (int i = 0; i < size_cubo; ++i) {
-    std::vector<Vec_Bloque> adyacents = get_adyacents(i);
-    for (Vec_Bloque & bloque : adyacents) {
-      for (int & id1 : bloques[i].lista_particulas) {
-        for (int & id2 : bloque.lista_particulas) {
-          if (id1 < id2) { incremento_densidades(id1, id2); }
+    std::vector<Vec_Bloque> const adyacents = get_adyacents(i);
+    for (Vec_Bloque  const& bloque : adyacents) {
+      for (int  const& id1 : bloques[i].lista_particulas) {
+        for (int  const& id2 : bloque.lista_particulas) {
+          if (id1 < id2) { double norma = 0;
+            for (int j = 0; j <3 ;j++) {
+              norma += std::pow(l_m.list_of_particles[id2].pxyz[j] - l_m.list_of_particles[id1].pxyz[j],2);
+            }
+            double const h_2 = std::pow(l_m.l_suavizado,2);
+            if (norma < h_2) {
+              double const incremento              = (h_2 - norma)*(h_2-norma)*(h_2-norma);
+              l_m.list_of_particles[id1].densidad += incremento;
+              l_m.list_of_particles[id2].densidad += incremento;
+            }
+          }
         }
       }
     }
@@ -129,17 +127,17 @@ void Grid::choques_entre_particulas() {
 
 void Grid::transferencia_aceleracion() {
   for (int i = 0; i < size_cubo; ++i) {
-    std::vector<Vec_Bloque> adyacents = get_adyacents(i);
-    for (Vec_Bloque & bloque : adyacents) {
-      for (int & id1 : bloques[i].lista_particulas) {
-        for (int & id2 : bloque.lista_particulas) {
+    std::vector<Vec_Bloque> const adyacents = get_adyacents(i);
+    for (Vec_Bloque  const& bloque : adyacents) {
+      for (int  const& id1 : bloques[i].lista_particulas) {
+        for (int const& id2 : bloque.lista_particulas) {
           if (id1 < id2) {
             double norma = 0;
             for (int k = 0; k <3 ;k++) {
               norma += std::pow(l_m.list_of_particles[id2].pxyz[k] - l_m.list_of_particles[id1].pxyz[k],2);
             }
             if (norma < std::pow(l_m.l_suavizado,2)) {
-              incremento_aceleracion(l_m.list_of_particles[id1], l_m.list_of_particles[id2], norma);
+              incremento_aceleracion(l_m.list_of_particles[id2], l_m.list_of_particles[id1], norma);
             }
           }
         }

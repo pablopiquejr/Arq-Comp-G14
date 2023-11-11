@@ -27,6 +27,8 @@ class Grid {
 
     longitud_y_masa l_m;
 
+    void escribir_datos_iniciales();
+
     int transform(int i, int j, int k);
 
     void get_adyacents_op(int i, Vec_Bloque &bloque);
@@ -38,8 +40,6 @@ class Grid {
     std::vector<Vec_Bloque> get_adyacents(int i);
 
     void reposicionar_particula(Particula & particula, std::vector<double> newpos);
-
-    void incremento_densidades(int & id1, int & id2);
 
     void choques_entre_particulas();
 
