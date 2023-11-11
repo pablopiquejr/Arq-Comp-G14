@@ -98,20 +98,19 @@ std::vector<Vec_Bloque> Grid::get_adyacents(int i) {
 }
 
 void Grid::incremento_densidades(int & id1, int & id2) {
-  double const norma =
-      std::pow(l_m.list_of_particles[id2].pxyz[0] - l_m.list_of_particles[id1].pxyz[0], 2) +
-      std::pow(l_m.list_of_particles[id2].pxyz[1] - l_m.list_of_particles[id1].pxyz[1], 2) +
-      std::pow(l_m.list_of_particles[id2].pxyz[2] - l_m.list_of_particles[id1].pxyz[2], 2);
-  double const h_2 = std::pow(l_m.l_suavizado, 2);
+  double norma = 0;
+  for (int i = 0; i <3 ;i++) {
+    norma += std::pow(l_m.list_of_particles[id2].pxyz[i] - l_m.list_of_particles[id1].pxyz[i],2);
+  }
+  double const h_2 = std::pow(l_m.l_suavizado,2);
   if (norma < h_2) {
-    double const incremento              = std::pow(h_2 - norma, 3);
+    double const incremento              = (h_2 - norma)*(h_2-norma)*(h_2-norma);
     l_m.list_of_particles[id1].densidad += incremento;
     l_m.list_of_particles[id2].densidad += incremento;
   }
 }
 
 void Grid::choques_entre_particulas() {
-  /////////PUEDE QUE CON INT NOS PASEMOS DE RANGO
   for (int i = 0; i < size_cubo; ++i) {
     std::vector<Vec_Bloque> adyacents = get_adyacents(i);
     for (Vec_Bloque & bloque : adyacents) {
@@ -135,14 +134,11 @@ void Grid::transferencia_aceleracion() {
       for (int & id1 : bloques[i].lista_particulas) {
         for (int & id2 : bloque.lista_particulas) {
           if (id1 < id2) {
-            double const norma =
-                std::pow(l_m.list_of_particles[id2].pxyz[0] - l_m.list_of_particles[id1].pxyz[0],
-                         2) +
-                std::pow(l_m.list_of_particles[id2].pxyz[1] - l_m.list_of_particles[id1].pxyz[1],
-                         2) +
-                std::pow(l_m.list_of_particles[id2].pxyz[2] - l_m.list_of_particles[id1].pxyz[2],
-                         2);
-            if (norma < std::pow(l_m.l_suavizado, 2)) {
+            double norma = 0;
+            for (int k = 0; k <3 ;k++) {
+              norma += std::pow(l_m.list_of_particles[id2].pxyz[k] - l_m.list_of_particles[id1].pxyz[k],2);
+            }
+            if (norma < std::pow(l_m.l_suavizado,2)) {
               incremento_aceleracion(l_m.list_of_particles[id1], l_m.list_of_particles[id2], norma);
             }
           }
@@ -157,7 +153,7 @@ void Grid::incremento_aceleracion(Particula & particula_i, Particula & particula
   std::vector<double> var_ac = {0, 0, 0, 0, 0, 0};
   double dist                = std::pow(std::max(norma, std::pow(10, -12)), 0.5);
   double const operador_izquierda =
-      (15 * l_m.masa_p * 1.5 * p_s * std::pow(l_m.l_suavizado - dist, 2) *
+      (15 * l_m.masa_p * 1.5 * p_s * std::pow(l_m.l_suavizado - dist,2) *
        (particula_i.densidad + particula_j.densidad - 2 * p_densidad)) /
       (std::numbers::pi * std::pow(l_m.l_suavizado, 6) * dist);
   double const operador_derecha =

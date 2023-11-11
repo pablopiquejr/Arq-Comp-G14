@@ -19,10 +19,7 @@ class Grid {
     // n_x, n_y, n_z
     std::vector<int> borders = {0, 0, 0};
 
-    // PUEDE QUE CON INT NOS PASEMOS DEL RANGO Y NECESITEMOS DOUBLE
     int size_cubo;
-
-    //std::vector<int> vertices;
 
     std::vector<Vec_Bloque> bloques;
 
@@ -31,8 +28,6 @@ class Grid {
     explicit Grid(longitud_y_masa & setter) : l_m{setter} {};
 
     longitud_y_masa l_m;
-
-    void escribir_datos_iniciales();
 
     int transform(int i, int j, int k);
 
