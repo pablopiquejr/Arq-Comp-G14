@@ -1,6 +1,6 @@
 
 #include "../sim/progargs.cpp"
-#include "sim/vec_grid.hpp"
+#include "../sim/vec_grid.hpp"
 
 #include <span>
 

@@ -5,7 +5,7 @@
 #ifndef LAB_ARQUITECTURA_VEC_BLOCK_HPP
 #define LAB_ARQUITECTURA_VEC_BLOCK_HPP
 
-  #include "./sim/particle.hpp"
+  #include "../sim/particle.hpp"
 
   #include <cmath>
   #include <iostream>
