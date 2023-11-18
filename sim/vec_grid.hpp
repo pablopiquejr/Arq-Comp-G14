@@ -4,6 +4,9 @@
 #ifndef LAB_ARQUITECTURA_VEC_GRID_HPP
 #define LAB_ARQUITECTURA_VEC_GRID_HPP
 
+#include <ctime>
+
+
 #include "constants.hpp"
 #include "h_y_m_struct.hpp"
 #include "vec_block.hpp"
@@ -16,6 +19,22 @@
 
 class Grid {
   public:
+    // EXTRAS PARA TIEMPOS
+    double actransf = 0;
+    double incdens = 0;
+    double colisiones = 0;
+    double varac = 0;
+    double vardens = 0;
+
+
+
+
+
+
+
+
+
+
     // n_x, n_y, n_z
     std::vector<int> borders = {0, 0, 0};
 
@@ -46,7 +65,7 @@ class Grid {
     void transferencia_aceleracion();
 
     void incremento_aceleracion(Particula & particula_i, int index1, int index2,
-                                double norma) const;
+                                double norma);
 
     void procesamiento_colisiones();
 
