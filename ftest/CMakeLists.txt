@@ -3,9 +3,10 @@ set(TEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # List of all test files.
 set(TEST_SOURCES
-    ${TEST_SOURCE_DIR}/block_test.cpp
+    #${TEST_SOURCE_DIR}/block_test.cpp
     #${TEST_SOURCE_DIR}/math_vector_test.cpp
     #${TEST_SOURCE_DIR}/particle_info_test.cpp
+    ${TEST_SOURCE_DIR}/functional_test.cpp
 )
 
 # Executable for all unit tests with list of sources.

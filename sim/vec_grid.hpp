@@ -31,7 +31,7 @@ class Grid {
 
     int transform(int i, int j, int k);
 
-    void get_adyacents_op(int i, Vec_Bloque & bloque) ;
+    std::vector<Vec_Bloque> get_adyacents(int i);
 
     void primeros_calculos();
 

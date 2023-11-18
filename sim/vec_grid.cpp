@@ -6,9 +6,12 @@
 //
 
 void movimiento_particulas(Particula & particula, int index) {
-  particula.pxyz[index][0] += particula.hvxyz[index][0] * a_tiempo + particula.a_c[index][0] * std::pow(a_tiempo, 2);
-  particula.pxyz[index][1] += particula.hvxyz[index][1] * a_tiempo + particula.a_c[index][1] * std::pow(a_tiempo, 2);
-  particula.pxyz[index][2] += particula.hvxyz[index][2] * a_tiempo + particula.a_c[index][2] * std::pow(a_tiempo, 2);
+  particula.pxyz[index][0] +=
+      particula.hvxyz[index][0] * a_tiempo + particula.a_c[index][0] * std::pow(a_tiempo, 2);
+  particula.pxyz[index][1] +=
+      particula.hvxyz[index][1] * a_tiempo + particula.a_c[index][1] * std::pow(a_tiempo, 2);
+  particula.pxyz[index][2] +=
+      particula.hvxyz[index][2] * a_tiempo + particula.a_c[index][2] * std::pow(a_tiempo, 2);
   // se puede cambiar la división por * 0.5
   particula.vxyz[index][0]   = particula.hvxyz[index][0] + particula.a_c[index][0] * a_tiempo / 2;
   particula.vxyz[index][1]   = particula.hvxyz[index][1] + particula.a_c[index][1] * a_tiempo / 2;
@@ -33,20 +36,21 @@ void Grid::primeros_calculos() {
   for (int i = 0; i < 3; i++) { borders[i] = floor((max[i] - min[i]) / l_m.l_suavizado); }
   bloques   = std::vector<Vec_Bloque>(borders[0] * borders[1] * borders[2], Vec_Bloque());
   size_cubo = borders[0] * borders[1] * borders[2];
-  for (int j = 0; j<l_m.n_particulas; j++) {
+  for (int j = 0; j < l_m.n_particulas; j++) {
     for (int i = 0; i < 3; i++) {
-      l_m.particulas.bpos[j][i] = floor((l_m.particulas.pxyz[j][i] - min[i]) * borders[i] / (max[i] - min[i]));
+      l_m.particulas.bpos[j][i] =
+          floor((l_m.particulas.pxyz[j][i] - min[i]) * borders[i] / (max[i] - min[i]));
       if (0 > l_m.particulas.bpos[j][i]) {
         l_m.particulas.bpos[j][i] = 0;
       } else if (l_m.particulas.bpos[j][i] > borders[i] - 1) {
         l_m.particulas.bpos[j][i] = borders[i] - 1;
       }
     }
-    int const size = transform(l_m.particulas.bpos[j][0], l_m.particulas.bpos[j][1], l_m.particulas.bpos[j][2]);
+    int const size =
+        transform(l_m.particulas.bpos[j][0], l_m.particulas.bpos[j][1], l_m.particulas.bpos[j][2]);
     bloques[size].lista_particulas.push_back(j);
   }
   for (int i = 0; i < size_cubo; i++) { bloques[i].threeD_values(i, borders); }
-  for (int i = 0; i < size_cubo; i++) { get_adyacents_op(i, bloques[i]); }
   escribir_datos_iniciales();
 }
 
@@ -65,7 +69,7 @@ void Grid::check_if_repos() {
     }
     if (l_m.particulas.bpos[i][0] != newpos[0] || l_m.particulas.bpos[i][1] != newpos[1] ||
         l_m.particulas.bpos[i][2] != newpos[2]) {
-      reposicionar_particula(l_m.particulas,i, newpos);
+      reposicionar_particula(l_m.particulas, i, newpos);
     }
     l_m.particulas.densidad[i] = 0;
     l_m.particulas.a_c[i][0]   = 0;
@@ -74,7 +78,7 @@ void Grid::check_if_repos() {
   }
 }
 
-void Grid::reposicionar_particula(Particula & particula,int index, std::vector<double> newpos) {
+void Grid::reposicionar_particula(Particula & particula, int index, std::vector<double> newpos) {
   int pos = transform(particula.bpos[index][0], particula.bpos[index][1], particula.bpos[index][2]);
   for (size_t i = 0; i < bloques[pos].lista_particulas.size(); ++i) {
     if (bloques[pos].lista_particulas[i] == index) {
@@ -93,79 +97,67 @@ int Grid::transform(int i, int j, int k) {
   int const size = i + j * borders[0] + k * borders[0] * borders[1];
   return size;
 }
-void Grid::get_adyacents_op(int i, Vec_Bloque & bloque) {
+
+std::vector<Vec_Bloque> Grid::get_adyacents(int i) {
+  std::vector<Vec_Bloque> adyacentes;
   for (int dx = -1; dx <= 1; dx++) {
-    int const x = bloques[i].b_x + dx;
-    if (!(x < 0 || x >= borders[0])) {
-      for (int dy = -1; dy <= 1; dy++) {
+    for (int dy = -1; dy <= 1; dy++) {
+      for (int dz = -1; dz <= 1; dz++) {
+        int const x = bloques[i].b_x + dx;
         int const y = bloques[i].b_y + dy;
-        if (!(y < 0 || y >= borders[1])) {
-          for (int dz = -1; dz <= 1; dz++) {
-            int const z = bloques[i].b_z + dz;
-            if (!(z < 0 || z >= borders[2])) {
-              int const aux = transform(x, y, z);
-              if (i <= aux) { bloque.adyacentes.push_back(aux); }
+        int const z = bloques[i].b_z + dz;
+        if (!(x < 0 || x >= borders[0] || y < 0 || y >= borders[1] || z < 0 || z >= borders[2])) {
+          adyacentes.push_back(bloques[transform(x, y, z)]);
+        }
+      }
+    }
+  }
+  return adyacentes;
+}
+
+void Grid::choques_entre_particulas() {
+  for (int i = 0; i < size_cubo; ++i) {
+    std::vector<Vec_Bloque> const adyacents = get_adyacents(i);
+    for (Vec_Bloque const & bloque : adyacents) {
+      for (int const & id1 : bloques[i].lista_particulas) {
+        for (int const & id2 : bloque.lista_particulas) {
+          if (id1 < id2) {
+            double norma = 0;
+            for (int j = 0; j < 3; j++) {
+              norma += std::pow(l_m.particulas.pxyz[id2][j] - l_m.particulas.pxyz[id1][j], 2);
+            }
+            double const h_2 = std::pow(l_m.l_suavizado, 2);
+            if (norma < h_2) {
+              double const incremento       = (h_2 - norma) * (h_2 - norma) * (h_2 - norma);
+              l_m.particulas.densidad[id1] += incremento;
+              l_m.particulas.densidad[id2] += incremento;
             }
           }
         }
       }
     }
   }
-}
-
-
-void Grid::incremento_densidades(int & id1, int & id2) {
-  double const norma =
-      std::pow(l_m.particulas.pxyz[id2][0] - l_m.particulas.pxyz[id1][0], 2) +
-      std::pow(l_m.particulas.pxyz[id2][1] - l_m.particulas.pxyz[id1][1], 2) +
-      std::pow(l_m.particulas.pxyz[id2][2] - l_m.particulas.pxyz[id1][2], 2);
-  double const h_2 = std::pow(l_m.l_suavizado, 2);
-  if (norma < h_2) {
-    double const incremento              = std::pow(h_2 - norma, 3);
-    l_m.particulas.densidad[id1] += incremento;
-    l_m.particulas.densidad[id2] += incremento;
-  }
-}
-
-void Grid::choques_entre_particulas() {
-  /////////PUEDE QUE CON INT NOS PASEMOS DE RANGO
-  for (int i = 0; i < size_cubo; ++i) {
-    for (int &j : bloques[i].adyacentes) {
-      for (int &id1 : bloques[i].lista_particulas) {
-        for (int &id2 : bloques[j].lista_particulas) {
-          if (i == transform(bloques[j].b_x, bloques[j].b_y, bloques[j].b_z)) {
-            if (id1 < id2) { incremento_densidades(id1, id2); }
-          } else {
-            incremento_densidades(id1, id2);
-          }
-        }
-      }
-    }
-  }
   for (int i = 0; i < l_m.n_particulas; i++) {
-    l_m.particulas.densidad[i] = ((l_m.particulas.densidad[i] + std::pow(l_m.l_suavizado, m_num_6)) * 315 * l_m.masa_p) /
-                              (64 * std::numbers::pi * std::pow(l_m.l_suavizado, m_num_9));
+    l_m.particulas.densidad[i] =
+        ((l_m.particulas.densidad[i] + std::pow(l_m.l_suavizado, m_num_6)) * 315 * l_m.masa_p) /
+        (64 * std::numbers::pi * std::pow(l_m.l_suavizado, m_num_9));
   }
   transferencia_aceleracion();
 }
 
 void Grid::transferencia_aceleracion() {
   for (int i = 0; i < size_cubo; ++i) {
-    for (int j : bloques[i].adyacentes) {
-      for (int & id1 : bloques[i].lista_particulas) {
-        for (int & id2 : bloques[j].lista_particulas) {
-          double norma = 0;
-          for (int k = 0; k <3 ;k++) {
-            norma += std::pow(l_m.particulas.pxyz[id2][k] - l_m.particulas.pxyz[id1][k],2);
-          }
-          if (norma < std::pow(l_m.l_suavizado,2)) {
-            if (i == transform(bloques[j].b_x, bloques[j].b_y, bloques[j].b_z)) {
-              if (id1 < id2) {
-                incremento_aceleracion(l_m.particulas, id1,id2,
-                                       norma);
-              }
-            } else {
-              incremento_aceleracion(l_m.particulas,id1,id2,norma);
+    std::vector<Vec_Bloque> const adyacents = get_adyacents(i);
+    for (Vec_Bloque  const& bloque : adyacents) {
+      for (int  const& id1 : bloques[i].lista_particulas) {
+        for (int const& id2 : bloque.lista_particulas) {
+          if (id1 < id2) {
+            double norma = 0;
+            for (int k = 0; k <3 ;k++) {
+              norma += std::pow(l_m.particulas.pxyz[id2][k] - l_m.particulas.pxyz[id1][k],2);
+            }
+            if (norma < std::pow(l_m.l_suavizado,2)) {
+              incremento_aceleracion(l_m.particulas,id1,id2, norma);
             }
           }
         }
@@ -179,7 +171,7 @@ void Grid::incremento_aceleracion(Particula & particula, int index1, int index2,
   std::vector<double> var_ac = {0, 0, 0, 0, 0, 0};
   double dist                = std::pow(std::max(norma, std::pow(10, -12)), 0.5);
   double const operador_izquierda =
-      (15 * l_m.masa_p * 1.5 * p_s * std::pow(l_m.l_suavizado - dist,2) *
+      (15 * l_m.masa_p * 1.5 * p_s * std::pow(l_m.l_suavizado - dist, 2) *
        (particula.densidad[index1] + particula.densidad[index2] - 2 * p_densidad)) /
       (std::numbers::pi * std::pow(l_m.l_suavizado, 6) * dist);
   double const operador_derecha =
@@ -208,7 +200,7 @@ void Grid::procesamiento_colisiones() {
       bloque.colision_z(bloque.b_z, l_m.particulas);
     }
 
-    for (int id : bloque.lista_particulas) { movimiento_particulas(l_m.particulas,id); }
+    for (int id : bloque.lista_particulas) { movimiento_particulas(l_m.particulas, id); }
 
     if (bloque.b_x == 0 || bloque.b_x == borders[0] - 1) {
       bloque.recinto_x(bloque.b_x, l_m.particulas);
@@ -221,6 +213,7 @@ void Grid::procesamiento_colisiones() {
     }
   }
 }
+
 /*
 void Grid::write_report(int n_iteaccion) {
   std::ofstream output("traza_iteraccion" + std::to_string(n_iteaccion) + ".txt");
