@@ -4,6 +4,9 @@
 #ifndef LAB_ARQUITECTURA_VEC_GRID_HPP
 #define LAB_ARQUITECTURA_VEC_GRID_HPP
 
+#include <ctime>
+
+
 #include "constants.hpp"
 #include "h_y_m_struct.hpp"
 #include "vec_block.hpp"
@@ -16,42 +19,57 @@
 
 class Grid {
   public:
-      // n_x, n_y, n_z
-      std::vector<int> borders = {0, 0, 0};
+    // EXTRAS PARA TIEMPOS
+    double actransf = 0;
+    double incdens = 0;
+    double colisiones = 0;
+    double varac = 0;
+    double vardens = 0;
 
-      int size_cubo = 0;
 
-      std::vector<Vec_Bloque> bloques;
 
-      explicit Grid(longitud_y_masa & setter) : l_m{setter} {};
 
-      longitud_y_masa l_m;
 
-      void escribir_datos_iniciales();
 
-      int transform(int i, int j, int k);
 
-      std::vector<Vec_Bloque> get_adyacents(int i);
-      void primeros_calculos();
 
-      void check_if_repos();
 
-      void reposicionar_particula(Particula & particula, int index, std::vector<double> newpos);
 
-      void incremento_densidades(int & id1, int & id2);
+    // n_x, n_y, n_z
+    std::vector<int> borders = {0, 0, 0};
 
-      void choques_entre_particulas();
+    int size_cubo = 0;
 
-      void transferencia_aceleracion();
+    std::vector<Vec_Bloque> bloques;
 
-      void incremento_aceleracion(Particula & particula_i, int index1, int index2, double norma)
-          const;
+    explicit Grid(longitud_y_masa & setter) : l_m{setter} {};
 
-      void procesamiento_colisiones();
+    longitud_y_masa l_m;
 
-      // void write_report(int n_iteraccion);
+    void escribir_datos_iniciales();
 
-      Grid() = default;
+    int transform(int i, int j, int k);
+
+    std::vector<Vec_Bloque> get_adyacents(int i);
+
+    void primeros_calculos();
+
+    void check_if_repos();
+
+    void reposicionar_particula(Particula & particula, int index, std::vector<double> newpos);
+
+    void incremento_densidades(int & id1, int & id2) ;
+
+    void choques_entre_particulas();
+
+    void transferencia_aceleracion();
+
+    void incremento_aceleracion(Particula & particula_i, int index1, int index2,
+                                double norma);
+
+    void procesamiento_colisiones();
+
+    //void write_report(int n_iteraccion);
 
 };
 #endif  // LAB_ARQUITECTURA_VEC_GRID_HPP

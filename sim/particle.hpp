@@ -5,7 +5,7 @@
 #define LAB_ARQUITECTURA_PARTICLE_HPP
 
 #include "constants.hpp"
-
+#include <array>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -13,16 +13,16 @@
 
 class Particula {
   public:
-    std::vector<std::vector<double>> pxyz;
+    std::vector<std::array<double,3>> pxyz;
 
-    std::vector<std::vector<double>>hvxyz;
+    std::vector<std::array<double,3>>hvxyz;
 
-    std::vector<std::vector<double>>vxyz;
+    std::vector<std::array<double,3>>vxyz;
 
-    std::vector<std::vector<double>> a_c;
+    std::vector<std::array<double,3>> a_c;
     std::vector<double>densidad;
                           // i, j, k
-    std::vector<std::vector<int>> bpos;
+    std::vector<std::array<int,3>> bpos;
 
     Particula() = default;
 };
