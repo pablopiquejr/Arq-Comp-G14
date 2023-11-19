@@ -29,10 +29,8 @@ namespace
     stdout_capture = ::testing::internal::GetCapturedStdout();
     EXPECT_EQ(stdout_capture, "Invalid number of steps: 3\n");
   }
-
   }
-
-  TEST(ProgArgsSuite, validate_number){
+TEST(ProgArgsSuite, validate_number){
   // Caso 1: Archivo válido
   {
     // Crear un archivo binario de prueba
@@ -70,10 +68,10 @@ namespace
     EXPECT_EQ(stdout_capture, "Can't Open input file\n");
   }
   //Fin de este test
-  }
+}
 
 
-  TEST(ProgArgsSuite, file_writer_test){
+TEST(ProgArgsSuite, file_writer_test){
   // Creamos datos de prueba
   longitud_y_masa mis_datos(3.14, 2);
   Particula particula1, particula2;
@@ -130,16 +128,4 @@ namespace
   if (std::ifstream(output_filename)) {
     std::remove(output_filename.c_str());
   }
-  }
-
-
-  ///////////AÑADIR AL FINAL DE LOS ARCHIVOS O TESTEAR DESDE AQUI////////////
-/*
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-
-
-//////////AÑADIR AL FINAL DE LOS ARCHIVOS O TESTEAR DESDE AQUI//////////////
 }
-*/

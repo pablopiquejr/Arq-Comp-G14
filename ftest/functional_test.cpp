@@ -4,51 +4,94 @@
 #include "../sim/vec_grid.cpp"
 #include "../sim/progargs.cpp"
 #include "../sim/vec_block.cpp"
-
+#include "filesystem"
 #include "gtest/gtest.h"
+
 
 // https://google.github.io/googletest/reference/assertions.html
 
-namespace
-{
-  TEST(FunctionalTestSuite, stimated_time_test)
-  {
-    //Empezamos el cronómetro
+namespace {
+
+  TEST(FunctionalTestSuite, estimated_time_test) {
+    char current_directory[FILENAME_MAX];
+    getcwd(current_directory, sizeof(current_directory));
+
+    const char* desired_directory = "../cmake-build-debug";
+    chdir(desired_directory);
+
+    // Empezamos el cronómetro
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    //Ejecutamos el proyecto con el archivo large
-    const char* command = "g++ ../fluid/fluid.cpp -o fluid";
-    const char* command1 = "./fluid";
-    EXPECT_EQ(system(command),0);
-    EXPECT_EQ(system(command1),0);
+    // Ejecutamos el proyecto con el archivo large
+    const char* command =
+        "cd ../../cmake-build-debug/build_debug && fluid/fluid 100 ../../large.fld ../output.fld";
+    int return_code = std::system(command);
 
-    //Acabamos de contar
+    // Verificar si el comando se ejecutó correctamente (código de retorno igual a 0)
+    EXPECT_EQ(return_code, 0);
+
+    // Acabamos de contar
     auto end_time = std::chrono::high_resolution_clock::now();
 
     // Calcular tiempo de ejecucion
-    auto elapsed_time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
+    auto elapsed_time =
+        std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
 
     // Verificar si es menos que el tiempo mejorable y el óptimo
     EXPECT_GE(elapsed_time.count(), 45 * 1000000);
     EXPECT_LE(elapsed_time.count(), 55 * 1000000);
-
-  }
-  TEST(PersonTestSuite, functionB)
-  {
-    Product p;
-    EXPECT_EQ(p.computeB(10, 20, 30), 6000);
   }
 
-  TEST(PersonTestSuite, not_equal_functionB)
-  {
-    Product p;
-    EXPECT_NE(p.computeB(10, 20, 30), 5000);
+  TEST(OutputFileTestSuite, VerifyFileContent) {
+    // Nombre del archivo
+    std::string filename = "/home/kikealcocerdz/CLionProjects/Arq-Comp-G14/output.fld";
+
+    // Abrir el archivo
+    std::ifstream file(filename);
+
+    // Verificar si el archivo se abrió correctamente
+    ASSERT_TRUE(file.is_open()) << "No se pudo abrir el archivo: " << filename;
+
+    // Cerrar el archivo
+    file.close();
   }
 
-  TEST(PersonTestSuite, fun_B_greater_funA)
-  {
-    Product p;
-    EXPECT_GT(p.computeB(10, 20, 30), p.computeA(10, 10));
+  TEST(InputLargeFileTestSuite, VerifyFileContent) {
+    // Nombre del archivo
+    std::string filename = "/home/kikealcocerdz/CLionProjects/Arq-Comp-G14/large.fld";
+
+    // Verificar la extensión del archivo
+    std::filesystem::path filePath(filename);
+    std::string extension = filePath.extension().string();
+    ASSERT_EQ(extension, ".fld") << "La extensión del archivo no es .fld";
+
+    // Abrir el archivo
+    std::ifstream file(filename);
+
+    // Verificar si el archivo se abrió correctamente
+    ASSERT_TRUE(file.is_open()) << "No se pudo abrir el archivo: " << filename;
+
+    // Cerrar el archivo
+    file.close();
+  }
+
+  TEST(InputSmallFileTestSuite, VerifyFileContent) {
+    // Nombre del archivo
+    std::string filename = "/home/kikealcocerdz/CLionProjects/Arq-Comp-G14/small.fld";
+
+    // Verificar la extensión del archivo
+    std::filesystem::path filePath(filename);
+    std::string extension = filePath.extension().string();
+    ASSERT_EQ(extension, ".fld") << "La extensión del archivo no es .fld";
+
+    // Abrir el archivo
+    std::ifstream file(filename);
+
+    // Verificar si el archivo se abrió correctamente
+    ASSERT_TRUE(file.is_open()) << "No se pudo abrir el archivo: " << filename;
+
+    // Cerrar el archivo
+    file.close();
   }
 
 }

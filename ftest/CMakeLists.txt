@@ -7,6 +7,8 @@ set(TEST_SOURCES
     #${TEST_SOURCE_DIR}/math_vector_test.cpp
     #${TEST_SOURCE_DIR}/particle_info_test.cpp
     ${TEST_SOURCE_DIR}/functional_test.cpp
+    #    product.cpp
+    #   product.hpp
 )
 
 # Executable for all unit tests with list of sources.

@@ -148,6 +148,4 @@ TEST(VecBloqueSuite, colision_z_test)
     EXPECT_EQ(particula.a_c[0][0], -0.1);
     EXPECT_EQ(particula.a_c[1][0], 0.1);
 }
-
-
 }

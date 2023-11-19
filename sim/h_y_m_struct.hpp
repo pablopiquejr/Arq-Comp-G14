@@ -19,5 +19,7 @@ struct longitud_y_masa{
     double masa_p;
     int n_particulas;
     float ppm;
+
+    longitud_y_masa() = default;
 };
 #endif  // FLUID_H_Y_M_STRUCT_HPP
