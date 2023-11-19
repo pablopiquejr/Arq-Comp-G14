@@ -26,15 +26,6 @@ class Grid {
     double varac = 0;
     double vardens = 0;
 
-
-
-
-
-
-
-
-
-
     // n_x, n_y, n_z
     std::vector<int> borders = {0, 0, 0};
 

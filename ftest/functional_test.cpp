@@ -13,18 +13,13 @@
 namespace {
 
   TEST(FunctionalTestSuite, estimated_time_test) {
-    char current_directory[FILENAME_MAX];
-    getcwd(current_directory, sizeof(current_directory));
-
-    const char* desired_directory = "../cmake-build-debug";
-    chdir(desired_directory);
 
     // Empezamos el cronómetro
     auto start_time = std::chrono::high_resolution_clock::now();
 
     // Ejecutamos el proyecto con el archivo large
     const char* command =
-        "cd ../../cmake-build-debug/build_debug && fluid/fluid 100 ../../large.fld ../output.fld";
+        "cd ../../cmake-build-release/ && fluid/fluid 1000 ../large.fld output.fld";
     int return_code = std::system(command);
 
     // Verificar si el comando se ejecutó correctamente (código de retorno igual a 0)

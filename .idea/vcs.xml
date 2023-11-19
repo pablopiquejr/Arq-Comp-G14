@@ -4,7 +4,11 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/googletest-src" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/gsl-src" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cmake-build-debug/build_debug/_deps/googletest-src" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cmake-build-debug/build_debug/_deps/gsl-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/googletest-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/gsl-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/utest/cmake-build-debug/_deps/googletest-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/utest/cmake-build-debug/_deps/gsl-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/utest/cmake-build-release/_deps/googletest-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/utest/cmake-build-release/_deps/gsl-src" vcs="Git" />
   </component>
 </project>

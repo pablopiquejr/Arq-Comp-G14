@@ -10,7 +10,7 @@ int main(int argc, char * argv[]) {
   std::vector<std::string> const arguments{span_args.begin(), span_args.end()};
   longitud_y_masa mi_struct = argument_validator(arguments);
 
-  int const n_interacciones       =  stoi(arguments[1]);
+  int const n_interacciones = stoi(arguments[1]);
   Grid my_cubo(mi_struct);
   my_cubo.primeros_calculos();
 

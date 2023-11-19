@@ -152,7 +152,7 @@ void Grid::choques_entre_particulas() {
 }
 
 void Grid::transferencia_aceleracion() {
-  auto t1 = clock();
+  //auto t1 = clock();
   for (int i = 0; i < size_cubo; ++i) {
     std::vector<Vec_Bloque> const adyacents = get_adyacents(i);
     for (Vec_Bloque const & bloque : adyacents) {
@@ -175,8 +175,8 @@ void Grid::transferencia_aceleracion() {
       }
     }
   }
-  auto t2 = clock();
-  actransf += double(t2-t1)/CLOCKS_PER_SEC;
+  //auto t2 = clock();
+  //actransf += double(t2-t1)/CLOCKS_PER_SEC;
 }
 
 void Grid::incremento_aceleracion(Particula & particula, int index1, int index2,
