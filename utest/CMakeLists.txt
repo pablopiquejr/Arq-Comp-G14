@@ -5,6 +5,7 @@ set(TEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(TEST_SOURCES
         ${TEST_SOURCE_DIR}/block_test.cpp
         ${TEST_SOURCE_DIR}/grid_test.cpp
+        progargs_test.cpp
 
 )
 
