@@ -1,5 +1,4 @@
 #include "../sim/vec_grid.cpp"
-#include "../sim/progargs.cpp"
 #include <cmath>
 #include "gtest/gtest.h"
 

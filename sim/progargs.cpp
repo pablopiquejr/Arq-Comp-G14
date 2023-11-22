@@ -4,6 +4,24 @@
 
 #include "progargs.hpp"
 
+void check_n_arguments(int argc) {
+  if (argc != 4) {
+    std::cerr << "Invalid number of steps: " << argc << '\n';
+    throw std::invalid_argument("Invalid number of steps");
+  }
+}
+
+void validate_number(std::string const & n_iterations) {
+  int const base = 10;
+  if (isdigit(stoi(n_iterations, nullptr, base)) == 1) {
+    std::cerr << "Time steps must be numeric" << '\n';
+    throw std::invalid_argument("Time steps must be numeric");
+  } else if (stoi(n_iterations, nullptr, base) < 0) {
+    std::cerr << "Invalid number of time steps" << '\n';
+    throw std::out_of_range("Invalid number of time steps");
+  }
+}
+
 std::array<double,3> read_data(std::ifstream & file) {
   std::array<double,3> sol = {};
   for (int i = 0; i < 3; i++) {
@@ -26,24 +44,6 @@ std::vector<float> write_data(std::array<double,3> pxyz,
   data.insert(data.end(), h_v.begin(), h_v.end());
   data.insert(data.end(), v_aux.begin(), v_aux.end());
   return data;
-}
-
-void check_n_arguments(int argc) {
-  if (argc != 4) {
-    std::cout << "Invalid number of steps: " << argc << '\n';
-    exit(-1);
-  }
-}
-
-void validate_number(std::string const & n_iterations) {
-  int const base = 10;
-  if (isdigit(stoi(n_iterations, nullptr, base)) == 1) {
-    std::cout << "Time steps must be numeric" << '\n';
-    exit(-1);
-  } else if (stoi(n_iterations, nullptr, base) < 0) {
-    std::cout << "Invalid number of time steps" << '\n';
-    exit(-2);
-  }
 }
 
 struct longitud_y_masa file_reader(std::string const & file_name) {
