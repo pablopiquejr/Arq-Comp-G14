@@ -47,6 +47,8 @@ class Grid {
 
     void check_if_repos();
 
+    void incremento_densidad(double const h_2, double norma, int id1, int id2);
+
     void reposicionar_particula(Particula & particula, int index, std::vector<double> newpos);
 
     void incremento_densidades(int & id1, int & id2) ;

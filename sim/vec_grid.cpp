@@ -115,27 +115,25 @@ std::vector<Vec_Bloque> Grid::get_adyacents(int i) {
   return adyacentes;
 }
 
+void Grid::incremento_densidad(double const h_2, double norma, int id1, int id2) {
+  double const incremento       = (h_2 - norma) * (h_2 - norma) * (h_2 - norma);
+  l_m.particulas.densidad[id1] += incremento;
+  l_m.particulas.densidad[id2] += incremento;
+}
+
 void Grid::choques_entre_particulas() {
-  auto t1 = clock();
   for (int i = 0; i < size_cubo; ++i) {
     std::vector<Vec_Bloque> const adyacents = get_adyacents(i);
     for (Vec_Bloque const & bloque : adyacents) {
       for (int const & id1 : bloques[i].lista_particulas) {
         for (int const & id2 : bloque.lista_particulas) {
           if (id1 < id2) {
-            //auto t3 = clock();
             double norma = 0;
             for (int j = 0; j < 3; j++) {
               norma += std::pow(l_m.particulas.pxyz[id2][j] - l_m.particulas.pxyz[id1][j], 2);
             }
             double const h_2 = std::pow(l_m.l_suavizado, 2);
-            if (norma < h_2) {
-              double const incremento       = (h_2 - norma) * (h_2 - norma) * (h_2 - norma);
-              l_m.particulas.densidad[id1] += incremento;
-              l_m.particulas.densidad[id2] += incremento;
-            }
-            //auto t4 = clock();
-            //vardens += double(t4-t3)/CLOCKS_PER_SEC;
+            if (norma < h_2) { incremento_densidad(h_2, norma, id1, id2); }
           }
         }
       }
@@ -146,8 +144,6 @@ void Grid::choques_entre_particulas() {
         ((l_m.particulas.densidad[i] + std::pow(l_m.l_suavizado, m_num_6)) * 315 * l_m.masa_p) /
         (64 * std::numbers::pi * std::pow(l_m.l_suavizado, m_num_9));
   }
-  auto t2 = clock();
-  incdens += double(t2-t1)/CLOCKS_PER_SEC;
   transferencia_aceleracion();
 }
 
@@ -197,7 +193,6 @@ void Grid::incremento_aceleracion(Particula & particula, int index1, int index2,
          (particula.vxyz[index2][i] - particula.vxyz[index1][i]) * l_m.operador_derecha_ac) /
         (particula.densidad[index1] * particula.densidad[index2]);
   }
-
 }
 
 void Grid::procesamiento_colisiones() {
