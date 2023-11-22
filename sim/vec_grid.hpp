@@ -15,19 +15,14 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <algorithm>
 
 
 class Grid {
   public:
-    // EXTRAS PARA TIEMPOS
-    double actransf = 0;
-    double incdens = 0;
-    double colisiones = 0;
-    double varac = 0;
-    double vardens = 0;
 
     // n_x, n_y, n_z
-    std::vector<int> borders = {0, 0, 0};
+    std::array<int,3> borders = {0, 0, 0};
 
     int size_cubo = 0;
 
@@ -47,18 +42,15 @@ class Grid {
 
     void check_if_repos();
 
-    void incremento_densidad(double const h_2, double norma, int id1, int id2);
+    void incremento_densidad(double h_2, double norma, int id1, int id2);
 
-    void reposicionar_particula(Particula & particula, int index, std::vector<double> newpos);
-
-    void incremento_densidades(int & id1, int & id2) ;
+    void reposicionar_particula(Particula & particula, int index, std::array<int,3> newpos);
 
     void choques_entre_particulas();
 
-    void transferencia_aceleracion();
+    void incremento_aceleracion(Particula & particula, int index1, int index2, double norma) const;
 
-    void incremento_aceleracion(Particula & particula_i, int index1, int index2,
-                                double norma);
+    void transferencia_aceleracion();
 
     void procesamiento_colisiones();
 

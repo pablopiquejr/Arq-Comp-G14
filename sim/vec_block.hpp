@@ -22,7 +22,7 @@ class Vec_Bloque {
     int b_y = 0;
     int b_z = 0;
 
-    void threeD_values(int identifier, std::vector<int> borders);
+    void threeD_values(int identifier, std::array<int,3> borders);
 
     void colision_x(int n_x, Particula & particula);
     void colision_y(int n_y, Particula & particula);

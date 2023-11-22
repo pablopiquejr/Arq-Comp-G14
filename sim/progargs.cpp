@@ -16,7 +16,7 @@ void validate_number(std::string const & n_iterations) {
   if (isdigit(stoi(n_iterations, nullptr, base)) == 1) {
     std::cerr << "Time steps must be numeric" << '\n';
     throw std::invalid_argument("Time steps must be numeric");
-  } else if (stoi(n_iterations, nullptr, base) < 0) {
+  } if (stoi(n_iterations, nullptr, base) < 0) {
     std::cerr << "Invalid number of time steps" << '\n';
     throw std::out_of_range("Invalid number of time steps");
   }
@@ -28,7 +28,7 @@ std::array<double,3> read_data(std::ifstream & file) {
     float number = 0;
     // NOLINTNEXTLINE
     file.read(reinterpret_cast<char *>(&number), 4);
-    sol[i] = number;
+    sol.at(i) = number;
   }
   return sol;
 }
@@ -61,12 +61,9 @@ struct longitud_y_masa file_reader(std::string const & file_name) {
   if (n_parameters <= 0) { exit(-m_num_5); }
   long counter = 0;
   while (counter < n_parameters) {
-    l_m.particulas.pxyz.push_back(read_data(binary_file));
-    l_m.particulas.hvxyz.push_back(read_data(binary_file));
-    l_m.particulas.vxyz.push_back(read_data(binary_file));
-    l_m.particulas.a_c.push_back({0, gravedad, 0});
-    l_m.particulas.densidad.push_back(0);
-    l_m.particulas.bpos.push_back({0, 0, 0});
+    l_m.particulas.pxyz[counter] = read_data(binary_file);
+    l_m.particulas.hvxyz[counter] = read_data(binary_file);
+    l_m.particulas.vxyz[counter] = read_data(binary_file);
     counter += 1;
   }
   if (counter <= 0) { exit(-m_num_5); }

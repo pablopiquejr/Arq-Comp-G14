@@ -12,15 +12,16 @@
 struct longitud_y_masa{
     explicit longitud_y_masa(float ppm, int numero_p)
       : l_suavizado{r_radio / ppm}, masa_p{p_densidad / std::pow(ppm, 3)}, n_particulas{numero_p},
-        ppm{ppm} { }
+        ppm{ppm}, particulas(numero_p) { }
 
-    Particula particulas;
+
     double l_suavizado;
     double masa_p;
     int n_particulas;
     float ppm;
-    double const operador_derecha_ac =
-        45 * u_viscosidad * masa_p / (std::numbers::pi * std::pow(l_suavizado, 6));
+    double operador_derecha_ac =
+        m_num_45 * u_viscosidad * masa_p / (M_PI * std::pow(l_suavizado, m_num_6));
+    Particula particulas;
 
 };
 #endif  // FLUID_H_Y_M_STRUCT_HPP

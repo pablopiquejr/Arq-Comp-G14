@@ -3,7 +3,6 @@ add_library(sim
         progargs.hpp
         progargs.cpp
         constants.hpp
-        particle.cpp
         particle.hpp
         h_y_m_struct.hpp
         vec_grid.hpp

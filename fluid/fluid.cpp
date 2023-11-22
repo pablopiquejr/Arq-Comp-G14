@@ -20,9 +20,6 @@ int main(int argc, char * argv[]) {
     my_cubo.procesamiento_colisiones();
     //my_cubo.write_report(i+1);
   }
-  std::cout << my_cubo.incdens << "\t" << my_cubo.vardens << "\n"
-            <<   my_cubo.actransf << "\t" << my_cubo.varac << "\n" <<
-      my_cubo.colisiones << "\n";
   file_writer(arguments[3], my_cubo.l_m);
   return 0;
 }

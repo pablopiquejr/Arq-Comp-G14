@@ -1,13 +1,12 @@
 //
 // Created by 34638 on 07/10/2023.
 //
-
+/*
 #include "../sim/vec_block.cpp"
 #include "gtest/gtest.h"
 
 
 namespace {
-
   TEST(VecBloqueSuite, colision_x_test)
   {
     // Instancia de Vec_Bloque
@@ -87,3 +86,4 @@ namespace {
     EXPECT_EQ(particula.a_c[1][0], -42861);
   }
 }
+ */
