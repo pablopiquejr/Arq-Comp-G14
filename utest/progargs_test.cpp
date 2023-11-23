@@ -1,35 +1,41 @@
-#include "../sim/progargs.cpp"
+#include "../sim/progargs.hpp"
 #include "gtest/gtest.h"
 
 namespace {
   TEST(ProgArgsTestSuite, TestValidNumberOfArguments) {
+    progargs const inicio;
     // Supongamos que argc es 4, que es el número correcto de argumentos
-    int argc = 4;
-    EXPECT_NO_FATAL_FAILURE(check_n_arguments(argc));
+    int const argc = 4;
+    EXPECT_NO_FATAL_FAILURE(inicio.check_n_arguments(argc));
   }
 
   TEST(ProgArgsTestSuite, TestInvalidNumberOfArguments) {
-    int argc = 3;
-    EXPECT_THROW(check_n_arguments(argc), std::invalid_argument);
+    progargs const inicio;
+    int const argc = 3;
+    EXPECT_THROW(inicio.check_n_arguments(argc), std::invalid_argument);
   }
 
   TEST(ProgArgsTestSuite, TestValidNumber) {
-    std::string n_iterations = "100";
-    EXPECT_NO_FATAL_FAILURE(validate_number(n_iterations));
+    progargs const inicio;
+    std::string const n_iterations = "100";
+    EXPECT_NO_FATAL_FAILURE(inicio.validate_number(n_iterations));
   }
 
   TEST(ProgArgsTestSuite, TestNonNumericNumber) {
-    std::string n_iterations = "abc";
-    EXPECT_THROW(validate_number(n_iterations), std::invalid_argument);
+    progargs const inicio;
+    std::string const n_iterations = "abc";
+    EXPECT_THROW(inicio.validate_number(n_iterations), std::invalid_argument);
   }
 
   TEST(ProgArgsTestSuite, TestNegativeNumber) {
+    progargs const inicio;
     std::string n_iterations = "-10";
-    EXPECT_THROW(validate_number(n_iterations), std::out_of_range);
+    EXPECT_THROW(inicio.validate_number(n_iterations), std::out_of_range);
   }
 
   TEST(ProgArgsTestSuite, TestFileReader) {
-    std::string file_name = "test_file.bin";
+    progargs const inicio;
+    std::string const file_name = "test_file.bin";
 
     // Create a temporary file for testing
     std::ofstream output(file_name, std::ios::binary);
@@ -60,7 +66,7 @@ namespace {
     output.close();
 
     // Call the file_reader function
-    longitud_y_masa result  = file_reader(file_name);
+    setter result  = inicio.file_reader(file_name);
     result.particulas.pxyz  = {pxyz};
     result.particulas.hvxyz = {hvxyz};
     result.particulas.vxyz  = {vxyz};

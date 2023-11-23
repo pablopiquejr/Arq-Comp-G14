@@ -1,12 +1,12 @@
 //
 // Created by 34638 on 12/11/2023.
 //
-#include "../sim/vec_grid.cpp"
+#include "../sim/Block.cpp"
+#include "../sim/Grid.cpp"
 #include "../sim/progargs.cpp"
-#include "../sim/vec_block.cpp"
 #include "filesystem"
-#include "gtest/gtest.h"
 
+#include "gtest/gtest.h"
 
 // https://google.github.io/googletest/reference/assertions.html
 

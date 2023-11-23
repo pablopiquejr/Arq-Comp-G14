@@ -4,11 +4,11 @@ add_library(sim
         progargs.cpp
         constants.hpp
         particle.hpp
-        h_y_m_struct.hpp
-        vec_grid.hpp
-        vec_grid.cpp
-        vec_block.hpp
-        vec_block.cpp
+        setter.hpp
+        Grid.hpp
+        Grid.cpp
+        Block.hpp
+        Block.cpp
 )
 # Use this line only if you have dependencies from stim to GSL
 target_link_libraries (sim PRIVATE Microsoft.GSL::GSL)

@@ -4,26 +4,30 @@
 
 #include "progargs.hpp"
 
-void check_n_arguments(int argc) {
+// Comprobar que el numero de argumentos es el esperado
+void progargs::check_n_arguments(int argc) {
   if (argc != 4) {
     std::cerr << "Invalid number of steps: " << argc << '\n';
     throw std::invalid_argument("Invalid number of steps");
   }
 }
 
-void validate_number(std::string const & n_iterations) {
+// Comprobar que el numero de iteracciones es un integer.
+void progargs::validate_number(std::string const & n_iterations) {
   int const base = 10;
   if (isdigit(stoi(n_iterations, nullptr, base)) == 1) {
     std::cerr << "Time steps must be numeric" << '\n';
     throw std::invalid_argument("Time steps must be numeric");
-  } if (stoi(n_iterations, nullptr, base) < 0) {
+  }
+  if (stoi(n_iterations, nullptr, base) < 0) {
     std::cerr << "Invalid number of time steps" << '\n';
     throw std::out_of_range("Invalid number of time steps");
   }
 }
 
-std::array<double,3> read_data(std::ifstream & file) {
-  std::array<double,3> sol = {};
+// Leer de tres en tres los datos de las particulas
+std::array<double, 3> progargs::read_data(std::ifstream & file) {
+  std::array<double, 3> sol = {};
   for (int i = 0; i < 3; i++) {
     float number = 0;
     // NOLINTNEXTLINE
@@ -33,8 +37,9 @@ std::array<double,3> read_data(std::ifstream & file) {
   return sol;
 }
 
-std::vector<float> write_data(std::array<double,3> pxyz,
-                              std::array<double,3> hvxyz, std::array<double,3> vxyz) {
+// Escribir, en este caso se podŕia optimizar con array, pero no habría mucha mejora.
+std::vector<float> progargs::write_data(std::array<double, 3> pxyz, std::array<double, 3> hvxyz,
+                                        std::array<double, 3> vxyz) {
   std::vector<float> data(pxyz.begin(), pxyz.end());
 
   std::vector<float> h_v(hvxyz.begin(), hvxyz.end());
@@ -46,39 +51,45 @@ std::vector<float> write_data(std::array<double,3> pxyz,
   return data;
 }
 
-struct longitud_y_masa file_reader(std::string const & file_name) {
+// Función que lee el archivo, genera y completa el setter que posteriormente vamos a usar para
+// nuestras operaciones
+struct setter progargs::file_reader(std::string const & file_name) {
+  // Abrir el archivo y comprobar que no de error
   std::ifstream binary_file(file_name, std::ios::binary);
   if (!binary_file) {
-    std::cout << "Can't Open input file" << '\n';
+    std::cerr << "Can't Open input file" << '\n';
     exit(-3);
   }
-  // read the header
+  // Leer la cabecera
   float ppm        = 0;
   int n_parameters = 0;
   binary_file.read(reinterpret_cast<char *>(&ppm), 4);           // NOLINT
   binary_file.read(reinterpret_cast<char *>(&n_parameters), 4);  // NOLINT
-  longitud_y_masa l_m{ppm, n_parameters};
+  // Inicializar nuestro setter
+  setter l_m{ppm, n_parameters};
   if (n_parameters <= 0) { exit(-m_num_5); }
   long counter = 0;
   while (counter < n_parameters) {
-    l_m.particulas.pxyz[counter] = read_data(binary_file);
-    l_m.particulas.hvxyz[counter] = read_data(binary_file);
-    l_m.particulas.vxyz[counter] = read_data(binary_file);
-    counter += 1;
+    // Leer los tres parametros de cada particula
+    l_m.particulas.pxyz[counter]   = read_data(binary_file);
+    l_m.particulas.hvxyz[counter]  = read_data(binary_file);
+    l_m.particulas.vxyz[counter]   = read_data(binary_file);
+    counter                       += 1;
   }
   if (counter <= 0) { exit(-m_num_5); }
   return l_m;
 }
 
-struct longitud_y_masa argument_validator(std::vector<std::string> arguments) {
-  // checking the validity of the first command (nº of executions)
+struct setter progargs::argument_validator(std::vector<std::string> arguments) {
+  // Comprobar que las iteracciones sean un numero
   validate_number(arguments[1]);
 
-  // validate and read input file
+  // validar el archivo de lectura
   return file_reader(arguments[2]);
 }
 
-void file_writer(std::string const & name, longitud_y_masa mis_datos) {
+void progargs::file_writer(std::string const & name, setter mis_datos) {
+  // Generar el archivo donde vas a escribir
   std::ofstream output{name, std::ios::binary};
   if (!output) {
     std::cout << "Can't Open output file " << '\n';

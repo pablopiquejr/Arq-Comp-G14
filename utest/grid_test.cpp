@@ -1,6 +1,7 @@
-#include "../sim/vec_grid.hpp"
-#include <cmath>
+#include "../sim/Grid.cpp"
+
 #include "gtest/gtest.h"
+#include <cmath>
 
 namespace {
 
@@ -9,7 +10,7 @@ namespace {
     Vec_Bloque my_bloque;
     // Partícula en 1234 en el Bloque 3471
     my_bloque.threeD_values(3471, {15, 21, 15});
-    longitud_y_masa struct_test{204, 1};
+    setter struct_test{204, 1};
     struct_test.particulas.pxyz = {
       {-0.040281, -0.0650672, 0.00368461}
     };
@@ -45,7 +46,7 @@ namespace {
     Vec_Bloque my_bloque;
     // Partícula en 1234 en el Bloque 3471
     my_bloque.threeD_values(3471, {15, 21, 15});
-    longitud_y_masa struct_test{204, 1};
+    setter struct_test{204, 1};
     struct_test.particulas.pxyz = {
       {-0.040281, -0.0650672, 0.00368461}
     };
@@ -76,7 +77,7 @@ namespace {
     // y comprobamos nuestros cálculos a mano con calculadora con los que nos da el programa
     Vec_Bloque my_bloque;
     // Partícula en 1234 en el Bloque 3471
-    longitud_y_masa struct_test{204, 2};
+    setter struct_test{204, 2};
     struct_test.particulas.pxyz = {
       {-0.057331390678882599, -0.080263644456863403, -0.057781580835580826},
       { -0.064884483814239502, -0.077343977987766266, -0.058011941611766815}
@@ -114,7 +115,7 @@ namespace {
     // y comprobamos nuestros cálculos a mano con calculadora con los que nos da el programa
     Vec_Bloque my_bloque;
     // Partícula en 1234 en el Bloque 3471
-    longitud_y_masa struct_test{204, 2};
+    setter struct_test{204, 2};
     struct_test.particulas.pxyz = {
       {-0.057331390678882599, -0.080263644456863403, -0.057781580835580826},
       { -0.064884483814239502, -0.077343977987766266, -0.058011941611766815}
@@ -152,7 +153,7 @@ namespace {
     // y comprobamos nuestros cálculos a mano con calculadora con los que nos da el programa
     Vec_Bloque my_bloque;
     // Partícula en 1234 en el Bloque 3471
-    longitud_y_masa struct_test{204, 2};
+    setter struct_test{204, 2};
     struct_test.particulas.pxyz = {
       {-0.057331390678882599, -0.080263644456863403, -0.057781580835580826},
       { -0.064884483814239502, -0.077343977987766266, -0.058011941611766815}
@@ -192,7 +193,7 @@ namespace {
         // y comprobamos nuestros cálculos a mano con calculadora con los que nos da el programa
         Vec_Bloque my_bloque;
         // Partícula en 1234 en el Bloque 3471
-        longitud_y_masa struct_test{204, 2};
+        setter struct_test{204, 2};
         struct_test.particulas.pxyz = {
           {-0.057331390678882599, -0.080263644456863403, -0.057781580835580826},
           { -0.064884483814239502, -0.077343977987766266, -0.058011941611766815}
@@ -225,5 +226,6 @@ namespace {
         // Valores previamente calculados
         EXPECT_EQ(my_cubo.l_m.particulas.pxyz[0][0], -0.057120179519057276);
         EXPECT_EQ(my_cubo.l_m.particulas.pxyz[0][1], -0.079839567934465408);
+
   }
 }

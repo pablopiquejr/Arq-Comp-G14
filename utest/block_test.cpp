@@ -1,8 +1,7 @@
 //
 // Created by 34638 on 07/10/2023.
 //
-#include "../sim/vec_grid.hpp"
-#include <cmath>
+#include "../sim/Grid.hpp"
 #include "gtest/gtest.h"
 
 
@@ -16,7 +15,7 @@ namespace {
     my_bloque.b_x = 0;
     my_bloque.b_y = 0;
     my_bloque.b_z = 0;
-    longitud_y_masa struct_test{204, 2};
+    setter struct_test{204, 2};
     struct_test.particulas.pxyz = {
       {-0.057331390678882599, -0.080263644456863403, -0.057781580835580826},
       { -0.064884483814239502, -0.077343977987766266, -0.058011941611766815}
@@ -61,7 +60,7 @@ namespace {
       my_bloque.b_x = 0;
       my_bloque.b_y = 0;
       my_bloque.b_z = 0;
-      longitud_y_masa struct_test{204, 2};
+      setter struct_test{204, 2};
       struct_test.particulas.pxyz = {
         {-0.057331390678882599, -0.080263644456863403, -0.057781580835580826},
         { -0.064884483814239502, -0.077343977987766266, -0.058011941611766815}
