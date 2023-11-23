@@ -1,4 +1,4 @@
-#include "../sim/vec_grid.cpp"
+#include "../sim/vec_grid.hpp"
 #include <cmath>
 #include "gtest/gtest.h"
 
@@ -225,6 +225,5 @@ namespace {
         // Valores previamente calculados
         EXPECT_EQ(my_cubo.l_m.particulas.pxyz[0][0], -0.057120179519057276);
         EXPECT_EQ(my_cubo.l_m.particulas.pxyz[0][1], -0.079839567934465408);
-
   }
 }
