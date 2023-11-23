@@ -8,20 +8,22 @@
 void progargs::check_n_arguments(int argc) {
   if (argc != 4) {
     std::cerr << "Invalid number of steps: " << argc << '\n';
-    throw std::invalid_argument("Invalid number of steps");
+    exit(-1);
   }
 }
 
 // Comprobar que el numero de iteracciones es un integer.
 void progargs::validate_number(std::string const & n_iterations) {
   int const base = 10;
-  if (isdigit(stoi(n_iterations, nullptr, base)) == 1) {
+  try {
+    stoi(n_iterations, nullptr, base);
+  } catch (std::invalid_argument&) {
     std::cerr << "Time steps must be numeric" << '\n';
-    throw std::invalid_argument("Time steps must be numeric");
+    exit(-1);
   }
   if (stoi(n_iterations, nullptr, base) < 0) {
     std::cerr << "Invalid number of time steps" << '\n';
-    throw std::out_of_range("Invalid number of time steps");
+    exit(-2);
   }
 }
 

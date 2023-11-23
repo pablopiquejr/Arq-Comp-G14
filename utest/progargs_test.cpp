@@ -12,7 +12,7 @@ namespace {
   TEST(ProgArgsTestSuite, TestInvalidNumberOfArguments) {
     progargs const inicio;
     int const argc = 3;
-    EXPECT_THROW(inicio.check_n_arguments(argc), std::invalid_argument);
+    ASSERT_DEATH(inicio.check_n_arguments(argc), "Invalid number of steps: 3");
   }
 
   TEST(ProgArgsTestSuite, TestValidNumber) {
@@ -24,13 +24,13 @@ namespace {
   TEST(ProgArgsTestSuite, TestNonNumericNumber) {
     progargs const inicio;
     std::string const n_iterations = "abc";
-    EXPECT_THROW(inicio.validate_number(n_iterations), std::invalid_argument);
+    ASSERT_DEATH(inicio.validate_number(n_iterations), "Time steps must be numeric");
   }
 
   TEST(ProgArgsTestSuite, TestNegativeNumber) {
     progargs const inicio;
     std::string n_iterations = "-10";
-    EXPECT_THROW(inicio.validate_number(n_iterations), std::out_of_range);
+    ASSERT_DEATH(inicio.validate_number(n_iterations), "Invalid number of time steps");
   }
 
   TEST(ProgArgsTestSuite, TestFileReader) {
@@ -82,6 +82,7 @@ namespace {
     std::remove(file_name.c_str());
   }
 }
+
 
 // correr tests namespace
 int main(int argc, char **argv) {
