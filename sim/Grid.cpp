@@ -6,6 +6,14 @@
 //
 
 void movimiento_particulas(Particula & particula, int index) {
+  for (int i = 0; i < 3; i++){
+    particula.pxyz[index][i] +=
+        particula.hvxyz[index][i] * a_tiempo + particula.a_c[index][i] * std::pow(a_tiempo, 2);
+    particula.vxyz[index][i]   = particula.hvxyz[index][i] + particula.a_c[index][i] * a_tiempo * m_half;
+    particula.hvxyz[index][i] += particula.a_c[index][i] * a_tiempo;
+
+  }
+  /*
   particula.pxyz[index][0] +=
       particula.hvxyz[index][0] * a_tiempo + particula.a_c[index][0] * std::pow(a_tiempo, 2);
   particula.pxyz[index][1] +=
@@ -19,6 +27,8 @@ void movimiento_particulas(Particula & particula, int index) {
   particula.hvxyz[index][0] += particula.a_c[index][0] * a_tiempo;
   particula.hvxyz[index][1] += particula.a_c[index][1] * a_tiempo;
   particula.hvxyz[index][2] += particula.a_c[index][2] * a_tiempo;
+
+   */
 }
 
 void Grid::escribir_datos_iniciales() {

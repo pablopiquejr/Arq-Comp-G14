@@ -24,6 +24,7 @@ std::array<double, 3> constexpr min = {-0.065, -0.08, -0.065};
 double const limite_colision        = 0.0000000001;
 
 // Errores de Magic num de clang-tidy
+float constexpr m_half = 0.5;
 int constexpr m_num_5   = 5;
 int constexpr m_num_6   = 6;
 int constexpr m_num_9   = 9;
