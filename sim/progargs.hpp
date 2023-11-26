@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-class progargs{
+class progargs {
   public:
     progargs() = default;
     // Comprobar que el numero de argumentos es el esperado
@@ -27,7 +27,7 @@ class progargs{
 
     // Escribir, en este caso se podŕia optimizar con array, pero no habría mucha mejora.
     static std::vector<float> write_data(std::array<double, 3> pxyz, std::array<double, 3> hvxyz,
-                                  std::array<double, 3> vxyz);
+                                         std::array<double, 3> vxyz);
     static struct setter file_reader(std::string const & file_name);
 
     static struct setter argument_validator(std::vector<std::string> arguments);

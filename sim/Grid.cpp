@@ -28,12 +28,14 @@ void Grid::escribir_datos_iniciales() {
             << "Masa de particula: " << l_m.masa_p << '\n'
             << "Tamaño Bloque: " << borders[0] << " * " << borders[1] << " * " << borders[2] << '\n'
             << "Numero de Bloques: " << size_cubo << '\n'
-            << "Tamaño Bloque: " << borders[0] / max[0] << " * " << borders[1] / max[0] << " * "
-            << borders[2] / max[2] << '\n';
+            << "Tamaño Bloque: " << (max[0] - min[0]) / borders[0] << " * "
+            << (max[1] - min[1]) / borders[1] << " * " << (max[2] - min[2]) / borders[2] << '\n';
 }
 
-// for (int i = 0; i < 3; i++) { borders[i] = floor((max[i] - min[i]) / l_m.l_suavizado); }
 /*
+ FORMAS QUE SE PROBARON ANTES DE DESCUBRIR EL .AT PARA ITERAR ARRAYS
+for (int i = 0; i < 3; i++) { borders[i] = floor((max[i] - min[i]) / l_m.l_suavizado); }
+
 auto it_borders    = borders.begin();
 auto it_min        = min.begin();
 auto it_max        = max.begin();

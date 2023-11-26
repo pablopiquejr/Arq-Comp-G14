@@ -17,7 +17,7 @@ void progargs::validate_number(std::string const & n_iterations) {
   int const base = 10;
   try {
     stoi(n_iterations, nullptr, base);
-  } catch (std::invalid_argument&) {
+  } catch (std::invalid_argument &) {
     std::cerr << "Time steps must be numeric" << '\n';
     exit(-1);
   }
