@@ -22,13 +22,13 @@ void movimiento_particulas(Particula & particula, int index) {
 }
 
 void Grid::escribir_datos_iniciales() {
-  std::cout << "Numero de Partículas: " << l_m.n_particulas << '\n'
-            << "Particles Per Meter: " << l_m.ppm << "\n"
-            << "Longitud de suavizado: " << l_m.l_suavizado << '\n'
-            << "Masa de particula: " << l_m.masa_p << '\n'
-            << "Tamaño Bloque: " << borders[0] << " * " << borders[1] << " * " << borders[2] << '\n'
-            << "Numero de Bloques: " << size_cubo << '\n'
-            << "Tamaño Bloque: " << (max[0] - min[0]) / borders[0] << " * "
+  std::cout << "Number of particles: " << l_m.n_particulas << '\n'
+            << "Particles per meter: " << l_m.ppm << "\n"
+            << "Smoothing Length: " << l_m.l_suavizado << '\n'
+            << "Particles mass: " << l_m.masa_p << '\n'
+            << "Grid size: " << borders[0] << " * " << borders[1] << " * " << borders[2] << '\n'
+            << "Number of blocks: " << size_cubo << '\n'
+            << "Bloque size: " << (max[0] - min[0]) / borders[0] << " * "
             << (max[1] - min[1]) / borders[1] << " * " << (max[2] - min[2]) / borders[2] << '\n';
 }
 
